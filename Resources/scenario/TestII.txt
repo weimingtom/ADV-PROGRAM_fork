@@ -1,0 +1,12 @@
+﻿
+@gameStart
+t1#s1:Hello!
+#PlayBGM:Theme
+t2#s1:HaHa!
+#Background:cxc_1
+t3#s1:Yeah!
+#StopBGM
+#Background:cxc_2
+t2#s1:heihei~
+#Background:cxc_3
+
