@@ -1,8 +1,10 @@
 ﻿
 @gameStart
 t1#s1:Hello!
+#Set:key=1
 #PlayBGM:Theme
 t2#s1:HaHa!
+#Set:key+1
 #Background:cxc_1
 t3#s1:Yeah!
 #StopBGM

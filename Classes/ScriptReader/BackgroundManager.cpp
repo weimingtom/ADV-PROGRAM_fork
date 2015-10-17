@@ -1,4 +1,6 @@
 #include "BackgroundManager.h"
+
+//脚本文件路径
 #define BGLISTPATH "/bgimage/bgList.txt"
 
 BackgroundManager* BackgroundManager::_instance = nullptr;
@@ -6,15 +8,15 @@ BackgroundManager* BackgroundManager::_instance = nullptr;
 BackgroundManager::BackgroundManager()
 	:_pool(nullptr)
 {
-	log("BM> instance starting...");
+	//log("BM> instance starting...");
 	_pool = new std::map<std::string, std::string>();
 
 	defaultBackground = "";
 
 	std::string ss = FileUtils::getInstance()->getStringFromFile(BGLISTPATH);
 
-	int sPos = 0;
-	int ePos = 0;
+	int sPos = 0;	//行头
+	int ePos = 0;	//行尾
 	//预先读取一行不处理，解决BOM头
 	ePos = ss.find('\n', sPos);
 	sPos = ePos + 1;
@@ -28,7 +30,7 @@ BackgroundManager::BackgroundManager()
 		temp = ss.substr(sPos, ePos - sPos - 1);
 		if (temp.compare("") == 0)
 		{
-			log("SCB> Load Background ending");
+			//log("SCB> Load Background ending");
 			break;
 		}
 		sPos = ePos + 1;
@@ -38,7 +40,7 @@ BackgroundManager::BackgroundManager()
 		background = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
 		background = "/bgimage/" + background + ".png";
 
-		log("bgkey = %s , backgroundPath = %s", key.c_str(), background.c_str());
+		//log("bgkey = %s , backgroundPath = %s", key.c_str(), background.c_str());
 
 		addBackground(key, background);
 		log("SCB> addBackground[%s]", key.c_str());

@@ -16,10 +16,9 @@ GameSystem::GameSystem()
 	if (!cocos2d::UserDefault::getInstance()->getBoolForKey(ISINIT))	//判断是否初始化过
 	{
 		setDefault();
-		//log("System> Initialization done.");
 	}
 
-	auto _savedata = new std::map<std::string, int>()[100];
+	_savedata = new std::map<std::string, int>[100];
 }
 
 
@@ -125,6 +124,7 @@ int GameSystem::getDataValue(std::string &key)
 	auto result = _savedata[0].find(key);
 	if (result != _savedata[0].end())
 	{
+		// cocos2d::log("GS> key = %s , value = %d", key.c_str(), result->second);
 		return result->second;
 	}
 	else
@@ -133,7 +133,7 @@ int GameSystem::getDataValue(std::string &key)
 	}
 }
 
-void GameSystem::setData(std::map<std::string, int> *map = nullptr)
+void GameSystem::setData(std::map<std::string, int> *map)// = nullptr)
 {
 	if (map == nullptr)
 	{

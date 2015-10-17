@@ -82,7 +82,7 @@ SoundManager* SoundManager::getInstance()
 	if (_instance == nullptr)
 	{
 		_instance = new SoundManager();
-		log("SM> instance starting...");
+		//log("SM> instance starting...");
 	}
 	return _instance;
 }

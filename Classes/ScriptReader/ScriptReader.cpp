@@ -9,6 +9,7 @@
 #include "SCStopBGM.h"
 #include "SCPlaySound.h"
 #include "SCStopSound.h"
+#include "SCSet.h"
 #include "CharactorManager.h"
 #include "GameSystem.h"
 
@@ -35,7 +36,6 @@ void ScriptReader::initWithStage(Node* stage)
 	this->stage = stage;
 	charStage = Layer::create();
 	stage->addChild(charStage);
-
 	for (int i = 0; i < 5; i++)
 	{
 		chars[i] = nullptr;
@@ -161,7 +161,43 @@ void ScriptReader::loadScriptFile(std::string path)
 								else
 									if (cmd.compare("Set") == 0)
 									{
-										//set，待补充
+										std::string key;
+										char mark;
+										int value;
+										int pos;
+										pos = cmdParams.find_first_of("+-=", 0);
+										key = cmdParams.substr(0, pos);
+										mark = cmdParams[pos];
+										cmdParams.substr(pos + 1, cmdParams.length() - 1);
+										pos = cmdParams.find_first_of("+-", 0);
+										log("Setttttt add!");
+										if (pos < 0)
+										{
+											log("Setttttt add 2!");
+											value = atoi(cmdParams.c_str());
+										}
+										else
+										{
+											log("Setttttt add 3!");
+											char tmpChar = cmdParams[pos];
+											std::string tmpString;
+											switch (tmpChar)
+											{
+											case '-':
+												value = 1;
+												//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// -atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
+												break;
+											case '+':
+												//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// +atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
+												value = 1;
+												break;
+											default:
+												break;
+											}
+										}
+										log("Set Add!");
+										SCSet* setCMD = new SCSet(this, key, mark, value);
+										cms->push_back(setCMD);
 									}
 									else
 										if (cmd.compare("Jump") == 0)
@@ -200,36 +236,6 @@ void ScriptReader::loadScriptFile(std::string path)
 																cms->push_back(stopSoundCMD);
 															}
 															else
-																if (cmd.compare("Set") == 0)
-																{
-																	std::string key;
-																	char mark;
-																	int value;
-																	int pos;
-																	pos = cmdParams.find_first_of("+-=", 0);
-																	key = cmdParams.substr(0, pos);
-																	mark = cmdParams[pos];
-																	cmdParams.substr(pos + 1, cmdParams.length() - 1);
-																	pos = cmdParams.find_first_of("+-", 0);
-																	if (pos < 0)
-																	{
-																		value = atoi(cmdParams.c_str());
-																	}
-																	else
-																	{
-																		switch (cmdParams[pos])
-																		{
-																		case '-':
-																			value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos)) - atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
-																			break;
-																		case '+':
-																			value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos)) + atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
-																			break;
-																		default:
-																		}
-																	}
-																	SCSet* setCMD = new SCSet(this, key, mark, value);
-																}
 										{
 											log("Unknow Script Command> [%s]:[%s]", cmd.c_str(), cmdParams.c_str());
 										}
@@ -346,6 +352,9 @@ void ScriptReader::nextScript()
 		break;
 	case ScriptCommandType::StopSd:
 		((SCStopSound*)cmd)->execute(stage);
+		break;
+	case ScriptCommandType::Set:
+		((SCSet*)cmd)->execute(stage);
 		break;
 	default:
 		log("Unhandle ScriptCommandType [%d]", cmd->type);

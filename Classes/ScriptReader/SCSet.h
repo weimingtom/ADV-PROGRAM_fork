@@ -12,9 +12,8 @@ public:
 	~SCSet();
 	void execute(cocos2d::Node* stage);
 
-	std::function<void(std::string &key, int value)> setDataValue;
-	std::function<int(std::string &key)> getDataValue;
-	std::function<void(std::string &key, int value)> setDataValue;
+	void setDataValue(std::string key,int value);
+	int getDataValue(std::string key);
 
 }; 
 

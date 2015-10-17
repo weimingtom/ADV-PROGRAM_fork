@@ -28,7 +28,7 @@ BackgroundMusicManager::BackgroundMusicManager()
 		temp = ss.substr(sPos, ePos - sPos - 1);
 		if (temp.compare("") == 0)
 		{
-			log("BMM> Load Background ending");
+			//log("BMM> Load Background ending");
 			break;
 		}
 		sPos = ePos + 1;
@@ -38,10 +38,10 @@ BackgroundMusicManager::BackgroundMusicManager()
 		background = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
 		background = "/bgm/" + background + ".mp3";
 
-		log("bgmkey = %s , backgroundmusicPath = %s", key.c_str(), background.c_str());
+		//log("bgmkey = %s , backgroundmusicPath = %s", key.c_str(), background.c_str());
 
 		addBackgroundMusic(key, background);
-		log("BMM> addBackground[%s]", key.c_str());
+		//log("BMM> addBackground[%s]", key.c_str());
 	}
 }
 
@@ -82,7 +82,7 @@ BackgroundMusicManager* BackgroundMusicManager::getInstance()
 	if (_instance == nullptr)
 	{
 		_instance = new BackgroundMusicManager();
-		log("BMM> instance starting...");
+		//log("BMM> instance starting...");
 	}
 	return _instance;
 }

@@ -9,8 +9,6 @@ ScriptReader::SCSet::SCSet(ScriptReader* reader, std::string &key, char mark, in
 {
 	this->reader = reader;
 	this->type = ScriptCommandType::Set;
-	this->setDataValue = CC_CALLBACK_2(GameSystem::setDataValue, GameSystem::getInstance());
-	this->getDataValue = CC_CALLBACK_1(GameSystem::getDataValue, GameSystem::getInstance());
 }
 
 
@@ -23,15 +21,27 @@ void ScriptReader::SCSet::execute(cocos2d::Node* stage)
 	switch (_mark)
 	{
 	case '=':
-		setDataValue(_key, _value);
 		break;
 	case '-':
-		setDataValue(_key, getDataValue(_key) - _value);
+		_value = getDataValue(_key) - _value;
 		break;
 	case '+':
-		setDataValue(_key, getDataValue(_key) + _value);
+		_value = getDataValue(_key) + _value;
 		break;
 	default:
-
+		log("SC>Set:Unknow Symbol.");
+		break;
 	}
+	setDataValue(_key, _value);
+	log("SC>Set:%s=%d",_key.c_str(),_value);
+}
+
+void ScriptReader::SCSet::setDataValue(std::string key, int value)
+{
+	GameSystem::getInstance()->setDataValue(key, value);
+}
+
+int ScriptReader::SCSet::getDataValue(std::string key)
+{
+	return GameSystem::getInstance()->getDataValue(key);
 }

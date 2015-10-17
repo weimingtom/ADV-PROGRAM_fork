@@ -23,7 +23,6 @@ CharactorManager::CharactorManager()
 	
 	while (1)
 	{
-		log("CM> load new Charactor");
 		auto tempCharactor = new Charactor();
 		std::string key;
 		std::string name;
@@ -31,20 +30,16 @@ CharactorManager::CharactorManager()
 		key = ss.substr(sPos, ePos - sPos - 1);
 		if (key.compare("") == 0)
 		{
-			log("CM> Load Charactor ending");
 			break;
 		}
-		log("CM> key=%s", key.c_str());
 		sPos = ePos + 1;
 		ePos = ss.find('\n', sPos);
 		name = ss.substr(sPos, ePos - sPos - 1);
 		tempCharactor->name = name;
-		log("CM> name=%s", name.c_str());
 		sPos = ePos + 1;
 		tempCharactor->fgList = new std::map<std::string, char*>();
 		while (1)
 		{
-			log("CM> load CharactorFace");
 			std::string temp;
 			ePos = ss.find('\n', sPos);
 			temp = ss.substr(sPos, ePos - sPos - 1);
@@ -59,15 +54,16 @@ CharactorManager::CharactorManager()
 			char* tmpfacePath = new char;
 			facePath.copy(tmpfacePath,facePath.length(),0);
 			*(tmpfacePath + facePath.length()) = '\0';
-			log("face = %s , facePath = %s", face.c_str(), (char*)facePath.c_str());
 			tempCharactor->fgList->insert(std::pair<std::string, char*>(face, tmpfacePath));
 		}
 
+		/*
 		//check list
 		for (auto i = tempCharactor->fgList->begin(); i != tempCharactor->fgList->end(); i++)
 		{
 			log("%s , %s", i->first.c_str(), i->second);
 		}
+		*/
 
 		addCharactor(key, tempCharactor);
 		log("CM> addCharactor[%s]", tempCharactor->name.c_str());
