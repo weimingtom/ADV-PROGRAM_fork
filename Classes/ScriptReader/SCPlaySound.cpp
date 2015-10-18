@@ -24,4 +24,6 @@ void ScriptReader::SCPlaySound::execute(cocos2d::Node* stage)
 	{
 		reader->playSound(sound);
 	}
+
+	reader->nextScript();
 }

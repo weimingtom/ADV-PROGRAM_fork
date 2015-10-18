@@ -24,4 +24,6 @@ void ScriptReader::SCPlayBGM::execute(cocos2d::Node* stage)
 	{
 		reader->playBackgroundMusic(bgm);
 	}
+
+	reader->nextScript();
 }

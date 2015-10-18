@@ -34,6 +34,8 @@ void ScriptReader::SCSet::execute(cocos2d::Node* stage)
 	}
 	setDataValue(_key, _value);
 	log("SC>Set:%s=%d",_key.c_str(),_value);
+
+	reader->nextScript();
 }
 
 void ScriptReader::SCSet::setDataValue(std::string key, int value)
