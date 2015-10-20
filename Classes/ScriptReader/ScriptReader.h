@@ -20,7 +20,8 @@ enum ScriptCommandType
 	PlayBGM,	//播放音乐
 	StopBGM,	//停止音乐
 	PlaySd,		//播放音效
-	StopSd		//停止音效
+	StopSd,		//停止音效
+	If			//判断
 };
 
 class ScriptReader
@@ -49,6 +50,8 @@ class ScriptReader
 	class SCStopSound;	//停止音效
 
 	class SCSet;		//数值修改
+
+	class SCIf;			//条件判断
 
 	std::map<std::string, std::vector<ScriptCommand*>*> _scripts;	//储存 段落标签和对应脚本列表
 	/*

@@ -10,6 +10,7 @@
 #include "SCPlaySound.h"
 #include "SCStopSound.h"
 #include "SCSet.h"
+#include "SCIf.h"
 #include "CharactorManager.h"
 #include "GameSystem.h"
 
@@ -98,7 +99,7 @@ void ScriptReader::loadScriptFile(std::string path)
 
 	while (sPos >= 0)
 	{
-		log("load succeess");
+		//log("load succeess");
 		ePos = ss.find('\n', sPos);	//从脚本中读出一行
 		std::string command;	//储存解读脚本命令
 		if (ePos < 0)
@@ -147,98 +148,118 @@ void ScriptReader::loadScriptFile(std::string path)
 							currentSelect = selectCMD;
 							cms->push_back(selectCMD);
 						}
-						else
-							if (cmd.compare("GameOver") == 0)
+						else if (cmd.compare("GameOver") == 0)
+						{
+							//游戏结束，待补充
+						}
+						else if (cmd.compare("Leave") == 0)
+						{
+							SCLeave* leaveCMD = new SCLeave(this, cmdParams);
+							cms->push_back(leaveCMD);
+						}
+						else if (cmd.compare("Set") == 0)
+						{
+							std::string key;
+							char mark;
+							int value;
+							int pos;
+							pos = cmdParams.find_first_of("+-=", 0);
+							key = cmdParams.substr(0, pos);
+							mark = cmdParams[pos];
+							cmdParams.substr(pos + 1, cmdParams.length() - 1);
+							pos = cmdParams.find_first_of("+-", 0);
+							if (pos < 0)
 							{
-								//游戏结束，待补充
+								value = atoi(cmdParams.c_str());
 							}
 							else
-								if (cmd.compare("Leave") == 0)
+							{
+								char tmpChar = cmdParams[pos];
+								std::string tmpString;
+								switch (tmpChar)
 								{
-									SCLeave* leaveCMD = new SCLeave(this, cmdParams);
-									cms->push_back(leaveCMD);
+								case '-':
+									value = 1;
+									//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// -atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
+									break;
+								case '+':
+									//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// +atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
+									value = 1;
+									break;
+								default:
+									break;
 								}
-								else
-									if (cmd.compare("Set") == 0)
-									{
-										std::string key;
-										char mark;
-										int value;
-										int pos;
-										pos = cmdParams.find_first_of("+-=", 0);
-										key = cmdParams.substr(0, pos);
-										mark = cmdParams[pos];
-										cmdParams.substr(pos + 1, cmdParams.length() - 1);
-										pos = cmdParams.find_first_of("+-", 0);
-										log("Setttttt add!");
-										if (pos < 0)
-										{
-											log("Setttttt add 2!");
-											value = atoi(cmdParams.c_str());
-										}
-										else
-										{
-											log("Setttttt add 3!");
-											char tmpChar = cmdParams[pos];
-											std::string tmpString;
-											switch (tmpChar)
-											{
-											case '-':
-												value = 1;
-												//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// -atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
-												break;
-											case '+':
-												//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// +atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
-												value = 1;
-												break;
-											default:
-												break;
-											}
-										}
-										log("Set Add!");
-										SCSet* setCMD = new SCSet(this, key, mark, value);
-										cms->push_back(setCMD);
-									}
-									else
-										if (cmd.compare("Jump") == 0)
-										{
-											SCJump* jumpCMD = new SCJump(this, cmdParams);
-											cms->push_back(jumpCMD);
-										}
-										else
-											if (cmd.compare("Background") == 0)
-											{
-												SCBackground* backgroundCMD = new SCBackground(this, cmdParams);
-												cms->push_back(backgroundCMD);
-											}
-											else
-												if (cmd.compare("PlayBGM") == 0)
-												{
-													SCPlayBGM* playBGMCMD = new SCPlayBGM(this, cmdParams);
-													cms->push_back(playBGMCMD);
-												}
-												else
-													if (cmd.compare("StopBGM") == 0)
-													{
-														SCStopBGM* stopBGMCMD = new SCStopBGM(this);
-														cms->push_back(stopBGMCMD);
-													}
-													else
-														if (cmd.compare("PlaySound") == 0)
-														{
-															SCPlaySound* playSoundCMD = new SCPlaySound(this, cmdParams);
-															cms->push_back(playSoundCMD);
-														}
-														else
-															if (cmd.compare("StopSound") == 0)
-															{
-																SCStopSound* stopSoundCMD = new SCStopSound(this);
-																cms->push_back(stopSoundCMD);
-															}
-															else
-										{
-											log("Unknow Script Command> [%s]:[%s]", cmd.c_str(), cmdParams.c_str());
-										}
+							}
+							SCSet* setCMD = new SCSet(this, key, mark, value);
+							cms->push_back(setCMD);
+						}
+						else if (cmd.compare("Jump") == 0)
+						{
+							SCJump* jumpCMD = new SCJump(this, cmdParams);
+							cms->push_back(jumpCMD);
+						}
+						else if (cmd.compare("Background") == 0)
+						{
+							SCBackground* backgroundCMD = new SCBackground(this, cmdParams);
+							cms->push_back(backgroundCMD);
+						}
+						else if (cmd.compare("PlayBGM") == 0)
+						{
+							SCPlayBGM* playBGMCMD = new SCPlayBGM(this, cmdParams);
+							cms->push_back(playBGMCMD);
+						}
+						else if (cmd.compare("StopBGM") == 0)
+						{
+							SCStopBGM* stopBGMCMD = new SCStopBGM(this);
+							cms->push_back(stopBGMCMD);
+						}
+						else if (cmd.compare("PlaySound") == 0)
+						{
+							SCPlaySound* playSoundCMD = new SCPlaySound(this, cmdParams);
+							cms->push_back(playSoundCMD);
+						}
+						else if (cmd.compare("StopSound") == 0)
+						{
+							SCStopSound* stopSoundCMD = new SCStopSound(this);
+							cms->push_back(stopSoundCMD);
+						}
+						else if (cmd.compare("If") == 0)
+						{
+							std::string expression = "";	//表达式
+							std::string trueTag = "";	//真跳转
+							std::string falseTag = "";	//else跳转
+							int pos;		
+
+							//提取表达式
+							pos = cmdParams.find_first_of(":", 0);
+							expression = cmdParams.substr(0, pos);
+							
+							//提取真跳转
+							cmdParams = cmdParams.substr(pos + 1, cmdParams.length() - 1);
+							pos = cmdParams.find_first_of(":", 0);
+							if (pos < 0)	//没有else跳转的情况
+							{
+								trueTag = cmdParams;
+								//falseTag = "";
+
+							}
+							else
+							{
+								trueTag = cmdParams.substr(0, pos);
+								cmdParams = cmdParams.substr(pos + 1, cmdParams.length() - 1);
+								falseTag = cmdParams.substr(0, pos);
+							}
+							SCIf* ifCMD = new SCIf(this, expression, trueTag, falseTag);
+							cms->push_back(ifCMD);
+						}
+						else
+						{
+							log("Unknow Script Command> [%s]:[%s]", cmd.c_str(), cmdParams.c_str());
+						}
+												
+												
+													
+														
 					}
 					else
 					{
@@ -290,6 +311,11 @@ void ScriptReader::loadScriptFile(std::string path)
 
 void ScriptReader::jumpToSign(std::string &sign)
 {
+	if (sign.compare("") == 0)
+	{
+		log("Sign is null");
+		return;
+	}
 	isWaitingForSelection = false;
 	auto list = _scripts.find(sign);
 	if (list == _scripts.end())
@@ -304,12 +330,14 @@ void ScriptReader::jumpToSign(std::string &sign)
 
 void ScriptReader::nextScript()
 {
-	log("loading");
+	//log("loading");
+	
 	if (isWaitingForSelection)
 	{
 		log("waitting");
 		return;
 	}
+	_currentCommandIndex++;
 	auto list = _scripts.find(_currentSignName);
 	if (list == _scripts.end())
 	{
@@ -317,12 +345,12 @@ void ScriptReader::nextScript()
 		return;
 	}
 	auto cmdList = list->second;
-	if (_currentCommandIndex >= (int)cmdList->size())
+	if (_currentCommandIndex-1 >= (int)cmdList->size())
 	{
 		log("End of Script..! CurrentScript");
 	}
 
-	auto cmd = cmdList->at(_currentCommandIndex);
+	auto cmd = cmdList->at(_currentCommandIndex-1);
 
 	switch (cmd->type)
 	{
@@ -356,8 +384,11 @@ void ScriptReader::nextScript()
 	case ScriptCommandType::Set:
 		((SCSet*)cmd)->execute(stage);
 		break;
+	case ScriptCommandType::If:
+		((SCIf*)cmd)->execute(stage);
+		break;
 	default:
 		log("Unhandle ScriptCommandType [%d]", cmd->type);
 	}
-	_currentCommandIndex++;
+	//_currentCommandIndex++;
 }
