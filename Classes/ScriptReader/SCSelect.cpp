@@ -28,8 +28,9 @@ void ScriptReader::SCSelect::execute(Node* stage)
 	log("Select::> optionSize[%d]", options.size());
 	for (auto itr = options.begin(); itr != options.end(); itr++)
 	{
-		auto label = Label::createWithSystemFont(itr->second, "MSYH", 20);
+		auto label = Label::createWithSystemFont(itr->second, "MSYH", 30);
 		label->setColor(Color3B::WHITE);
+		label->enableShadow();
 		log("OPTION[%s] SIGN[%s]", itr->second.c_str(), itr->first.c_str());
 		auto button = MenuItemLabel::create(label, [=](Ref*)
 		{

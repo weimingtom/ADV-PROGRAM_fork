@@ -4,10 +4,13 @@
 t1#s1:这是一个对话测试
 #Set:key=1
 t1:现在创建了一个key值，并且设定值为一
+#Select
+>part_one:分支1
+>part_two:分支2
 #If:key>1:gameone:gametwo
-@gameone
+@part_one
 #Background:cxc_2
 t2#s1:现在触发了分支1
-@gametwo
+@part_two
 #Background:cxc_3
-t2#s1:现在出发了分支2
+t2#s1:现在触发了分支2
