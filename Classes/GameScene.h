@@ -49,5 +49,9 @@ public:
 
 	void playSound(std::string &file);	//播放音效
 	void stopSound();					//停止音效
+
+	void startAutoPlay();	//开始自动前进
+	void stopAutoPlay();	//停止自动前进
+	void autoPlay(float dt);	//自动前进
 };
 

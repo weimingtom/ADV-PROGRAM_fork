@@ -4,6 +4,16 @@
 t1#s1:这是一个对话测试
 #Set:key=1
 t1:现在创建了一个key值，并且设定值为一
+t1:一
+t1:二
+t1:三
+t1:嘿
+#Background:cxc_2
+#Background:cxc_3
+#Background:cxc_2
+#Background:cxc_3
+#Background:cxc_2
+#Background:cxc_3
 #Select
 >part_one:分支1
 >part_two:分支2

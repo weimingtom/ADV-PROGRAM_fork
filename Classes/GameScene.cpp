@@ -73,7 +73,7 @@ bool GameScene::init()
 	*/
 
 	//对话框按钮
-	auto buttonDict = MenuItemImage::create("/ui/dialog/button_dict.png", "/ui/dialog/button_dict_down.png");
+	auto buttonDict = MenuItemImage::create("/ui/dialog/button_dict.png", "/ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
 	buttonDict->setPosition(Vec2(840,220));
 
 	auto buttonSave = MenuItemImage::create("/ui/dialog/button_save.png", "/ui/dialog/button_save_down.png");
@@ -125,14 +125,7 @@ bool GameScene::init()
 	};
 	_dialogWindow->getEventDispatcher()->addEventListenerWithSceneGraphPriority(dialogClickEvent, _dialogWindow);
 
-
-	//文本测试
-	
-	std::string test = "Hello World!";
-	showText(test);
-	showName(test);
-
-	
+	//创建ScriptReader对象
 	_reader = new ScriptReader();
 	_reader->initWithStage(stageLayer);
 	//绑定reader功能
@@ -147,10 +140,6 @@ bool GameScene::init()
 	_reader->loadScriptFile("/scenario/TestII.txt");
 	_reader->nextScript();
 	
-
-	//std::string TestText = UTEXT("HelloWorldAndChangeTheWorld!今天天气真好");
-	//_reader->setText(TestText);
-	//scheduleUpdate();
 
 	return true;
 }
@@ -245,4 +234,20 @@ void GameScene::playSound(std::string &file)
 void GameScene::stopSound()
 {
 	CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
+}
+
+void GameScene::startAutoPlay()
+{
+	//schedule(schedule_selector(GameScene::autoPlay), GameSystem::getInstance()->getAutoSpeed());
+	schedule(schedule_selector(GameScene::autoPlay));
+}
+
+void GameScene::stopAutoPlay()
+{
+	unschedule(schedule_selector(GameScene::autoPlay));
+}
+
+void GameScene::autoPlay(float dt)
+{
+	_reader->nextScript();
 }
