@@ -18,7 +18,8 @@ public:
 
 	void menuExit(Ref* pSender);
 
-	void newgame();
+	void newgame();	//进入新游戏
+	void config();	//游戏设置
 
 };
 

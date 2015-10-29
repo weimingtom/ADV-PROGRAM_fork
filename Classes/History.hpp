@@ -20,7 +20,7 @@ enum recordType
 {
     null,   //旁白（默认）
     talk,   //对白
-    select  //选项
+    selecte  //选项
 };
 
 /*记录*/
@@ -44,15 +44,15 @@ class HistoryLogger
 {
     int _maximum;   //最大记录数
     int _currentLog;    //当前记录
-    record* records;
+    record* _records;
     static HistoryLogger* _instance;    //实例
 public:
     HistoryLogger();
     ~HistoryLogger();
-    static HistoryLogger getInstance(); //获取实例
-    void destroyInstance(); //销毁实例
-    record createRecord(char* type, std::string text, std::string name, color4B color);    //生成记录
-    void addRecord(recordType type, std::string text, std::string name, color4B color);
+    static HistoryLogger* getInstance(); //获取实例
+	void destoryInstance(); //销毁实例
+    record* createRecord(std::string type, std::string text, std::string name, Color4B color);    //生成记录
+    void addRecord(recordType type, std::string text, std::string name, Color4B color);
     void pushRecord(record record);
     
 };

@@ -1,5 +1,6 @@
 #include "MainMenuScene.h"
 #include "GameScene.h"
+#include "SettingScene.h"
 
 USING_NS_CC;
 
@@ -52,7 +53,7 @@ bool MainMenu::init()
 	auto buttonCG = MenuItemImage::create("/ui/Title/button_cg.png", "/ui/Title/button_cg_down.png");
 	buttonCG->setPosition(Vec2(1114, visibleSize.height - 343));
 
-	auto buttonConfig = MenuItemImage::create("/ui/Title/button_config.png", "/ui/Title/button_config_down.png");
+	auto buttonConfig = MenuItemImage::create("/ui/Title/button_config.png", "/ui/Title/button_config_down.png",CC_CALLBACK_0(MainMenu::config, this));
 	buttonConfig->setPosition(Vec2(1114, visibleSize.height - 393));
 
 	auto buttonExit = MenuItemImage::create("/ui/Title/button_exit.png", "/ui/Title/button_exit_down.png",CC_CALLBACK_1(MainMenu::menuExit, this));
@@ -96,4 +97,10 @@ void MainMenu::menuExit(Ref* pSender)
 void MainMenu::newgame()
 {
 	Director::getInstance()->replaceScene(GameScene::createScene());
+}
+
+void MainMenu::config()
+{
+	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
+	Director::getInstance()->replaceScene(SettingScene::createScene());
 }

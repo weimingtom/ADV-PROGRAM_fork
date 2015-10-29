@@ -11,7 +11,7 @@
 HistoryLogger::HistoryLogger()
     : _maximum(MAXIMUM)
 {
-    _records = new record(MAXIMUM);
+    //_records = new record[MAXIMUM];
 }
 
 HistoryLogger::~HistoryLogger()
@@ -19,16 +19,13 @@ HistoryLogger::~HistoryLogger()
     
 }
 
-HistoryLogger HistoryLogger::getInstance()
+HistoryLogger* HistoryLogger::getInstance()
 {
-    if (_instance)
-    {
-        return _instance;
-    }
-    else
+    if (!_instance)
     {
         _instance = new HistoryLogger;
     }
+	return _instance;
 }
 
 void HistoryLogger::destoryInstance()
@@ -40,21 +37,23 @@ void HistoryLogger::destoryInstance()
     }
 }
 
-record HistoryLogger::createRecord(char* type, std::string text, std::string name, Color4B color)
+record* HistoryLogger::createRecord(std::string type, std::string text, std::string name, Color4B color)
 {
+	/*将type从string转成recordType*/
     recordType tmpType;
-    switch (type)
-    {
-        case "null":
-            tmpType = recordType::null;
-            break;
-        case "talk":
-            tmpType = recordType::talk;
-        case "select":
-            tmpType = recordType::select;
-        default:
-            tmpType = recordType::null;
-            break;
-    }
-    record tmpRecord = new record(tmpType, text, name, color);
+	if (type.compare("null") == 0)
+	{
+		tmpType = recordType::null;
+	}
+	else if (type.compare("talk") == 0)
+	{
+		tmpType = recordType::talk;
+	}
+	else if (type.compare("select") == 0)
+	{
+		tmpType = recordType::selecte;
+	}
+
+    record* tmpRecord = new record(tmpType, text, name, color);
+	return tmpRecord;
 }
