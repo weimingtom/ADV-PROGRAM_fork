@@ -10,6 +10,7 @@ Slidebar::Slidebar(Sprite* backgroundSprite, Sprite* pointSprite)
 	_maxValue = 100;
 	_minValue = 0;
 	_targetValue = nullptr;
+    _controlEvent = createControlEvent();
 }
 
 
@@ -23,8 +24,8 @@ Slidebar* Slidebar::createSlidebar(std::string backgroundFile, std::string point
 	auto tmpPointSprite = Sprite::create(pointFile);
 	if (tmpBackgroundSprite && tmpPointSprite)
 	{
-		auto tmpSliderbar = new Slidebar(tmpBackgroundSprite, tmpPointSprite);
-		return tmpSliderbar;
+		auto tmpSlidebar = new Slidebar(tmpBackgroundSprite, tmpPointSprite);
+		return tmpSlidebar;
 	}
 	else
 	{
@@ -36,5 +37,21 @@ Slidebar* Slidebar::createSlidebar(std::string backgroundFile, std::string point
 
 EventListenerTouchOneByOne* Slidebar::createControlEvent()
 {
-
+    auto et = EventListenerTouchOneByOne::create();
+    et->onTouchBegan = [=](Touch *t, Event *e)
+    {
+        this->_point;
+    }
+    
+    et->onTouchMove = [=](Touch *t, Event *e)
+    {
+        
+    }
+    
+    et->onTouchEnd = [=](Touch *t, Event *e)
+    {
+        
+    }
+    
+    return et;
 }
