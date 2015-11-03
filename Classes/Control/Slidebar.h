@@ -9,8 +9,10 @@ class Slidebar : public Node
 	Sprite* _point;
 	int _maxValue;
 	int _minValue;
-	int* _targetValue;
+	float* _targetValue;
 	EventListenerTouchOneByOne* _controlEvent;
+	float _pointPositionX;
+	float _maxWidth;
 public:
 	Slidebar(Sprite* backgroundSprite, Sprite* pointSprite);
 	~Slidebar();
@@ -20,5 +22,7 @@ public:
 	void setMinValue(int value);
 	void valueChange();
 	EventListenerTouchOneByOne* createControlEvent();	//建立控制事件
+	void setMaxWidth(float value);//设置滑块最大移动范围（半径）
+	void setTargetValue(float *value);
 };
 
