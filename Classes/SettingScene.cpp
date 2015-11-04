@@ -1,6 +1,9 @@
 #include "SettingScene.h"
 #include "Control/Slidebar.h"
 
+#include "Control/EasyButton.h"
+#include "Control/RadioButton.h"
+
 SettingScene::SettingScene()
 {
 }
@@ -52,7 +55,23 @@ bool SettingScene::init()
 	auto textSpeedSliderBar = Slidebar::createSlidebar("/ui/scroll_bar.png", "/ui/scroll_point.png");
 	textSpeedSliderBar->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(textSpeedSliderBar);
+
 	//
+
+	//²âÊÔ°´Å¥
+	auto testButton = EasyButton::createEasyButton("/ui/button_ok.png", "/ui/button_ok.png", "/ui/button_ok_down.png");
+	testButton->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y + 100));
+	//stageLayer->addChild(testButton);
+	//testButton->touchEvent = CC_CALLBACK_0(SettingScene::back, this);
+	auto testButton2 = EasyButton::createEasyButton("/ui/button_ok.png", "/ui/button_ok.png", "/ui/button_ok_down.png");
+	testButton2->setPosition(Vec2(visibleSize.width / 2 + origin.x + 100, visibleSize.height / 2 + origin.y + 100));
+	//stageLayer->addChild(testButton2);
+	auto testButton3 = EasyButton::createEasyButton("/ui/button_ok.png", "/ui/button_ok.png", "/ui/button_ok_down.png");
+	testButton3->setPosition(Vec2(visibleSize.width / 2 + origin.x + 200, visibleSize.height / 2 + origin.y + 100));
+	//stageLayer->addChild(testButton3);
+	auto testRadio = RadioButton::createRadioButton(testButton, testButton2, testButton3, nullptr);
+	stageLayer->addChild(testRadio);
+
 
 	//·µ»Ø°´Å¥
 	auto buttonBack = MenuItemImage::create("/ui/button_return.png", "/ui/button_return_down.png", CC_CALLBACK_0(SettingScene::back, this));

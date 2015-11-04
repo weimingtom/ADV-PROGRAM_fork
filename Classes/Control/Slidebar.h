@@ -24,5 +24,6 @@ public:
 	EventListenerTouchOneByOne* createControlEvent();	//建立控制事件
 	void setMaxWidth(float value);//设置滑块最大移动范围（半径）
 	void setTargetValue(float *value);
+	void changeTargetValue(float change);
 };
 

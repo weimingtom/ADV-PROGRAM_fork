@@ -97,6 +97,12 @@ bool GameScene::init()
 
 	auto CBauto = ui::CheckBox::create("/ui/dialog/charbox_auto_off.png", "/ui/dialog/charbox_auto_off.png", "/ui/dialog/charbox_auto_on.png", "/ui/dialog/charbox_auto_off.png", "/ui/dialog/charbox_auto_on.png");
 	CBauto->setPosition(Vec2(1000, 75));
+	/*
+	CBauto->onTouchEnded = [=](Touch *touch, Event *unusedEvent)
+	{
+		//startAutoPlay();
+	};
+	*/
 	_dialogWindow->addChild(CBauto, 1);
 
 	auto menu = Menu::create(buttonDict, buttonSave, buttonLoad, buttonLog, buttonConfig, buttonTitle, NULL);
@@ -239,7 +245,7 @@ void GameScene::stopSound()
 void GameScene::startAutoPlay()
 {
 	//schedule(schedule_selector(GameScene::autoPlay), GameSystem::getInstance()->getAutoSpeed());
-	schedule(schedule_selector(GameScene::autoPlay));
+	schedule(schedule_selector(GameScene::autoPlay),0.5f);
 }
 
 void GameScene::stopAutoPlay()

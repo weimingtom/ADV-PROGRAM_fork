@@ -87,12 +87,8 @@ EventListenerTouchOneByOne* Slidebar::createControlEvent()
 		_pointPositionX = _point->getPositionX();
 		//改变的倍率
 		float change = (_pointPositionX - (_background->getPositionX() - _maxWidth)) / (_maxWidth * 2);
-		if (_targetValue)
-		{
-			*_targetValue = *_targetValue * change;
-		}
-		log("Target Value = %f", change
-			);
+		changeTargetValue(change);
+		//log("Target Value = %f", change);
 	};
     
     return et;
@@ -101,4 +97,12 @@ EventListenerTouchOneByOne* Slidebar::createControlEvent()
 void Slidebar::setMaxWidth(float value)
 {
 	_maxWidth = value;
+}
+
+void Slidebar::changeTargetValue(float change)
+{
+	if (_targetValue)
+	{
+		*_targetValue = *_targetValue * change;
+	}
 }
