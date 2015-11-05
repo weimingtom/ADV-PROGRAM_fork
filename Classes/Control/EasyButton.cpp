@@ -20,6 +20,7 @@ EasyButton::EasyButton(Sprite* _normalSprite, Sprite* _touchSprite, Sprite* _sel
 	_eventTouch = EventListenerTouchOneByOne::create();
 	_eventTouch->onTouchBegan = [=](Touch *t, Event *e)
 	{
+		log("EasyButton Touch!");
 		if (_normal->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
 		{
 			onTouchBegan(t, e);
@@ -32,18 +33,20 @@ EasyButton::EasyButton(Sprite* _normalSprite, Sprite* _touchSprite, Sprite* _sel
 		//onTouchMoved(t, e);
 	};
 	_eventTouch->onTouchEnded = [=](Touch *t, Event *e)
-	{if (_normal->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
 	{
-		onTouchEnded(t, e, true);
-	}
-	else
-	{
-		onTouchEnded(t, e, false);
-	}
+		log("EasyButton Touch End!");
+		if (_normal->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
+		{
+			onTouchEnded(t, e, true);
+		}
+		else
+		{
+			onTouchEnded(t, e, false);
+		}
 	};
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_eventTouch, this);
 	touchEvent = [=](){};
-	touchEventWithInt = [=](){};
+	//touchEventWithInt = [=](){};
 }
 
 
@@ -94,6 +97,15 @@ void EasyButton::onTouchEnded(Touch *t, Event *e, bool flag)
 	if (flag)
 	{
 		touchEvent();
-		touchEventWithInt;
 	}
+}
+
+void EasyButton::setEventTouchEnabled(bool flag)
+{
+	_eventTouch->setEnabled(flag);
+}
+
+Sprite* EasyButton::getNormal()
+{
+	return _normal;
 }

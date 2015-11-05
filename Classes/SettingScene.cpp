@@ -1,8 +1,8 @@
 #include "SettingScene.h"
 #include "Control/Slidebar.h"
 
-#include "Control/EasyButton.h"
-#include "Control/RadioButton.h"
+
+
 
 SettingScene::SettingScene()
 {
@@ -69,8 +69,11 @@ bool SettingScene::init()
 	auto testButton3 = EasyButton::createEasyButton("/ui/button_ok.png", "/ui/button_ok.png", "/ui/button_ok_down.png");
 	testButton3->setPosition(Vec2(visibleSize.width / 2 + origin.x + 200, visibleSize.height / 2 + origin.y + 100));
 	//stageLayer->addChild(testButton3);
-	auto testRadio = RadioButton::createRadioButton(testButton, testButton2, testButton3, nullptr);
-	stageLayer->addChild(testRadio);
+	_testRadio = RadioButton::createRadioButton(testButton, testButton2, testButton3, nullptr);
+	_testRadio->setSelectedNumber(3);
+	stageLayer->addChild(_testRadio);
+	_testRadio->touchEvent = CC_CALLBACK_0(SettingScene::test, this);
+
 
 
 	//·µ»Ø°´Å¥
@@ -88,4 +91,9 @@ bool SettingScene::init()
 void SettingScene::back()
 {
 	Director::getInstance()->popScene();
+}
+
+void SettingScene::test()
+{
+	log("RadioButton Number: %d", _testRadio->getSelectedNumber());
 }

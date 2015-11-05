@@ -22,7 +22,10 @@ public:
 	void onTouchMoved(Touch *t, Event *e);
 	void onTouchEnded(Touch *t, Event *e, bool flag);
 
+	void setEventTouchEnabled(bool flag);	//设置监听器开关
+	Sprite* getNormal();	//返回普通状态的精灵
+
 	std::function<void()> touchEvent;	//触碰事件方法指针
-	std::function<void(int i)> touchEventWithInt;	//带int参数的触碰事件方法指针
+	//std::function<void(int i)> touchEventWithInt;	//带int参数的触碰事件方法指针
 };
 
