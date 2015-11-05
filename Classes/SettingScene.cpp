@@ -1,7 +1,6 @@
 #include "SettingScene.h"
-#include "Control/Slidebar.h"
-
-
+#include "GameSystem.h"
+#include "SimpleAudioEngine.h"
 
 
 SettingScene::SettingScene()
@@ -52,10 +51,13 @@ bool SettingScene::init()
 	/*¼ÓÔØ°´Å¥*/
 
 	//SliderBar
-	auto textSpeedSliderBar = Slidebar::createSlidebar("/ui/scroll_bar.png", "/ui/scroll_point.png");
-	textSpeedSliderBar->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	stageLayer->addChild(textSpeedSliderBar);
-
+	_musicVolumeSlidebar = Slidebar::createSlidebar("/ui/scroll_bar.png", "/ui/scroll_point.png");
+	_musicVolumeSlidebar->setPosition(Vec2(750, 400));
+	_musicVolumeSlidebar->setFloat(GameSystem::getInstance()->getMusicVolume());
+	_musicVolumeSlidebar->moveEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
+	_musicVolumeSlidebar->touchEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
+	stageLayer->addChild(_musicVolumeSlidebar);
+	
 	//
 
 	//²âÊÔ°´Å¥
@@ -70,7 +72,7 @@ bool SettingScene::init()
 	testButton3->setPosition(Vec2(visibleSize.width / 2 + origin.x + 200, visibleSize.height / 2 + origin.y + 100));
 	//stageLayer->addChild(testButton3);
 	_testRadio = RadioButton::createRadioButton(testButton, testButton2, testButton3, nullptr);
-	_testRadio->setSelectedNumber(3);
+	_testRadio->setSelectedNumber(1);
 	stageLayer->addChild(_testRadio);
 	_testRadio->touchEvent = CC_CALLBACK_0(SettingScene::test, this);
 
@@ -96,4 +98,11 @@ void SettingScene::back()
 void SettingScene::test()
 {
 	log("RadioButton Number: %d", _testRadio->getSelectedNumber());
+}
+
+void SettingScene::changeMusicVolume()
+{
+	log("Music Value : %f", _musicVolumeSlidebar->getFloat());
+	GameSystem::getInstance()->setMusicVolume(_musicVolumeSlidebar->getFloat());
+	CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(GameSystem::getInstance()->getMusicVolume());
 }

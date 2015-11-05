@@ -9,12 +9,14 @@ Slidebar::Slidebar(Sprite* backgroundSprite, Sprite* pointSprite)
 	this->addChild(_point);
 	_pointPositionX = _point->getPositionX();
 	_maxWidth = (_background->getContentSize().width - _point->getContentSize().width) / 2 ;
-	_maxValue = 100;
-	_minValue = 0;
+	_maxValue = 1.0f;
+	_minValue = 0.0f;
 	_targetValue = nullptr;
-	log("Slidebar Done 1");
+	_floatValue = 0.5f;
     _controlEvent = createControlEvent();
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_controlEvent, this);
+	touchEvent = [=](){};
+	moveEvent = [=](){};
 }
 
 
@@ -45,10 +47,8 @@ EventListenerTouchOneByOne* Slidebar::createControlEvent()
 	
     et->onTouchBegan = [=](Touch *t, Event *e)
     {
-		//log("Touch began.");
 		if (_point->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
 		{
-			//log("Touch!");
 			return true;
 		}
 		else
@@ -56,6 +56,7 @@ EventListenerTouchOneByOne* Slidebar::createControlEvent()
 			if (_background->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))
 			{
 				float setP = this->convertTouchToNodeSpace(t).x;	//临时点
+				//限制滑块移动范围
 				if (setP < _background->getPositionX() - _maxWidth)
 					setP = _background->getPositionX() - _maxWidth;
 				if (setP > _background->getPositionX() + _maxWidth)
@@ -64,7 +65,6 @@ EventListenerTouchOneByOne* Slidebar::createControlEvent()
 				_pointPositionX = _point->getPositionX();
 				return true;
 			}
-			//log("Not in touch!");
 			return false;
 		}
 	};
@@ -79,6 +79,13 @@ EventListenerTouchOneByOne* Slidebar::createControlEvent()
 		if (xOff > RLimit) xOff = RLimit;
 		
 		_point->setPositionX(_pointPositionX + xOff);
+
+		//改变的倍率
+		_change = (_point->getPositionX()-(_background->getPositionX() - _maxWidth)) / (_maxWidth * 2);
+		changeTargetValue(_change);
+		_floatValue = (_maxValue - _minValue) * _change;
+
+		moveEvent();
 	};
 	
     et->onTouchEnded = [=](Touch *t, Event *e)
@@ -86,9 +93,10 @@ EventListenerTouchOneByOne* Slidebar::createControlEvent()
 		//保存指针位置
 		_pointPositionX = _point->getPositionX();
 		//改变的倍率
-		float change = (_pointPositionX - (_background->getPositionX() - _maxWidth)) / (_maxWidth * 2);
-		changeTargetValue(change);
-		//log("Target Value = %f", change);
+		_change = (_pointPositionX - (_background->getPositionX() - _maxWidth)) / (_maxWidth * 2);
+		changeTargetValue(_change);
+		_floatValue = (_maxValue-_minValue) * _change;
+		touchEvent();
 	};
     
     return et;
@@ -105,4 +113,45 @@ void Slidebar::changeTargetValue(float change)
 	{
 		*_targetValue = *_targetValue * change;
 	}
+}
+
+void Slidebar::setMaxValue(float value)
+{
+	_maxValue = value;
+	setFloat(_floatValue);
+}
+
+void Slidebar::setMinValue(float value)
+{
+	_minValue = value;
+	setFloat(_floatValue);
+}
+
+float Slidebar::getChange()
+{
+	return _change;
+}
+
+void Slidebar::setSlidebar()
+{
+	_point->setPosition((_background->getPositionX() - _maxWidth) + _maxWidth * 2 * _change, _point->getPositionY());
+	_pointPositionX = _point->getPositionX();
+}
+
+void Slidebar::setFloat(float value)
+{
+	if (value > _maxValue || value < _minValue)
+	{
+		log("Bad value!");
+		return;
+	}
+	_floatValue = value;
+	_change = value / (_maxValue - _minValue);
+	setSlidebar();
+	
+}
+
+float Slidebar::getFloat()
+{
+	return _floatValue;
 }
