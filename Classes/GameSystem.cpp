@@ -144,3 +144,17 @@ void GameSystem::setData(std::map<std::string, int> *map)// = nullptr)
 		_savedata[0] = *map;
 	}
 }
+
+void GameSystem::setSavedata(int i, bool value)
+{
+	char* ch = new char[4];
+	itoa(i, ch, 10);
+	cocos2d::UserDefault::getInstance()->setBoolForKey(ch, value);
+}
+
+bool GameSystem::getSavedata(int i)
+{
+	char* ch = new char[4];
+	itoa(i, ch, 10);
+	return cocos2d::UserDefault::getInstance()->getBoolForKey(ch);
+}

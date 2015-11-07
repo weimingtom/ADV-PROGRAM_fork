@@ -78,13 +78,14 @@ SaveData::SaveData(int number)
 
 		/*ÏÔÊ¾´æµµ½ØÍ¼*/
 		auto dataImage = Sprite::create("/ui/saveload/pic_bg.png");
-		dataImage->setPosition(19,99);
+		dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+		dataImage->setPosition(15,101);
 		stageLayer->addChild(dataImage);
 
 		/*ÏÔÊ¾´æµµÈÕÆÚ*/
 		auto dataDate = Label::createWithSystemFont("-/-/- --:--","ºÚÌå",20);
 		dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		dataDate->setPosition(160, 65);
+		dataDate->setPosition(170, 65);
 		stageLayer->addChild(dataDate);
 
 		/*ÏÔÊ¾´æµµ±¸×¢*/
@@ -97,4 +98,10 @@ SaveData::SaveData(int number)
 
 SaveData::~SaveData()
 {
+}
+
+SaveData* SaveData::create(int i)
+{
+	auto tmpSavedata = new SaveData(i);
+	return tmpSavedata;
 }

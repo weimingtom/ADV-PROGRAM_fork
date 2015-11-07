@@ -14,7 +14,9 @@ class SaveData : public Node
 	std::string _date;	//存档时间
 public:
 	SaveData(int number, std::string imageFile, std::string text, std::string date);
+	SaveData(int number);
 	~SaveData();
 	void setOther();	//设置备注信息
+	static SaveData* create(int i);	//创建一个SaveData按钮
 };
 

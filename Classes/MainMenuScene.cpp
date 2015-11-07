@@ -3,6 +3,7 @@
 #include "SettingScene.h"
 #include "SimpleAudioEngine.h"
 #include "GameSystem.h"
+#include "SaveScene.h"
 
 USING_NS_CC;
 
@@ -49,7 +50,7 @@ bool MainMenu::init()
 	auto buttonNew = MenuItemImage::create("/ui/Title/button_new.png", "/ui/Title/button_new_down.png", CC_CALLBACK_0(MainMenu::newgame, this));
 	buttonNew->setPosition(Vec2(1114, visibleSize.height - 243));
 
-	auto buttonLoad = MenuItemImage::create("/ui/Title/button_load.png","/ui/Title/button_load_down.png");
+	auto buttonLoad = MenuItemImage::create("/ui/Title/button_load.png", "/ui/Title/button_load_down.png", CC_CALLBACK_0(MainMenu::load, this));
 	buttonLoad->setPosition(Vec2(1114, visibleSize.height - 293));
 
 	auto buttonCG = MenuItemImage::create("/ui/Title/button_cg.png", "/ui/Title/button_cg_down.png");
@@ -105,4 +106,10 @@ void MainMenu::config()
 {
 	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
 	Director::getInstance()->replaceScene(SettingScene::createScene());
+}
+
+void MainMenu::load()
+{
+	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
+	Director::getInstance()->replaceScene(SaveScene::createScene());
 }

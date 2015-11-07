@@ -20,6 +20,7 @@ public:
 
 	void newgame();	//进入新游戏
 	void config();	//游戏设置
+	void load();	//读取存档
 
 };
 
