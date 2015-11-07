@@ -245,7 +245,7 @@ void GameScene::stopSound()
 void GameScene::startAutoPlay()
 {
 	//schedule(schedule_selector(GameScene::autoPlay), GameSystem::getInstance()->getAutoSpeed());
-	schedule(schedule_selector(GameScene::autoPlay),0.5f);
+	schedule(schedule_selector(GameScene::autoPlay),1.0f);
 }
 
 void GameScene::stopAutoPlay()

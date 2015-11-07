@@ -47,5 +47,7 @@ public:
 	int getDataValue(std::string &key);
 	void setData(std::map<std::string, int> *map = nullptr);
 
+	void setSavedata(int i, bool value);
+	bool getSavedata(int i);
 };
 

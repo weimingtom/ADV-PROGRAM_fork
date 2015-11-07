@@ -61,17 +61,12 @@ bool SettingScene::init()
 	//
 
 	//²âÊÔ°´Å¥
-	auto testButton = EasyButton::createEasyButton("/ui/button_ok.png", "/ui/button_ok.png", "/ui/button_ok_down.png");
-	testButton->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y + 100));
-	//stageLayer->addChild(testButton);
-	//testButton->touchEvent = CC_CALLBACK_0(SettingScene::back, this);
-	auto testButton2 = EasyButton::createEasyButton("/ui/button_ok.png", "/ui/button_ok.png", "/ui/button_ok_down.png");
-	testButton2->setPosition(Vec2(visibleSize.width / 2 + origin.x + 100, visibleSize.height / 2 + origin.y + 100));
-	//stageLayer->addChild(testButton2);
-	auto testButton3 = EasyButton::createEasyButton("/ui/button_ok.png", "/ui/button_ok.png", "/ui/button_ok_down.png");
-	testButton3->setPosition(Vec2(visibleSize.width / 2 + origin.x + 200, visibleSize.height / 2 + origin.y + 100));
-	//stageLayer->addChild(testButton3);
-	_testRadio = RadioButton::createRadioButton(testButton, testButton2, testButton3, nullptr);
+	auto testButton = EasyButton::createEasyButton("/ui/charbox_off.png", "/ui/charbox_off.png", "/ui/charbox_on.png");
+	testButton->setPosition(Vec2(710, 275));
+	auto testButton2 = EasyButton::createEasyButton("/ui/charbox_off.png", "/ui/charbox_off.png", "/ui/charbox_on.png");
+	testButton2->setPosition(Vec2(920, 275));
+
+	_testRadio = RadioButton::createRadioButton(testButton, testButton2, nullptr);
 	_testRadio->setSelectedNumber(1);
 	stageLayer->addChild(_testRadio);
 	_testRadio->touchEvent = CC_CALLBACK_0(SettingScene::test, this);
