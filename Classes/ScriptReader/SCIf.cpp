@@ -26,12 +26,12 @@ void ScriptReader::SCIf::execute(cocos2d::Node* stage)
 	}
 	if (expressionJudge())
 	{
-		cocos2d::log("SC> If (%s) is true, jump to %s", _expression.c_str(), _trueTag.c_str());
+		//cocos2d::log("SC> If (%s) is true, jump to %s", _expression.c_str(), _trueTag.c_str());
 		jump(_trueTag);
 	}
 	else
 	{
-		cocos2d::log("SC> If (%s) is false, jump to %s", _expression.c_str(), _falseTag.c_str());
+		//cocos2d::log("SC> If (%s) is false, jump to %s", _expression.c_str(), _falseTag.c_str());
 		jump(_falseTag);
 	}
 	

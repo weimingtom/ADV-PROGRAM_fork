@@ -22,9 +22,9 @@ SaveData::SaveData(int number)
 	/*
 	auto stageLayer = Layer::create();
 	stageLayer->setContentSize(Size(400,110));
+	stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	*/
-
-	auto stageLayer = Sprite::create("/ui/saveload/selected_bg.png");
+	auto stageLayer = Sprite::create("/ui/saveload/noselected_bg.png");
 
 
 	if (GameSystem::getInstance()->getSavedata(number))
@@ -92,6 +92,39 @@ SaveData::SaveData(int number)
 		//待实现
 	}
 
+	this->setTouchEnabled(true);
+
+	auto touchImage = Sprite::create("/ui/saveload/selected_bg.png");
+	touchImage->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	touchImage->setVisible(false);
+	stageLayer->addChild(touchImage);
+
+	auto eventTouch = EventListenerTouchOneByOne::create();
+
+	eventTouch->onTouchBegan = [=](Touch *t, Event *e)
+	{
+		if (stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
+		{
+			touchImage->setVisible(true);
+			return true;
+		}
+		return false;
+	};
+
+	eventTouch->onTouchEnded = [=](Touch *t, Event *e)
+	{
+		touchImage->setVisible(false);
+		if (stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
+		{
+			
+		}
+		else
+		{
+			
+		}
+	};
+
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventTouch, this);
 
 	this->addChild(stageLayer);
 }

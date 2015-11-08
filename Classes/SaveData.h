@@ -4,7 +4,7 @@
 
 USING_NS_CC;
 
-class SaveData : public Node
+class SaveData : public Layer
 {
 	/*基本信息*/
 	std::string _imageFile;	//存档截图路径

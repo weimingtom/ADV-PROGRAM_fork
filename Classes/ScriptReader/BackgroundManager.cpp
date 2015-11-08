@@ -8,12 +8,11 @@ BackgroundManager* BackgroundManager::_instance = nullptr;
 BackgroundManager::BackgroundManager()
 	:_pool(nullptr)
 {
-	//log("BM> instance starting...");
-	_pool = new std::map<std::string, std::string>();
+	_pool = new std::map<std::string, std::string>();	//创建容器
 
-	defaultBackground = "";
+	defaultBackground = "";	//设定默认的背景为空地址
 
-	std::string ss = FileUtils::getInstance()->getStringFromFile(BGLISTPATH);
+	std::string ss = FileUtils::getInstance()->getStringFromFile(BGLISTPATH);	//读取文件
 
 	int sPos = 0;	//行头
 	int ePos = 0;	//行尾
@@ -21,20 +20,23 @@ BackgroundManager::BackgroundManager()
 	ePos = ss.find('\n', sPos);
 	sPos = ePos + 1;
 
+	/*开始处理*/
 	while (1)
 	{
-		std::string key;
-		std::string background;
-		std::string temp;
+		std::string key;	//临时储存场景名
+		std::string background;	//储存背景
+		std::string temp;	//临时储存一行信息
+
+		/*读取一行信息*/
 		ePos = ss.find('\n', sPos);
 		temp = ss.substr(sPos, ePos - sPos - 1);
-		if (temp.compare("") == 0)
+		if (temp.compare("") == 0)	//如果是空的就是文件尾了
 		{
-			//log("SCB> Load Background ending");
 			break;
 		}
 		sPos = ePos + 1;
 
+		/*提取出背景文件名后自动补全路径*/
 		int tempPos = temp.find_first_of(',', 0);
 		key = temp.substr(0, tempPos);
 		background = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
@@ -42,6 +44,7 @@ BackgroundManager::BackgroundManager()
 
 		//log("bgkey = %s , backgroundPath = %s", key.c_str(), background.c_str());
 
+		/*添加进场景容器*/
 		addBackground(key, background);
 		log("SCB> addBackground[%s]", key.c_str());
 	}
@@ -66,7 +69,6 @@ void BackgroundManager::addBackground(std::string key, std::string background)
 
 std::string BackgroundManager::getBackground(std::string key)
 {
-	log("Key = %s", key.c_str());
 	auto result = _pool->find(key);
 	if (result != _pool->end())
 	{
@@ -85,7 +87,6 @@ BackgroundManager* BackgroundManager::getInstance()
 	if (_instance == nullptr)
 	{
 		_instance = new BackgroundManager();
-		log("BM> instance starting...");
 	}
 	return _instance;
 }

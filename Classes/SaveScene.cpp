@@ -51,13 +51,13 @@ bool SaveScene::init()
 	for (int i = 0; i < 4; i++)
 	{
 		dataButtons[i] = SaveData::create(i);
-		dataButtons[i]->setPosition(425, 500 - 100 * i);
+		dataButtons[i]->setPosition(425, 520 - 115 * i);
 		stageLayer->addChild(dataButtons[i]);
 	}
 	for (int i = 4; i < 8; i++)
 	{
 		dataButtons[i] = SaveData::create(i);
-		dataButtons[i]->setPosition(850, 500 - 100 * (i - 4));
+		dataButtons[i]->setPosition(850, 520 - 115 * (i - 4));
 		stageLayer->addChild(dataButtons[i]);
 	}
 	
