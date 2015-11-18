@@ -376,6 +376,8 @@ void ScriptReader::nextScript()
 	if (_currentCommandIndex-1 >= (int)cmdList->size())
 	{
 		log("End of Script..! CurrentScript");
+		//do something to done
+		return;
 	}
 
 	auto cmd = cmdList->at(_currentCommandIndex-1);

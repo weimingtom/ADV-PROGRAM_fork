@@ -2,7 +2,9 @@
 #include "ui/CocosGUI.h"
 #include "SimpleAudioEngine.h"
 #include "GameSystem.h"
-
+#include "ScriptReader/BackgroundManager.h"
+#include "ScriptReader/BackgroundMusicManager.h"
+#include "ScriptReader/SoundManager.h"
 
 USING_NS_CC;
 
@@ -184,33 +186,43 @@ void GameScene::showText(std::string &text)
 {
 	_textLabel->setString(text);
 }
-void GameScene::changeBackground(Sprite &background)
+void GameScene::changeBackground(std::string &key)
 {
-	(&background)->setOpacity(0);
-	_backgroundLayer->addChild(&background);
-	(&background)->runAction(Sequence::createWithTwoActions(FadeIn::create(1.0f), CallFunc::create([&]()
+	auto background = BM->getBackground(key);
+	if (background.compare("") == 0) return;	//如果找不到就退出
+	auto backgroundSprite = Sprite::create(background);
+	backgroundSprite->setAnchorPoint(Vec2(0, 0));
+	backgroundSprite->setOpacity(0);
+	_backgroundLayer->addChild(backgroundSprite);
+	backgroundSprite->runAction(Sequence::createWithTwoActions(FadeIn::create(1.0f), CallFunc::create([&]()
 	{
 		if (_backgroundSprite)
 		{
-			auto *tmp = _backgroundSprite;
-			_backgroundSprite = (&background);
-			tmp->removeFromParent();
+			//auto tmp = _backgroundSprite;
+			_backgroundSprite = backgroundSprite;
+			//tmp->removeFromParent();
 		}
 		else
 		{
-			_backgroundSprite = (&background);
+			_backgroundSprite = backgroundSprite;
 		}
 	}
 		)
 		));
-
 }
 
-void GameScene::playBackgroundMusic(std::string &file)
+void GameScene::playBackgroundMusic(std::string &key)
 {
 	stopBackgroundMusic();
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(file.c_str(), true);
+	auto bgm = BMM->getBackgroundMusic(key);
+	if (bgm.compare("") == 0)
+	{
+		log("Unfine bgm %s", key.c_str());
+		return;
+	}
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(bgm.c_str(), true);
 	_isPlayingMusic = true;
+	_backgroundMusicKey = key;
 }
 
 void GameScene::stopBackgroundMusic()
@@ -219,6 +231,7 @@ void GameScene::stopBackgroundMusic()
 	{
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 		_isPlayingMusic = false;
+		_backgroundMusicKey = "";
 	}
 }
 
@@ -295,8 +308,6 @@ void GameScene::displayCharator(std::string cName, std::string face)
 			if (cha->getCharactorFace(face))
 				sp = Sprite::create(cha->getCharactorFace(face));
 			cha->faceSprite = sp;
-
-			int flag = _charNumber; //暂时记下当前屏幕立绘数量
 
 			if (face.compare("") != 0)
 			{

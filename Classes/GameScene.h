@@ -17,10 +17,15 @@ class GameScene : public cocos2d::Layer
 	Sprite* _backgroundSprite;	//背景图片
 	Layer* _charactorsLayer;	//立绘层
 
-	Charactor* _chars[5];	//储存立绘资料
+	Charactor* _chars[5];	//储存当前立绘资料
 	int _charNumber;	//储存立绘数量
 
 	bool _isPlayingMusic;	//音乐播放状态
+
+	std::string _backgroundKey;	//当前背景
+	std::string _backgroundMusicKey;	//当前背景音乐
+	std::string _soundKey;	//当前音效
+
 public:
 	GameScene();
 	~GameScene();
@@ -45,9 +50,9 @@ public:
 
 	void dialogClicked();	//显示下一句对话
 
-	void changeBackground(Sprite &background);	//切换场景
+	void changeBackground(std::string &key);	//切换场景
 
-	void playBackgroundMusic(std::string &file);	//播放音乐
+	void playBackgroundMusic(std::string &key);	//播放音乐
 	void stopBackgroundMusic();						//停止音乐
 	void scheduleVolumeFadeIn();	//音乐淡入
 	void scheduleVolumeFadeOut();	//音乐淡出

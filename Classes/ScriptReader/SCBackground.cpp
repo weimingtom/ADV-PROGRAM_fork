@@ -17,10 +17,6 @@ ScriptReader::SCBackground::~SCBackground()
 
 void ScriptReader::SCBackground::execute(cocos2d::Node* stage)
 {
-	auto background = BM->getBackground(key);
-	auto backgroundSprite = Sprite::create(background);
-	backgroundSprite->setAnchorPoint(Vec2(0, 0));
-	reader->changeBackground(*backgroundSprite);
-
+	reader->changeBackground(key);
 	reader->nextScript();
 }

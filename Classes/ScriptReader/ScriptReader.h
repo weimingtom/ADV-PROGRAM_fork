@@ -84,7 +84,7 @@ public:
 
 	std::function<void(std::string &text)> showText;	//显示文本回调
 	std::function<void(std::string &text)> showName;	//显示名称回调
-	std::function<void(Sprite &background)> changeBackground;	//切换背景图片
+	std::function<void(std::string &background)> changeBackground;	//切换背景图片
 	std::function<void(std::string &file)> playBackgroundMusic;		//播放背景音乐
 	std::function<void()> stopBackgroundMusic;						//停止背景音乐
 	std::function<void(std::string &file)> playSound;				//播放音效

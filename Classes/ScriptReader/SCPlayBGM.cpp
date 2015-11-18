@@ -15,15 +15,7 @@ ScriptReader::SCPlayBGM::~SCPlayBGM()
 
 void ScriptReader::SCPlayBGM::execute(cocos2d::Node* stage)
 {
-	auto bgm = BMM->getBackgroundMusic(key);
-	if (bgm.compare("") == 0)
-	{
-		log("SC> unfine bgm %s", key.c_str());
-	}
-	else
-	{
-		reader->playBackgroundMusic(bgm);
-	}
+	reader->playBackgroundMusic(key);
 
 	reader->nextScript();
 }
