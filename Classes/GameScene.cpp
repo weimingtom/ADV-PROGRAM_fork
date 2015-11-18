@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-GameScene::GameScene() :_label(nullptr), _backgroundSprite(nullptr)
+GameScene::GameScene() :_label(nullptr), _backgroundSprite(nullptr), _charNumber(0)
 {
 
 }
@@ -39,38 +39,37 @@ bool GameScene::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	auto stageLayer = Layer::create();
-	addChild(stageLayer);
-
-	//对话框
-	auto _dialogWindow = Sprite::create("/ui/dialog/dialog_bg.png");
-	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 110));
-	this->addChild(_dialogWindow);
-
-	//文本框
-	_nameLabel = Label::createWithSystemFont("", "微软雅黑", 24);
-	_nameLabel->setColor(Color3B::BLACK);
-	_nameLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-	_nameLabel->setPosition(70, _dialogWindow->getContentSize().height - 40);
-	_dialogWindow->addChild(_nameLabel);
-
-	_textLabel = CharLabel::create("", 24, CC_CALLBACK_0(GameScene::showClickSign, this));
-	_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
-	_textLabel->setColor(Color3B::BLACK);
-	_dialogWindow->addChild(_textLabel);
+	addChild(stageLayer,13);
 
 	//背景层
 	_backgroundLayer = Layer::create();
 	//_backgroundLayer->setLocalZOrder(0);
 	this->addChild(_backgroundLayer, -1);
 
-	/*
-	_label = Label::createWithSystemFont("", "微软雅黑", 24);
-	_label->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-	_label->setPosition(Vec2(100, 180));
-	_label->setColor(Color3B::BLACK);
-	_label->retain();
-	this->addChild(_label, 200);
-	*/
+	//立绘层
+	_charactorsLayer = Layer::create();
+	this->addChild(_charactorsLayer, 1);
+	for (int i = 0; i < 5; i++)
+	{
+		_chars[i] = nullptr;
+	}
+
+	//对话框
+	auto _dialogWindow = Sprite::create("/ui/dialog/dialog_bg.png");
+	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 110));
+	this->addChild(_dialogWindow,10);
+
+	//文本框
+	_nameLabel = Label::createWithSystemFont("", "微软雅黑", 24);
+	_nameLabel->setColor(Color3B::BLACK);
+	_nameLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+	_nameLabel->setPosition(70, _dialogWindow->getContentSize().height - 40);
+	_dialogWindow->addChild(_nameLabel,11);
+
+	_textLabel = CharLabel::create("", 24, CC_CALLBACK_0(GameScene::showClickSign, this));
+	_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
+	_textLabel->setColor(Color3B::BLACK);
+	_dialogWindow->addChild(_textLabel,12);
 
 	//对话框按钮
 	auto buttonDict = MenuItemImage::create("/ui/dialog/button_dict.png", "/ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
@@ -107,7 +106,7 @@ bool GameScene::init()
 
 	auto menu = Menu::create(buttonDict, buttonSave, buttonLoad, buttonLog, buttonConfig, buttonTitle, NULL);
 	menu->setPosition(Vec2::ZERO);
-	this->addChild(menu, 1);
+	this->addChild(menu, 13);
 
 
 
@@ -142,6 +141,8 @@ bool GameScene::init()
 	_reader->stopBackgroundMusic = CC_CALLBACK_0(GameScene::stopBackgroundMusic, this);
 	_reader->playSound = CC_CALLBACK_1(GameScene::playSound, this);
 	_reader->stopSound = CC_CALLBACK_0(GameScene::stopSound, this);
+	_reader->showCharator = CC_CALLBACK_2(GameScene::displayCharator, this);
+	_reader->hideCharator = CC_CALLBACK_1(GameScene::unDisplayCharator, this);
 
 	_reader->loadScriptFile("/scenario/TestII.txt");
 	_reader->nextScript();
@@ -256,4 +257,272 @@ void GameScene::stopAutoPlay()
 void GameScene::autoPlay(float dt)
 {
 	_reader->nextScript();
+}
+
+void GameScene::createGameDate()
+{
+	auto tmpGameData = new GameData;
+	//tmpGameData->backgroundKey = 
+}
+
+void GameScene::displayCharator(std::string cName, std::string face)
+{
+	auto cha = CM->getCharactor(cName);	//获取角色
+	if (cha)
+	{
+		bool isNeedShow = false;	//判断是否需要重新显示人物立绘
+		if (cha->faceSprite)
+		{
+			if (cha->currentFace != face)
+			{
+				cha->leave();
+				isNeedShow = true;
+			}
+		}
+		else
+		{
+			isNeedShow = true;
+		}
+
+
+
+		if (isNeedShow)
+		{
+			auto pChar = &_chars[2];
+			PositionType tmpPT = PositionType::EMPTY;
+
+			Sprite *sp = nullptr;
+			if (cha->getCharactorFace(face))
+				sp = Sprite::create(cha->getCharactorFace(face));
+			cha->faceSprite = sp;
+
+			int flag = _charNumber; //暂时记下当前屏幕立绘数量
+
+			if (face.compare("") != 0)
+			{
+				if (!_charNumber)
+				{
+					_charNumber++;
+					pChar = &_chars[2];
+					tmpPT = PositionType::CENTER;
+				}
+				else
+					if (_charNumber == 1)
+					{
+						if (_chars[2] == cha)
+						{
+							pChar = &_chars[2];
+							tmpPT = PositionType::CENTER;
+						}
+						else
+						{
+							_chars[2]->moveTo(PositionType::LEFT_CENTER);
+							_chars[1] = _chars[2];
+							_chars[2] = nullptr;
+							_charNumber++;
+							pChar = &_chars[3];
+							tmpPT = PositionType::RIGHT_CENTER;
+						}
+					}
+					else
+					{
+						if (_charNumber == 2)
+						{
+							if (_chars[1] == cha)
+							{
+								pChar = &_chars[1];
+								tmpPT = PositionType::LEFT_CENTER;
+							}
+							else
+								if (_chars[3] == cha)
+								{
+									pChar = &_chars[3];
+									tmpPT = PositionType::RIGHT_CENTER;
+								}
+								else
+								{
+									_chars[1]->moveTo(PositionType::LEFT);
+									_chars[0] = _chars[1];
+									_chars[1] = nullptr;
+									_chars[3]->moveTo(PositionType::RIGHT);
+									_chars[4] = _chars[3];
+									_chars[3] = nullptr;
+									_charNumber++;
+									pChar = &_chars[2];
+									tmpPT = PositionType::CENTER;
+								}
+						}
+						else
+						{
+							if (_chars[0] == cha)
+							{
+								pChar = &_chars[0];
+								tmpPT = PositionType::LEFT;
+							}
+							else
+								if (_chars[2] == cha)
+								{
+									pChar = &_chars[2];
+									tmpPT = PositionType::CENTER;
+								}
+								else
+									if (_chars[4] == cha)
+									{
+										pChar = &_chars[4];
+										tmpPT = PositionType::RIGHT;
+									}
+									else
+									{
+										pChar = &_chars[2];
+										tmpPT = PositionType::CENTER;
+									}
+						}
+					}
+
+
+				if (((Charactor*)*pChar))
+				{
+					((Charactor*)*pChar)->leave();
+				}
+
+
+
+				cha->currentPosition = tmpPT;
+				if (sp)
+					*pChar = cha;
+
+				switch (tmpPT)
+				{
+				case PositionType::LEFT:
+				{
+					sp->setPositionX(320);
+					break;
+				}
+				case PositionType::LEFT_CENTER:
+				{
+					sp->setPositionX(427);
+					break;
+				}
+				case PositionType::CENTER:
+				{
+					sp->setPositionX(640);
+					break;
+				}
+				case PositionType::RIGHT_CENTER:
+				{
+					sp->setPositionX(853);
+					break;
+				}
+				case PositionType::RIGHT:
+				{
+					sp->setPositionX(960);
+					break;
+				}
+				default:
+				{
+					break;
+				}
+				}
+
+				sp->setAnchorPoint(Vec2(0.5, 0));
+
+				_charactorsLayer->addChild(sp);
+			}
+		}
+	}
+}
+
+void GameScene::unDisplayCharator(std::string cName)
+{
+	auto cha = CM->getCharactor(cName);
+	if (cha->faceSprite)
+	{
+		cha->faceSprite->runAction(Sequence::createWithTwoActions(FadeOut::create(1.0f), CallFunc::create([=]()
+		{
+			if (_charNumber == 1)
+			{
+				_chars[2] = nullptr;
+			}
+			else
+				if (_charNumber == 2)
+				{
+					switch (cha->currentPosition)
+					{
+					case PositionType::LEFT_CENTER:
+					{
+						_chars[1] = nullptr;
+						_chars[3]->moveTo(PositionType::CENTER);
+						_chars[2] = _chars[3];
+						_chars[3] = nullptr;
+						break;
+					}
+					case PositionType::RIGHT_CENTER:
+					{
+						_chars[3] = nullptr;
+						_chars[1]->moveTo(PositionType::CENTER);
+						_chars[2] = _chars[1];
+						_chars[1] = nullptr;
+						break;
+					}
+					default:
+					{
+						break;
+					}
+					}
+				}
+				else
+					if (_charNumber == 3)
+					{
+						switch (cha->currentPosition)
+						{
+						case PositionType::LEFT:
+						{
+							_chars[0] = nullptr;
+							_chars[2]->moveTo(PositionType::LEFT_CENTER);
+							_chars[1] = _chars[2];
+							_chars[2] = nullptr;
+							_chars[4]->moveTo(PositionType::RIGHT_CENTER);
+							_chars[3] = _chars[4];
+							_chars[4] = nullptr;
+							break;
+						}
+						case PositionType::CENTER:
+						{
+							_chars[2] = nullptr;
+							_chars[0]->moveTo(PositionType::LEFT_CENTER);
+							_chars[1] = _chars[0];
+							_chars[0] = nullptr;
+							_chars[4]->moveTo(PositionType::RIGHT_CENTER);
+							_chars[3] = _chars[4];
+							_chars[4] = nullptr;
+							break;
+						}
+						case PositionType::RIGHT:
+						{
+							_chars[4] = nullptr;
+							_chars[0]->moveTo(PositionType::LEFT_CENTER);
+							_chars[1] = _chars[0];
+							_chars[0] = nullptr;
+							_chars[2]->moveTo(PositionType::RIGHT_CENTER);
+							_chars[3] = _chars[2];
+							_chars[2] = nullptr;
+							break;
+						}
+						default:
+						{
+							break;
+						}
+						}
+
+					}
+			cha->leave();
+			_charNumber--;
+			return;
+		}
+			)
+			)
+			);
+	}
+	else
+		return;
 }

@@ -2,6 +2,7 @@
 #include "ScriptReader/ScriptReader.h"
 #include "cocos2d.h"
 #include "CharLabel.h"
+#include "ScriptReader/CharactorManager.h"
 
 
 class GameScene : public cocos2d::Layer
@@ -14,6 +15,10 @@ class GameScene : public cocos2d::Layer
 	Sprite* _dialogWindow;	//文本框背景
 	Layer* _backgroundLayer;	//背景层
 	Sprite* _backgroundSprite;	//背景图片
+	Layer* _charactorsLayer;	//立绘层
+
+	Charactor* _chars[5];	//储存立绘资料
+	int _charNumber;	//储存立绘数量
 
 	bool _isPlayingMusic;	//音乐播放状态
 public:
@@ -53,5 +58,10 @@ public:
 	void startAutoPlay();	//开始自动前进
 	void stopAutoPlay();	//停止自动前进
 	void autoPlay(float dt);	//自动前进
+
+	void displayCharator(std::string cName,std::string face);
+	void unDisplayCharator(std::string cName);
+
+	void createGameDate();
 };
 
