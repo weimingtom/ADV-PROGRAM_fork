@@ -66,6 +66,36 @@ void ScriptReader::clearScript()
 				case ScriptCommandType::CharactorSpeak:
 					delete (SCCharactorSpeak*)ptr;
 					break;
+				case ScriptCommandType::Leave:
+					delete (SCLeave*)ptr;
+					break;
+				case ScriptCommandType::Jump:
+					delete (SCJump*)ptr;
+					break;
+				case ScriptCommandType::Select:
+					delete (SCSelect*)ptr;
+					break;
+				case ScriptCommandType::Background:
+					delete (SCBackground*)ptr;
+					break;
+				case ScriptCommandType::PlayBGM:
+					delete (SCPlayBGM*)ptr;
+					break;
+				case ScriptCommandType::StopBGM:
+					delete (SCStopBGM*)ptr;
+					break;
+				case ScriptCommandType::PlaySd:
+					delete (SCPlaySound*)ptr;
+					break;
+				case ScriptCommandType::StopSd:
+					delete (SCStopSound*)ptr;
+					break;
+				case ScriptCommandType::Set:
+					delete (SCSet*)ptr;
+					break;
+				case ScriptCommandType::If:
+					delete (SCIf*)ptr;
+					break;
 				}
 				//↑待填补
 
