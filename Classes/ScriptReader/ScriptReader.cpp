@@ -41,8 +41,6 @@ void ScriptReader::initWithStage(Node* stage)
 	{
 		chars[i] = nullptr;
 	}
-	
-	log("init ending");
 
 }
 

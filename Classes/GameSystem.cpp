@@ -9,6 +9,8 @@
 
 #define ISINIT "isInitialization"	//初始化标记
 
+
+
 GameSystem* GameSystem::_instance = nullptr;
 
 GameSystem::GameSystem()
@@ -157,4 +159,14 @@ bool GameSystem::getSavedata(int i)
 	char* ch = new char[4];
 	itoa(i, ch, 10);
 	return cocos2d::UserDefault::getInstance()->getBoolForKey(ch);
+}
+
+GameData* GameSystem::getGameSceneInfo()
+{
+	return _gameSceneInfo;
+}
+
+void GameSystem::setGameSceneInfo(GameData* gameData)
+{
+	_gameSceneInfo = gameData;
 }

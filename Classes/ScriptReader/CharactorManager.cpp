@@ -68,22 +68,6 @@ CharactorManager::CharactorManager()
 		addCharactor(key, tempCharactor);
 		log("CM> addCharactor[%s]", tempCharactor->name.c_str());
 	}
-	
-
-
-	auto c1 = new Charactor();
-	c1->name = "P1";
-	c1->color = Color3B::BLACK;
-
-	std::string key = "c1";
-	addCharactor(key, c1);
-
-	//auto c2 = new Charactor();
-	c1 = new Charactor();
-	c1->name = "Maid";
-
-	key = "c2";
-	addCharactor(key, c1);
 }
 
 

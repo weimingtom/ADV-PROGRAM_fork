@@ -42,5 +42,5 @@ void ScriptReader::SCSelect::execute(Node* stage)
 		button->setPosition(0, startY);
 		startY -= 60;
 	}
-	stage->addChild(menu);
+	stage->addChild(menu, 13);
 }

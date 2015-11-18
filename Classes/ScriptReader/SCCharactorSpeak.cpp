@@ -1,5 +1,6 @@
 #include "SCCharactorSpeak.h"
 #include "CharactorManager.h"
+#include "GameSystem.h"
 
 ScriptReader::SCCharactorSpeak::SCCharactorSpeak(ScriptReader *reader, std::string &name, std::string &text, std::string &face)
 	:cName(name)
@@ -17,6 +18,7 @@ ScriptReader::SCCharactorSpeak::~SCCharactorSpeak()
 
 void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 {
+	/*
 	auto cha = CM->getCharactor(cName);	//获取角色
 	if (cha)
 	{
@@ -39,19 +41,20 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 		if (isNeedShow)
 		{
 			auto pChar = &reader->chars[2];
-			//auto pSprite = &reader->centerCharSprite;
 			PositionType tmpPT = PositionType::EMPTY;
 
 			Sprite *sp = nullptr;
 			if (cha->getCharactorFace(face))
 				sp = Sprite::create(cha->getCharactorFace(face));
 			cha->faceSprite = sp;
+
+			int flag = reader->charNumber; //暂时记下当前屏幕立绘数量
+
 			if (face.compare("") != 0)
 			{
 				if (!reader->charNumber)
 				{
 					reader->charNumber++;
-					//pSprite = &reader->charSprites[2];
 					pChar = &reader->chars[2];
 					tmpPT = PositionType::CENTER;
 				}
@@ -60,7 +63,6 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 					{
 						if (reader->chars[2] == cha)
 						{
-							//pSprite = &reader->charSprites[2];
 							pChar = &reader->chars[2];
 							tmpPT = PositionType::CENTER;
 						}
@@ -71,7 +73,6 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 							reader->chars[1] = reader->chars[2];
 							reader->chars[2] = nullptr;
 							reader->charNumber++;
-							//pSprite = &reader->charSprites[3];
 							pChar = &reader->chars[3];
 							tmpPT = PositionType::RIGHT_CENTER;
 						}
@@ -82,14 +83,12 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 						{
 							if (reader->chars[1] == cha)
 							{
-								//pSprite = &reader->charSprites[1];
 								pChar = &reader->chars[1];
 								tmpPT = PositionType::LEFT_CENTER;
 							}
 							else
 								if (reader->chars[3] == cha)
 								{
-									//pSprite = &reader->charSprites[3];
 									pChar = &reader->chars[3];
 									tmpPT = PositionType::RIGHT_CENTER;
 								}
@@ -104,7 +103,6 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 									reader->chars[4] = reader->chars[3];
 									reader->chars[3] = nullptr;
 									reader->charNumber++;
-									//pSprite = &reader->charSprites[2];
 									pChar = &reader->chars[2];
 									tmpPT = PositionType::CENTER;
 								}
@@ -113,46 +111,28 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 						{
 							if (reader->chars[0] == cha)
 							{
-								//pSprite = &reader->charSprites[0];
 								pChar = &reader->chars[0];
 								tmpPT = PositionType::LEFT;
 							}
 							else
 								if (reader->chars[2] == cha)
 								{
-									//pSprite = &reader->charSprites[2];
 									pChar = &reader->chars[2];
 									tmpPT = PositionType::CENTER;
 								}
 								else
 									if (reader->chars[4] == cha)
 									{
-										//pSprite = &reader->charSprites[4];
 										pChar = &reader->chars[4];
 										tmpPT = PositionType::RIGHT;
 									}
 									else
 									{
-										//pSprite = &reader->charSprites[2];
 										pChar = &reader->chars[2];
 										tmpPT = PositionType::CENTER;
 									}
 						}
 					}
-				/*
-				if (reader->leftChar == cha || (reader->nextPositionIsLeft && reader->rightChar != cha))
-				{
-				cha->positionIsLeft = true;
-				reader->nextPositionIsLeft = false;
-				}
-				else
-				{
-				pChar = &reader->rightChar;
-				pSprite = &reader->rightCharSprite;
-				cha->positionIsLeft = false;
-				reader->nextPositionIsLeft = true;
-				}
-				*/
 
 
 				if (((Charactor*)*pChar))
@@ -201,12 +181,19 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 
 				sp->setAnchorPoint(Vec2(0.5, 0));
 
+				if (flag != reader->charNumber)	//如果不相等，说明立绘增加了，往GameSystem中记录
+				{
+					GameSystem::getInstance()->getGameSceneInfo().push(cName, face);
+				}
+
 				reader->charStage->addChild(sp);
-				//pSprite[0]->addChild(sp);
 			}
 		}
 	}
+	*/
+    auto cha = CM->getCharactor(cName);
+	reader->showCharator(cName, face);
 	reader->showName(cha->name);
 	reader->showText(text);
-	log("%s",text.c_str());
+	cocos2d::log("%s",text.c_str());
 }

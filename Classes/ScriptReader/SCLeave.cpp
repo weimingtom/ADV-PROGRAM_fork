@@ -15,6 +15,7 @@ ScriptReader::SCLeave::~SCLeave()
 
 void ScriptReader::SCLeave::execute(cocos2d::Node* stage)
 {
+	/*
 	auto cha = CM->getCharactor(cName);
 	if (cha->faceSprite)
 	{
@@ -96,7 +97,7 @@ void ScriptReader::SCLeave::execute(cocos2d::Node* stage)
 						}
 
 					}
-			/*
+			
 			cha->faceSprite->runAction
 			(
 			Sequence::createWithTwoActions
@@ -115,7 +116,7 @@ void ScriptReader::SCLeave::execute(cocos2d::Node* stage)
 			)
 			)
 			);
-			*/
+			
 			cha->leave();
 			reader->charNumber--;
 			reader->nextScript();
@@ -124,4 +125,7 @@ void ScriptReader::SCLeave::execute(cocos2d::Node* stage)
 			)
 			);
 	}
+	*/
+	reader->hideCharator(cName);
+	reader->nextScript();
 }

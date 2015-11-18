@@ -70,10 +70,11 @@ public:
 	Sprite* charSprites[5];//储存五个角色，0左，1左中，2中，3右中，4右
 	Layer* charStage;	//存储立绘的层
 
-	Charactor* chars[5];	//储存五个角色，0左，1左中，2中，3右中，4右
+	Charactor** chars[5];	//储存五个角色，0左，1左中，2中，3右中，4右
+	int* charNumber; //当前显示立绘数量
 
 	bool isWaitingForSelection;	//是否等待选择支中。出现选项菜单的时候应该由选项来触发脚本
-	int charNumber; //当前显示立绘数量
+	
 
 	Node* stage;	//绘制场景Node
 
@@ -88,6 +89,8 @@ public:
 	std::function<void()> stopBackgroundMusic;						//停止背景音乐
 	std::function<void(std::string &file)> playSound;				//播放音效
 	std::function<void()> stopSound;								//停止音效
+	std::function<void(std::string &cName, std::string &face)> showCharator;	//显示立绘
+	std::function<void(std::string &name)> hideCharator;	//隐藏立绘
 
 	void loadScriptFile(std::string path);	//载入脚本数据
 	void clearScript();	//清理脚本数据

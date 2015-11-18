@@ -20,7 +20,7 @@ EasyButton::EasyButton(Sprite* _normalSprite, Sprite* _touchSprite, Sprite* _sel
 	_eventTouch = EventListenerTouchOneByOne::create();
 	_eventTouch->onTouchBegan = [=](Touch *t, Event *e)
 	{
-		log("EasyButton Touch!");
+		//log("EasyButton Touch!");
 		if (_normal->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
 		{
 			onTouchBegan(t, e);
@@ -34,7 +34,7 @@ EasyButton::EasyButton(Sprite* _normalSprite, Sprite* _touchSprite, Sprite* _sel
 	};
 	_eventTouch->onTouchEnded = [=](Touch *t, Event *e)
 	{
-		log("EasyButton Touch End!");
+		//log("EasyButton Touch End!");
 		if (_normal->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
 		{
 			onTouchEnded(t, e, true);
