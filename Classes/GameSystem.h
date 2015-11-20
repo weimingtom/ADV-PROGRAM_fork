@@ -14,6 +14,7 @@ struct fgCharactor
 	std::string name;
 	std::string face;
 	int number;	//记录序号
+	fgCharactor(){};
 	fgCharactor(std::string name, std::string face, int number)
 		: name(name)
 		, face(face)
@@ -21,13 +22,15 @@ struct fgCharactor
 };
 
 /*用来储存当前游戏画面信息的数据结构*/
-struct GameData	
+struct GameData
 {
-	std::list<fgCharactor*> fgCharactors;	//储存角色，上限为三个
-	std::string backgroundKey;
-	std::string bgmKey;
-	std::string soundKey;
+	fgCharactor fgCharactors[3];	//储存角色，上限为三个
+	std::string backgroundKey;	//背景key
+	std::string bgmKey;	//背景音乐key
+	std::string soundKey;	//音效key
 	int charactorCount;	//立绘个数
+	std::string currentSignName;	//脚本标签
+	int currentCommandIndex;	//脚本位置
 };
 
 class GameSystem
@@ -47,7 +50,7 @@ class GameSystem
 	
 	std::map<std::string, int>* _savedata;		//游戏变量
 	GameData* _gameSceneInfo;	//记录当前游戏画面信息
-
+	bool _isNewGame;	//供GameScene判断是否开始新游戏，false为读档
 
 public:
 	GameSystem();
@@ -79,5 +82,8 @@ public:
 	void setGameSceneInfo(GameData* gameData);//设置游戏信息，从GameScene中传入GameData*
 	void saveGameSceneInfo(int i);//将GameData转成文档，储存在i位置
 	void loadGameSceneInfo(int i);//将i位置的文件作为存档读取为GameData
+
+	void setIsNewGame(bool value);
+	bool getIsNewGame();
 };
 

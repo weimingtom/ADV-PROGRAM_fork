@@ -4,6 +4,7 @@
 #include "CharLabel.h"
 #include "ScriptReader/CharactorManager.h"
 
+#define MAX_CHARACTOR_NUMBER 5
 
 class GameScene : public cocos2d::Layer
 {
@@ -17,7 +18,7 @@ class GameScene : public cocos2d::Layer
 	Sprite* _backgroundSprite;	//背景图片
 	Layer* _charactorsLayer;	//立绘层
 
-	Charactor* _chars[5];	//储存当前立绘资料
+	Charactor* _chars[MAX_CHARACTOR_NUMBER];	//储存当前立绘资料
 	int _charNumber;	//储存立绘数量
 
 	bool _isPlayingMusic;	//音乐播放状态

@@ -19,7 +19,7 @@ GameSystem::GameSystem()
 	{
 		setDefault();
 	}
-
+	_isNewGame = true;
 	_savedata = new std::map<std::string, int>[100];
 }
 
@@ -27,6 +27,7 @@ GameSystem::GameSystem()
 GameSystem::~GameSystem()
 {
 	delete _savedata;
+	if (_gameSceneInfo) delete _gameSceneInfo;
 }
 
 GameSystem* GameSystem::getInstance()
@@ -169,4 +170,14 @@ GameData* GameSystem::getGameSceneInfo()
 void GameSystem::setGameSceneInfo(GameData* gameData)
 {
 	_gameSceneInfo = gameData;
+}
+
+void GameSystem::setIsNewGame(bool value)
+{
+	_isNewGame = value;
+}
+
+bool GameSystem::getIsNewGame()
+{
+	return _isNewGame;
 }

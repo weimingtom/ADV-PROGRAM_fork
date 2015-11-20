@@ -97,5 +97,8 @@ public:
 	void jumpToSign(std::string &sign);	//章节脚本跳转
 
 	void nextScript();	//执行下一条脚本
+
+	std::string getCurrentSignName();
+	int getCurrentCommandIndex();
 };
 

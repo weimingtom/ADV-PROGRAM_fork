@@ -422,3 +422,13 @@ void ScriptReader::nextScript()
 	}
 	//_currentCommandIndex++;
 }
+
+std::string ScriptReader::getCurrentSignName()
+{
+	return _currentSignName;
+}
+
+int ScriptReader::getCurrentCommandIndex()
+{
+	return _currentCommandIndex;
+}

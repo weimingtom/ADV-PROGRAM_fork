@@ -8,7 +8,7 @@
 
 USING_NS_CC;
 
-GameScene::GameScene() :_label(nullptr), _backgroundSprite(nullptr), _charNumber(0)
+GameScene::GameScene() :_label(nullptr), _backgroundSprite(nullptr), _charNumber(0), _backgroundKey(""), _backgroundMusicKey(""), _soundKey("")
 {
 
 }
@@ -147,8 +147,14 @@ bool GameScene::init()
 	_reader->hideCharator = CC_CALLBACK_1(GameScene::unDisplayCharator, this);
 
 	_reader->loadScriptFile("/scenario/TestII.txt");
-	_reader->nextScript();
-	
+	if (GameSystem::getInstance()->getIsNewGame())
+	{
+		_reader->nextScript();
+	}
+	else
+	{
+		//loaddata
+	}
 
 	return true;
 }
@@ -275,7 +281,24 @@ void GameScene::autoPlay(float dt)
 void GameScene::createGameDate()
 {
 	auto tmpGameData = new GameData;
-	//tmpGameData->backgroundKey = 
+	tmpGameData->backgroundKey = _backgroundKey;
+	tmpGameData->bgmKey = _backgroundMusicKey;
+	tmpGameData->soundKey = _soundKey;
+	tmpGameData->charactorCount = _charNumber;
+	int n = 0;
+	for (int i = 0; i < MAX_CHARACTOR_NUMBER; i++)
+	{
+		if (_chars[i])
+		{
+			tmpGameData->fgCharactors[n].name = _chars[i]->key;
+			tmpGameData->fgCharactors[n].face = _chars[i]->currentFace;
+			tmpGameData->fgCharactors[n].number = i;
+			n++;
+		}
+	}
+	tmpGameData->currentCommandIndex = _reader->getCurrentCommandIndex();
+	tmpGameData->currentSignName = _reader->getCurrentSignName();
+	GameSystem::getInstance()->setGameSceneInfo(tmpGameData);
 }
 
 void GameScene::displayCharator(std::string cName, std::string face)
@@ -308,6 +331,7 @@ void GameScene::displayCharator(std::string cName, std::string face)
 			if (cha->getCharactorFace(face))
 				sp = Sprite::create(cha->getCharactorFace(face));
 			cha->faceSprite = sp;
+			cha->key = cName;
 
 			if (face.compare("") != 0)
 			{

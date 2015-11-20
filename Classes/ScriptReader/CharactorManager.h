@@ -22,6 +22,7 @@ enum PositionType
 */
 struct Charactor
 {
+	std::string key;	//角色key
 	std::string name;	//角色名
 	Color3B color;	//对白颜色（暂时不使用）
 	//待补充……
