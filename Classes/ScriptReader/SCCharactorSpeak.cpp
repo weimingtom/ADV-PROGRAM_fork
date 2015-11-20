@@ -18,9 +18,16 @@ ScriptReader::SCCharactorSpeak::~SCCharactorSpeak()
 
 void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 {
-    auto cha = CM->getCharactor(cName);
-	reader->showCharator(cName, face);
-	reader->showName(cha->name);
+	if (cName.compare("") != 0)
+	{
+		auto cha = CM->getCharactor(cName);
+		reader->showCharator(cName, face);
+		reader->showName(cha->name);
+	}
+	else
+	{
+		reader->showName((std::string)"");
+	}
 	reader->showText(text);
 	cocos2d::log("%s",text.c_str());
 }

@@ -313,21 +313,27 @@ void ScriptReader::loadScriptFile(std::string path)
 							std::string cmd = command;//记录人名部分
 							int scriptNamePos = cmd.find_first_of(':', 0);
 							std::string cmdParams = "";
-							if (scriptNamePos > 0)
+							std::string face = "";
+							if (scriptNamePos < 0)	//找不到":"的话cmd默认就是旁白
+							{
+								log("SC Csay Text[%s]", cmd.c_str());
+								SCCharactorSpeak* csCMD = new SCCharactorSpeak(this, face, cmd, face);	//这里的face只是用来顶替空串而已
+								cms->push_back(csCMD);
+							}
+							else
 							{
 								cmdParams = cmd.substr(scriptNamePos + 1, cmd.length() - scriptNamePos - 1);
 								cmd = cmd.substr(0, scriptNamePos);
+								scriptNamePos = cmd.find_first_of('#', 0);
+								if (scriptNamePos > 0)
+								{
+									face = cmd.substr(scriptNamePos + 1, cmd.length() - scriptNamePos - 1);
+									cmd = cmd.substr(0, scriptNamePos);
+								}
+								log("SC Csay CHA[%s] Face[%s] Text[%s]", cmd.c_str(), face.c_str(), cmdParams.c_str());
+								SCCharactorSpeak* csCMD = new SCCharactorSpeak(this, cmd, cmdParams, face);
+								cms->push_back(csCMD);
 							}
-							scriptNamePos = cmd.find_first_of('#', 0);
-							std::string face = "";
-							if (scriptNamePos > 0)
-							{
-								face = cmd.substr(scriptNamePos + 1, cmd.length() - scriptNamePos - 1);
-								cmd = cmd.substr(0, scriptNamePos);
-							}
-							log("SC Csay CHA[%s] Face[%s] Text[%s]", cmd.c_str(), face.c_str(), cmdParams.c_str());
-							SCCharactorSpeak* csCMD = new SCCharactorSpeak(this, cmd, cmdParams, face);
-							cms->push_back(csCMD);
 						}
 					}
 				}
