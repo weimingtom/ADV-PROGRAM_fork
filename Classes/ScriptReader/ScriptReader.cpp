@@ -29,7 +29,6 @@ ScriptReader::ScriptReader()
 ScriptReader::~ScriptReader()
 {
 	clearScript();
-	delete(chars);
 }
 
 void ScriptReader::initWithStage(Node* stage)

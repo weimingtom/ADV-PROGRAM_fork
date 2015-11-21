@@ -77,7 +77,7 @@ bool GameScene::init()
 	auto buttonDict = MenuItemImage::create("/ui/dialog/button_dict.png", "/ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
 	buttonDict->setPosition(Vec2(840,220));
 
-	auto buttonSave = MenuItemImage::create("/ui/dialog/button_save.png", "/ui/dialog/button_save_down.png");
+	auto buttonSave = MenuItemImage::create("/ui/dialog/button_save.png", "/ui/dialog/button_save_down.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
 	buttonSave->setPosition(Vec2(900,220));
 
 	auto buttonLoad = MenuItemImage::create("/ui/dialog/button_load.png", "/ui/dialog/button_load_down.png");
@@ -196,6 +196,7 @@ void GameScene::changeBackground(std::string &key)
 {
 	auto background = BM->getBackground(key);
 	if (background.compare("") == 0) return;	//如果找不到就退出
+	_backgroundKey = key;
 	auto backgroundSprite = Sprite::create(background);
 	backgroundSprite->setAnchorPoint(Vec2(0, 0));
 	backgroundSprite->setOpacity(0);
@@ -309,7 +310,8 @@ void GameScene::displayCharator(std::string cName, std::string face)
 		bool isNeedShow = false;	//判断是否需要重新显示人物立绘
 		if (cha->faceSprite)
 		{
-			if (cha->currentFace != face)
+			log("CurrentFace = %s, Face = %s", cha->currentFace.c_str(), face.c_str());
+			if (cha->currentFace != face && face.compare("") != 0)
 			{
 				cha->leave();
 				isNeedShow = true;
@@ -332,7 +334,7 @@ void GameScene::displayCharator(std::string cName, std::string face)
 				sp = Sprite::create(cha->getCharactorFace(face));
 			cha->faceSprite = sp;
 			cha->key = cName;
-
+			cha->currentFace = face;
 			if (face.compare("") != 0)
 			{
 				if (!_charNumber)
@@ -560,4 +562,10 @@ void GameScene::unDisplayCharator(std::string cName)
 	}
 	else
 		return;
+}
+
+void GameScene::showSaveScene()
+{
+	createGameDate();	//向GameSystem更新GameData信息
+	GameSystem::getInstance()->saveGameSceneInfo(1);
 }

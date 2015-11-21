@@ -43,6 +43,7 @@ struct Charactor
 		, favor(0)
 		, hate(0)
 		, faceSprite(nullptr)
+		, currentFace("")
 	{}
 
 	char* getCharactorFace(std::string &face)	//根据face值获取角色表情

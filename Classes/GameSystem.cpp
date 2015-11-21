@@ -1,5 +1,6 @@
 #include "GameSystem.h"
 #include "cocos2d\cocos\base\CCUserDefault.h"
+#include <stdlib.h>
 
 #define DEFAULT_SYSTEMVOLUME 1.0f
 #define DEFAULT_MUSICVOLUME 1.0f
@@ -180,4 +181,55 @@ void GameSystem::setIsNewGame(bool value)
 bool GameSystem::getIsNewGame()
 {
 	return _isNewGame;
+}
+
+void GameSystem::saveGameSceneInfo(int i)
+{
+	setSavedata(i, true);
+	/*将信息保存到savedata对应的file*/
+	char path[] = "savedata\\savedata";
+	char ch[2];
+	sprintf(ch,"%d",i);
+	char file[26];
+	sprintf(file, "%s%s%s", path, ch, ".sav");
+	cocos2d::log("Savedata file path = %s",file);
+	FILE* savedata = fopen(file,"wb");
+	if (savedata)
+	{
+		//fwrite(&rt, sizeof(char), strlen(&rt), savedata);
+		/*保存当前背景key*/
+		cocos2d::log("backgroundKey = %s", _gameSceneInfo->backgroundKey.c_str());
+		fwrite(_gameSceneInfo->backgroundKey.c_str(), sizeof(char), strlen(_gameSceneInfo->backgroundKey.c_str()), savedata);
+		fputs("\r\n", savedata);
+		/*保存当前立绘数量*/
+		char cCharactorCount[2];
+		sprintf(cCharactorCount, "%d", _gameSceneInfo->charactorCount);
+		fwrite(cCharactorCount, sizeof(char), strlen(cCharactorCount), savedata);
+		fputs("\r\n", savedata);
+		/*保存当前立绘信息*/
+		for (int j = 0; j < _gameSceneInfo->charactorCount; j++)
+		{
+			fwrite(_gameSceneInfo->fgCharactors[j].name.c_str(), sizeof(char), strlen(_gameSceneInfo->fgCharactors[j].name.c_str()), savedata);
+			fputs("\r\n", savedata);
+			fwrite(_gameSceneInfo->fgCharactors[j].face.c_str(), sizeof(char), strlen(_gameSceneInfo->fgCharactors[j].face.c_str()), savedata);
+			fputs("\r\n", savedata);
+			char num[2];
+			sprintf(num, "%d", _gameSceneInfo->fgCharactors[j].number);
+			fwrite(num, sizeof(char), strlen(num), savedata);
+			fputs("\r\n", savedata);
+		}
+		/*保存当前BGM信息*/
+		fwrite(_gameSceneInfo->bgmKey.c_str(), sizeof(char), strlen(_gameSceneInfo->bgmKey.c_str()), savedata);
+		fputs("\r\n", savedata);
+		/*保存当前sound信息*/
+		fwrite(_gameSceneInfo->bgmKey.c_str(), sizeof(char), strlen(_gameSceneInfo->bgmKey.c_str()), savedata);
+		fputs("\r\n", savedata);
+
+		fclose(savedata);
+	}
+	else
+	{
+		cocos2d::log("savedata file error.");
+	}
+	savedata = NULL;
 }

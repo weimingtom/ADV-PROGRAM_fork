@@ -69,5 +69,7 @@ public:
 	void unDisplayCharator(std::string cName);
 
 	void createGameDate();
+
+	void showSaveScene();	//进入存档界面
 };
 

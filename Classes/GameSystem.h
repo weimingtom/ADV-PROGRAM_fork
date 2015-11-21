@@ -75,7 +75,7 @@ public:
 	int getDataValue(std::string &key);
 	void setData(std::map<std::string, int> *map = nullptr);
 
-	void setSavedata(int i, bool value);
+	void setSavedata(int i, bool value);	//设置存档是否存在，value为true时则有存档
 	bool getSavedata(int i);
 
 	GameData* getGameSceneInfo();//获取游戏信息
