@@ -26,6 +26,8 @@ class GameScene : public cocos2d::Layer
 	std::string _backgroundKey;	//当前背景
 	std::string _backgroundMusicKey;	//当前背景音乐
 	std::string _soundKey;	//当前音效
+	std::string _currentText;	//当前文本
+	std::string _currentName;	//当前姓名
 
 public:
 	GameScene();

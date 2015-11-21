@@ -196,11 +196,24 @@ void GameSystem::saveGameSceneInfo(int i)
 	FILE* savedata = fopen(file,"wb");
 	if (savedata)
 	{
-		//fwrite(&rt, sizeof(char), strlen(&rt), savedata);
-		/*保存当前背景key*/
-		cocos2d::log("backgroundKey = %s", _gameSceneInfo->backgroundKey.c_str());
-		fwrite(_gameSceneInfo->backgroundKey.c_str(), sizeof(char), strlen(_gameSceneInfo->backgroundKey.c_str()), savedata);
+		/*保存存档信息*/
+		/*--储存截图路径*/
+		/*--储存时间*/
+		time_t t;
+		time(&t);
+		char tmp[64];
+		strftime(tmp, sizeof(tmp), "%Y-%m-%d %X", localtime((&t)));
+		fwrite(tmp, sizeof(char), strlen(tmp), savedata);
 		fputs("\r\n", savedata);
+		/*保存当前对白*/
+		fwrite(_gameSceneInfo->currentText.c_str(), sizeof(char), strlen(_gameSceneInfo->currentText.c_str()), savedata);
+		fputs("\r\n", savedata);
+		/*保存当前名字*/
+		fwrite(_gameSceneInfo->currentName.c_str(), sizeof(char), strlen(_gameSceneInfo->currentName.c_str()), savedata);
+		fputs("\r\n", savedata);
+		/*保存当前背景key*/
+		fwrite(_gameSceneInfo->backgroundKey.c_str(), sizeof(char), strlen(_gameSceneInfo->backgroundKey.c_str()), savedata);
+		fputs("\r\n", savedata);	//换行
 		/*保存当前立绘数量*/
 		char cCharactorCount[2];
 		sprintf(cCharactorCount, "%d", _gameSceneInfo->charactorCount);
@@ -208,11 +221,13 @@ void GameSystem::saveGameSceneInfo(int i)
 		fputs("\r\n", savedata);
 		/*保存当前立绘信息*/
 		for (int j = 0; j < _gameSceneInfo->charactorCount; j++)
-		{
+		{	/*保存角色key*/
 			fwrite(_gameSceneInfo->fgCharactors[j].name.c_str(), sizeof(char), strlen(_gameSceneInfo->fgCharactors[j].name.c_str()), savedata);
 			fputs("\r\n", savedata);
+			/*保存角色表情*/
 			fwrite(_gameSceneInfo->fgCharactors[j].face.c_str(), sizeof(char), strlen(_gameSceneInfo->fgCharactors[j].face.c_str()), savedata);
 			fputs("\r\n", savedata);
+			/*保存角色位置*/
 			char num[2];
 			sprintf(num, "%d", _gameSceneInfo->fgCharactors[j].number);
 			fwrite(num, sizeof(char), strlen(num), savedata);

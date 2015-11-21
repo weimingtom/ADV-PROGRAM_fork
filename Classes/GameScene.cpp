@@ -8,7 +8,15 @@
 
 USING_NS_CC;
 
-GameScene::GameScene() :_label(nullptr), _backgroundSprite(nullptr), _charNumber(0), _backgroundKey(""), _backgroundMusicKey(""), _soundKey("")
+GameScene::GameScene() 
+	:_label(nullptr)
+	, _backgroundSprite(nullptr)
+	, _charNumber(0)
+	, _backgroundKey("")
+	, _backgroundMusicKey("")
+	, _soundKey("")
+	, _currentName("")
+	, _currentText("")
 {
 
 }
@@ -185,11 +193,13 @@ void GameScene::dialogClicked()
 
 void GameScene::showName(std::string &name)
 {
+	_currentName = name;
 	_nameLabel->setString(name);
 }
 
 void GameScene::showText(std::string &text)
 {
+	_currentText = text;
 	_textLabel->setString(text);
 }
 void GameScene::changeBackground(std::string &key)
@@ -299,6 +309,8 @@ void GameScene::createGameDate()
 	}
 	tmpGameData->currentCommandIndex = _reader->getCurrentCommandIndex();
 	tmpGameData->currentSignName = _reader->getCurrentSignName();
+	tmpGameData->currentName = _currentName;
+	tmpGameData->currentText = _currentText;
 	GameSystem::getInstance()->setGameSceneInfo(tmpGameData);
 }
 
