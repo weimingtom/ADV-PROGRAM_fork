@@ -37,7 +37,15 @@ struct GameData
 
 struct GameSaveData
 {
-
+	std::string imageFile;
+	std::string date;
+	std::string text;
+	GameSaveData()
+	{
+		imageFile = "";
+		date = "";
+		text = "";
+	}
 };
 
 class GameSystem
@@ -57,6 +65,7 @@ class GameSystem
 	
 	std::map<std::string, int>* _savedata;		//游戏变量
 	GameData* _gameSceneInfo;	//记录当前游戏画面信息
+	GameSaveData* _savedataList; //记录当前游戏的存档信息
 	bool _isNewGame;	//供GameScene判断是否开始新游戏，false为读档
 
 public:
@@ -92,5 +101,8 @@ public:
 
 	void setIsNewGame(bool value);
 	bool getIsNewGame();
+
+	void initGameSavedataList();	//初始化存档列表
+	GameSaveData* getGameSavedata(int i);	//获取单个存档信息
 };
 

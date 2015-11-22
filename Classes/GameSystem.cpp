@@ -7,6 +7,7 @@
 #define DEFAULT_SOUNDVOLUME 1.0f
 #define DEFAULT_TEXTSPEED 1.0f
 #define DEFAULT_AUTOSPEED 1.0f
+#define MAX_SAVEDATA_NUMBER 100
 
 #define ISINIT "isInitialization"	//初始化标记
 
@@ -22,6 +23,10 @@ GameSystem::GameSystem()
 	}
 	_isNewGame = true;
 	_savedata = new std::map<std::string, int>[100];
+	_gameSceneInfo = nullptr;
+	//初始化存档列表
+	_savedataList = new GameSaveData[MAX_SAVEDATA_NUMBER];
+	initGameSavedataList();
 }
 
 
@@ -29,6 +34,7 @@ GameSystem::~GameSystem()
 {
 	delete _savedata;
 	if (_gameSceneInfo) delete _gameSceneInfo;
+	delete _savedataList;
 }
 
 GameSystem* GameSystem::getInstance()
@@ -247,4 +253,68 @@ void GameSystem::saveGameSceneInfo(int i)
 		cocos2d::log("savedata file error.");
 	}
 	savedata = NULL;
+}
+
+void GameSystem::initGameSavedataList()
+{
+	//记录cocos2d-x中CCFileUtils，对于没有找到文件是否弹出提示框的设置
+	bool isNeedModifyPopupSetting = FileUtils::sharedFileUtils()->isPopupNotify();
+	//如果有提示，就暂时关闭，因为这里的读取可能找不到该文件，因为该文件有可能还没有创建
+	if (isNeedModifyPopupSetting)
+	{
+		FileUtils::sharedFileUtils()->setPopupNotify(false);
+	}
+
+	for (int i = 0; i < MAX_SAVEDATA_NUMBER; i++)
+	{
+		char path[] = "savedata\\savedata";
+		char ch[3];
+		sprintf(ch, "%d", i);
+		char file[26];
+		sprintf(file, "%s%s%s", path, ch, ".sav");
+		cocos2d::log("Savedata file path = %s", file);
+		
+		std::string data = FileUtils::getInstance()->getStringFromFile(file);
+		if (data.compare("") != 0)
+		{
+			int sPos = 0;	//行头
+			int ePos = 0;	//行尾
+			std::string temp;	//临时储存一行信息
+			/*读取存档截图路径*/
+			/*读取存档时间*/
+			ePos = data.find('\n', sPos);
+			temp = data.substr(sPos, ePos - sPos - 1);
+			if (temp.compare("") == 0)	//如果是空的就是文件尾了
+			{
+				break;
+			}
+			cocos2d::log(temp.c_str());
+			_savedataList[i].date = temp;
+			sPos = ePos + 1;
+			/*读取存档文本*/
+			ePos = data.find('\n', sPos);
+			temp = data.substr(sPos, ePos - sPos - 1);
+			if (temp.compare("") == 0)	//如果是空的就是文件尾了
+			{
+				break;
+			}
+			cocos2d::log(temp.c_str());
+			_savedataList[i].text = temp;
+			sPos = ePos + 1;
+		}
+	}
+
+	//如果以前设置找不到文件有提示，则改回原来的设置
+	if (isNeedModifyPopupSetting)
+	{
+		FileUtils::sharedFileUtils()->setPopupNotify(true);
+	}
+}
+
+GameSaveData* GameSystem::getGameSavedata(int i)
+{
+	if (_savedataList[i].date.compare("") == 0)
+		return nullptr;
+	else
+		return &_savedataList[i];
 }

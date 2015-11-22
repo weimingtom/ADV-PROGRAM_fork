@@ -26,8 +26,8 @@ SaveData::SaveData(int number)
 	*/
 	auto stageLayer = Sprite::create("/ui/saveload/noselected_bg.png");
 
-
-	if (GameSystem::getInstance()->getSavedata(number))
+	auto savedata = GameSystem::getInstance()->getGameSavedata(number);
+	if (savedata)
 	{
 		/*ÏÔÊ¾´æµµÐòºÅ*/
 		/*
@@ -37,6 +37,7 @@ SaveData::SaveData(int number)
 		*/
 
 		/*ÏÔÊ¾´æµµ½ØÍ¼*/
+		/*
 		std::string imageFile = "imageOfSavedata";
 		imageFile = GameSystem::getInstance()->getDataValue(imageFile);
 
@@ -44,10 +45,10 @@ SaveData::SaveData(int number)
 		dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 		dataImage->setPosition(19, 99);
 		stageLayer->addChild(dataImage);
+		*/
 
 		/*ÏÔÊ¾´æµµÐÅÏ¢*/
-		std::string text = "textOfSavedata";
-		text = GameSystem::getInstance()->getDataValue(text);
+		std::string text = savedata->text;
 
 		auto dataText = Label::createWithSystemFont(text, "ºÚÌå", 20);
 		dataText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
@@ -55,8 +56,7 @@ SaveData::SaveData(int number)
 		stageLayer->addChild(dataText);
 
 		/*ÏÔÊ¾´æµµÈÕÆÚ*/
-		std::string date = "textOfDate";
-		date = GameSystem::getInstance()->getDataValue(date);
+		std::string date = savedata->date;
 
 		auto dataDate = Label::createWithSystemFont(date, "ºÚÌå", 20);
 		dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);

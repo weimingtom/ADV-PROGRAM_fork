@@ -33,6 +33,8 @@ bool MainMenu::init()
 	{
 		return false;
 	}
+	//初始化系统信息
+	GameSystem::getInstance();
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
