@@ -67,6 +67,7 @@ class GameSystem
 	GameData* _gameSceneInfo;	//记录当前游戏画面信息
 	GameSaveData* _savedataList; //记录当前游戏的存档信息
 	bool _isNewGame;	//供GameScene判断是否开始新游戏，false为读档
+	RenderTexture* _screenShoot;	//储存屏幕截图
 
 public:
 	GameSystem();
@@ -104,5 +105,12 @@ public:
 
 	void initGameSavedataList();	//初始化存档列表
 	GameSaveData* getGameSavedata(int i);	//获取单个存档信息
+	void updateGameSavedata(int i);	//重新加载单个存档信息
+	void deleteGameSavedata(int i);	//删除某个存档信息
+
+	void createSavedata();
+
+	void setScreenShoot(RenderTexture* render);	
+	RenderTexture* getScreenShoot();
 };
 

@@ -1,5 +1,5 @@
 #include "SaveScene.h"
-
+#include "GameSystem.h"
 
 SaveScene::SaveScene()
 {
@@ -52,12 +52,14 @@ bool SaveScene::init()
 	{
 		dataButtons[i] = SaveData::create(i);
 		dataButtons[i]->setPosition(425, 520 - 115 * i);
+		dataButtons[i]->onTouchEnded = CC_CALLBACK_1(GameSystem::saveGameSceneInfo, GameSystem::getInstance());
 		stageLayer->addChild(dataButtons[i]);
 	}
 	for (int i = 4; i < 8; i++)
 	{
 		dataButtons[i] = SaveData::create(i);
 		dataButtons[i]->setPosition(850, 520 - 115 * (i - 4));
+		dataButtons[i]->onTouchEnded = CC_CALLBACK_1(GameSystem::saveGameSceneInfo, GameSystem::getInstance());
 		stageLayer->addChild(dataButtons[i]);
 	}
 	
@@ -77,6 +79,11 @@ bool SaveScene::init()
 
 void SaveScene::back()
 {
+	GameSystem::getInstance()->initGameSavedataList();
 	Director::getInstance()->popScene();
 }
 
+void SaveScene::save(int i)
+{
+	GameSystem::getInstance()->saveGameSceneInfo(i);
+}

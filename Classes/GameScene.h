@@ -73,5 +73,7 @@ public:
 	void createGameDate();
 
 	void showSaveScene();	//进入存档界面
+
+	void ScreenShoot();	//截屏
 };
 

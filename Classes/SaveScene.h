@@ -17,5 +17,7 @@ public:
 	CREATE_FUNC(SaveScene);
 
 	void back();	//·µ»Ø
+
+	void save(int i);	//´æµµ
 };
 

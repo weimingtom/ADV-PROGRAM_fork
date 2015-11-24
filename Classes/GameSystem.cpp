@@ -26,6 +26,7 @@ GameSystem::GameSystem()
 	_gameSceneInfo = nullptr;
 	//初始化存档列表
 	_savedataList = new GameSaveData[MAX_SAVEDATA_NUMBER];
+	createSavedata();
 	initGameSavedataList();
 }
 
@@ -35,6 +36,7 @@ GameSystem::~GameSystem()
 	delete _savedata;
 	if (_gameSceneInfo) delete _gameSceneInfo;
 	delete _savedataList;
+	if (_screenShoot) _screenShoot->release();
 }
 
 GameSystem* GameSystem::getInstance()
@@ -193,17 +195,28 @@ void GameSystem::saveGameSceneInfo(int i)
 {
 	setSavedata(i, true);
 	/*将信息保存到savedata对应的file*/
-	char path[] = "savedata\\savedata";
-	char ch[2];
-	sprintf(ch,"%d",i);
-	char file[26];
-	sprintf(file, "%s%s%s", path, ch, ".sav");
+	char path[] = "savedata/savedata";
+	char ch[3];
+	sprintf(ch, "%d", i+1);
+	char file[100];
+	sprintf(file, "%s%s%s%s", FileUtils::getInstance()->getWritablePath().c_str(), path, ch, ".sav");
+	char image[100];
+	sprintf(image, "%s%d.jpg", path, i+1);
 	cocos2d::log("Savedata file path = %s",file);
+	cocos2d::log("Savedata image path = %s", image);
 	FILE* savedata = fopen(file,"wb");
 	if (savedata)
 	{
 		/*保存存档信息*/
 		/*--储存截图路径*/
+		bool result = _screenShoot->saveToFile(image, false, [&](RenderTexture *r, const  std::string &s){ });
+		if (result)
+		{
+			char tmp[100];
+			sprintf(tmp, "%s%s", FileUtils::getInstance()->getWritablePath().c_str(), image);
+			fwrite(tmp, sizeof(char), strlen(tmp), savedata);
+		}
+		fputs("\r\n", savedata);
 		/*--储存时间*/
 		time_t t;
 		time(&t);
@@ -227,7 +240,8 @@ void GameSystem::saveGameSceneInfo(int i)
 		fputs("\r\n", savedata);
 		/*保存当前立绘信息*/
 		for (int j = 0; j < _gameSceneInfo->charactorCount; j++)
-		{	/*保存角色key*/
+		{	
+			/*保存角色key*/
 			fwrite(_gameSceneInfo->fgCharactors[j].name.c_str(), sizeof(char), strlen(_gameSceneInfo->fgCharactors[j].name.c_str()), savedata);
 			fputs("\r\n", savedata);
 			/*保存角色表情*/
@@ -247,13 +261,16 @@ void GameSystem::saveGameSceneInfo(int i)
 		fputs("\r\n", savedata);
 
 		fclose(savedata);
+
+		
+		
 	}
 	else
 	{
 		cocos2d::log("savedata file error.");
 	}
 	savedata = NULL;
-}
+ }
 
 void GameSystem::initGameSavedataList()
 {
@@ -267,41 +284,7 @@ void GameSystem::initGameSavedataList()
 
 	for (int i = 0; i < MAX_SAVEDATA_NUMBER; i++)
 	{
-		char path[] = "savedata\\savedata";
-		char ch[3];
-		sprintf(ch, "%d", i);
-		char file[26];
-		sprintf(file, "%s%s%s", path, ch, ".sav");
-		cocos2d::log("Savedata file path = %s", file);
-		
-		std::string data = FileUtils::getInstance()->getStringFromFile(file);
-		if (data.compare("") != 0)
-		{
-			int sPos = 0;	//行头
-			int ePos = 0;	//行尾
-			std::string temp;	//临时储存一行信息
-			/*读取存档截图路径*/
-			/*读取存档时间*/
-			ePos = data.find('\n', sPos);
-			temp = data.substr(sPos, ePos - sPos - 1);
-			if (temp.compare("") == 0)	//如果是空的就是文件尾了
-			{
-				break;
-			}
-			cocos2d::log(temp.c_str());
-			_savedataList[i].date = temp;
-			sPos = ePos + 1;
-			/*读取存档文本*/
-			ePos = data.find('\n', sPos);
-			temp = data.substr(sPos, ePos - sPos - 1);
-			if (temp.compare("") == 0)	//如果是空的就是文件尾了
-			{
-				break;
-			}
-			cocos2d::log(temp.c_str());
-			_savedataList[i].text = temp;
-			sPos = ePos + 1;
-		}
+		updateGameSavedata(i);
 	}
 
 	//如果以前设置找不到文件有提示，则改回原来的设置
@@ -317,4 +300,76 @@ GameSaveData* GameSystem::getGameSavedata(int i)
 		return nullptr;
 	else
 		return &_savedataList[i];
+}
+
+void GameSystem::createSavedata()
+{
+	//绑定用户储存目录下
+	std::string path = FileUtils::getInstance()->getWritablePath();
+	//创建savedata文件夹
+	path += "savedata";
+	//log("path=%s", pathToSave.c_str());
+
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
+	DIR *pDir = NULL;
+	//打开该路径
+	pDir = opendir(path.c_str());
+	if (!pDir)
+	{
+		//创建该路径
+		mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+	}
+#else
+	if ((GetFileAttributesA(path.c_str())) == INVALID_FILE_ATTRIBUTES)
+	{
+		CreateDirectoryA(path.c_str(), 0);
+	}
+#endif
+	log("savadata created.");
+}
+
+void GameSystem::setScreenShoot(RenderTexture* render)
+{
+	_screenShoot = render;
+}
+
+RenderTexture* GameSystem::getScreenShoot()
+{
+	return _screenShoot;
+}
+
+void GameSystem::updateGameSavedata(int i)
+{
+	char path[] = "savedata/savedata";
+	char ch[4];
+	sprintf(ch, "%d", i+1);
+	char file[100];
+	sprintf(file, "%s%s%s%s", FileUtils::getInstance()->getWritablePath().c_str(), path, ch, ".sav");
+
+	std::string data = FileUtils::getInstance()->getStringFromFile(file);
+	if (data.compare("") != 0)
+	{
+		int sPos = 0;	//行头
+		int ePos = 0;	//行尾
+		std::string temp;	//临时储存一行信息
+		/*读取存档截图路径*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		Director::getInstance()->getTextureCache()->reloadTexture(temp);
+		//cocos2d::log(temp.c_str());
+		_savedataList[i].imageFile = temp;
+		sPos = ePos + 1;
+		/*读取存档时间*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		//cocos2d::log(temp.c_str());
+		_savedataList[i].date = temp;
+		sPos = ePos + 1;
+		/*读取存档文本*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		//cocos2d::log(temp.c_str());
+		_savedataList[i].text = temp;
+		sPos = ePos + 1;
+	}
 }

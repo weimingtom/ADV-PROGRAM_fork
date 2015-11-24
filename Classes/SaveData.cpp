@@ -16,52 +16,127 @@ SaveData::SaveData(int number, std::string imageFile, std::string text, std::str
 	/*加载备注信息*/
 }
 
-SaveData::SaveData(int number)
+SaveData::SaveData(int i)
+	: _dataImage(nullptr)
+	, _dataDate(nullptr)
+	, _dataText(nullptr)
 {
 	/*加载按钮底层*/
 	/*
 	auto stageLayer = Layer::create();
-	stageLayer->setContentSize(Size(400,110));
-	stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	_stageLayer->setContentSize(Size(400,110));
+	_stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	*/
-	auto stageLayer = Sprite::create("/ui/saveload/noselected_bg.png");
+	_stageLayer = Sprite::create("/ui/saveload/noselected_bg.png");
+	
+	_number = i;
 
-	auto savedata = GameSystem::getInstance()->getGameSavedata(number);
+	updataData();
+
+	//this->setTouchEnabled(true);
+
+	auto touchImage = Sprite::create("/ui/saveload/selected_bg.png");
+	touchImage->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	touchImage->setVisible(false);
+	_stageLayer->addChild(touchImage);
+
+	auto eventTouch = EventListenerTouchOneByOne::create();
+
+	eventTouch->onTouchBegan = [=](Touch *t, Event *e)
+	{
+		if (_stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
+		{
+			touchImage->setVisible(true);
+			return true;
+		}
+		return false;
+	};
+
+	eventTouch->onTouchEnded = [=](Touch *t, Event *e)
+	{
+		touchImage->setVisible(false);
+		if (_stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
+		{
+			log("Wow!");
+			onTouchEnded(_number);
+			GameSystem::getInstance()->updateGameSavedata(_number);
+			updataData();
+		}
+		else
+		{
+			
+		}
+	};
+
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventTouch, this);
+
+	this->addChild(_stageLayer);
+}
+
+SaveData::~SaveData()
+{
+}
+
+SaveData* SaveData::create(int i)
+{
+	auto tmpSavedata = new SaveData(i);
+	return tmpSavedata;
+}
+
+void SaveData::updataData()
+{
+	auto savedata = GameSystem::getInstance()->getGameSavedata(_number);
+	bool isNeedReloadImageFile = false;
+	if (_dataImage)
+	{
+		_dataImage->removeFromParent();
+		isNeedReloadImageFile = true;
+	}
+	if (_dataDate) _dataDate->removeFromParent();
+	if (_dataText) _dataText->removeFromParent();
 	if (savedata)
 	{
 		/*显示存档序号*/
 		/*
 		auto dataNumber = Label::createWithSystemFont();
 		dataNumber->setPosition();
-		stageLayer->addChild(dataNumber);
+		_stageLayer->addChild(dataNumber);
 		*/
 
 		/*显示存档截图*/
-		/*
-		std::string imageFile = "imageOfSavedata";
-		imageFile = GameSystem::getInstance()->getDataValue(imageFile);
 
-		auto dataImage = Sprite::create(imageFile);
-		dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-		dataImage->setPosition(19, 99);
-		stageLayer->addChild(dataImage);
-		*/
+		std::string imageFile = savedata->imageFile;
+		if (isNeedReloadImageFile)
+		{
+			Director::getInstance()->getTextureCache()->reloadTexture(imageFile);
+			_dataImage = Sprite::createWithTexture(GameSystem::getInstance()->getScreenShoot()->getSprite()->getTexture());
+			_dataImage->setScale(1, -1);
+		}
+		else
+			_dataImage = Sprite::create(imageFile);
+		if (_dataImage)
+		{
+			
+			//_dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+			_dataImage->setPosition(80, 55);
+			_stageLayer->addChild(_dataImage);
+		}
 
 		/*显示存档信息*/
 		std::string text = savedata->text;
 
-		auto dataText = Label::createWithSystemFont(text, "黑体", 20);
-		dataText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		dataText->setPosition(160,35);
-		stageLayer->addChild(dataText);
+		_dataText = Label::createWithSystemFont(text, "黑体", 20);
+		_dataText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+		_dataText->setPosition(160, 35);
+		_stageLayer->addChild(_dataText);
 
 		/*显示存档日期*/
 		std::string date = savedata->date;
 
-		auto dataDate = Label::createWithSystemFont(date, "黑体", 20);
-		dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		dataDate->setPosition(160,65);
-		stageLayer->addChild(dataDate);
+		_dataDate = Label::createWithSystemFont(date, "黑体", 20);
+		_dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+		_dataDate->setPosition(160, 65);
+		_stageLayer->addChild(_dataDate);
 
 		/*显示存档备注*/
 		//待实现
@@ -73,68 +148,22 @@ SaveData::SaveData(int number)
 		/*
 		auto dataNumber = Label::createWithSystemFont();
 		dataNumber->setPosition();
-		stageLayer->addChild(dataNumber);
+		_stageLayer->addChild(dataNumber);
 		*/
 
 		/*显示存档截图*/
-		auto dataImage = Sprite::create("/ui/saveload/pic_bg.png");
-		dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-		dataImage->setPosition(15,101);
-		stageLayer->addChild(dataImage);
+		_dataImage = Sprite::create("/ui/saveload/pic_bg.png");
+		_dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+		_dataImage->setPosition(15, 101);
+		_stageLayer->addChild(_dataImage);
 
 		/*显示存档日期*/
-		auto dataDate = Label::createWithSystemFont("-/-/- --:--","黑体",20);
-		dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		dataDate->setPosition(170, 65);
-		stageLayer->addChild(dataDate);
+		_dataDate = Label::createWithSystemFont("-/-/- --:--", "黑体", 20);
+		_dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+		_dataDate->setPosition(170, 65);
+		_stageLayer->addChild(_dataDate);
 
 		/*显示存档备注*/
 		//待实现
 	}
-
-	this->setTouchEnabled(true);
-
-	auto touchImage = Sprite::create("/ui/saveload/selected_bg.png");
-	touchImage->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	touchImage->setVisible(false);
-	stageLayer->addChild(touchImage);
-
-	auto eventTouch = EventListenerTouchOneByOne::create();
-
-	eventTouch->onTouchBegan = [=](Touch *t, Event *e)
-	{
-		if (stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
-		{
-			touchImage->setVisible(true);
-			return true;
-		}
-		return false;
-	};
-
-	eventTouch->onTouchEnded = [=](Touch *t, Event *e)
-	{
-		touchImage->setVisible(false);
-		if (stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
-		{
-			
-		}
-		else
-		{
-			
-		}
-	};
-
-	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventTouch, this);
-
-	this->addChild(stageLayer);
-}
-
-SaveData::~SaveData()
-{
-}
-
-SaveData* SaveData::create(int i)
-{
-	auto tmpSavedata = new SaveData(i);
-	return tmpSavedata;
 }

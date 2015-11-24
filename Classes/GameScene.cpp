@@ -5,6 +5,7 @@
 #include "ScriptReader/BackgroundManager.h"
 #include "ScriptReader/BackgroundMusicManager.h"
 #include "ScriptReader/SoundManager.h"
+#include "SaveScene.h"
 
 USING_NS_CC;
 
@@ -578,6 +579,27 @@ void GameScene::unDisplayCharator(std::string cName)
 
 void GameScene::showSaveScene()
 {
+	ScreenShoot();
 	createGameDate();	//向GameSystem更新GameData信息
-	GameSystem::getInstance()->saveGameSceneInfo(1);
+	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
+	Director::getInstance()->replaceScene(SaveScene::createScene());
+	
+	//GameSystem::getInstance()->saveGameSceneInfo(1);
+	//this->setScale(1.0f);
+}
+
+void GameScene::ScreenShoot()
+{
+	//utils::captureScreen(nullptr, "savedata\\savedataImage.jpg");
+
+	float scale = 0.1164f;	//缩小倍率
+	this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+	auto render = RenderTexture::create(getContentSize().width*scale, getContentSize().height*scale);
+	render->begin();
+	this->setScale(scale);
+	this->visit();
+	render->end();
+	render->retain();
+	GameSystem::getInstance()->setScreenShoot(render);
+	this->setScale(1.0f);
 }
