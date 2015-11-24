@@ -40,7 +40,7 @@ BackgroundManager::BackgroundManager()
 		int tempPos = temp.find_first_of(',', 0);
 		key = temp.substr(0, tempPos);
 		background = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
-		background = "/bgimage/" + background + ".png";
+		background = "/bgimage/" + background;
 
 		//log("bgkey = %s , backgroundPath = %s", key.c_str(), background.c_str());
 
