@@ -73,7 +73,7 @@ public:
 	GameSystem();
 	~GameSystem();
 	static GameSystem* getInstance();
-	void destoryInstance();
+	static void destoryInstance();
 	void setDefault();
 
 	void setSystemVolume(float value);

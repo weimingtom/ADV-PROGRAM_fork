@@ -9,7 +9,7 @@
 class GameScene : public cocos2d::Layer
 {
 	cocos2d::Label* _label;//文本框的文本层
-	ScriptReader* _reader;	//脚本解析器
+	//ScriptReader* _reader;	//脚本解析器
 
 	Label* _nameLabel;	//姓名框
 	CharLabel* _textLabel;	//对白框
@@ -75,5 +75,7 @@ public:
 	void showSaveScene();	//进入存档界面
 
 	void ScreenShoot();	//截屏
+
+	void clear();	//清楚屏幕的所有东西
 };
 

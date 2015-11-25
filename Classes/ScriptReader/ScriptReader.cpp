@@ -16,6 +16,8 @@
 
 USING_NS_CC;
 
+ScriptReader* ScriptReader::_instance = nullptr;
+
 ScriptReader::ScriptReader()
 	:_currentSignName("gameStart")
 	, _currentCommandIndex(0)
@@ -41,6 +43,24 @@ void ScriptReader::initWithStage(Node* stage)
 		chars[i] = nullptr;
 	}
 
+}
+
+ScriptReader* ScriptReader::getInstance()
+{
+	if (_instance == nullptr)
+	{
+		_instance = new ScriptReader();
+	}
+	return _instance;
+}
+
+void ScriptReader::destoryInstance()
+{
+	if (_instance)
+	{
+		delete _instance;
+		_instance = nullptr;
+	}
 }
 
 /*

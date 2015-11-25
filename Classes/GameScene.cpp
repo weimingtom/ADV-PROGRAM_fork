@@ -25,7 +25,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	delete _reader;
+	ScriptReader::destoryInstance();
 }
 
 Scene* GameScene::createScene()
@@ -62,7 +62,7 @@ bool GameScene::init()
 	this->addChild(_charactorsLayer, 1);
 	for (int i = 0; i < 5; i++)
 	{
-		_chars[i] = nullptr;
+		_chars[i] = new Charactor;
 	}
 
 	//对话框
@@ -89,7 +89,7 @@ bool GameScene::init()
 	auto buttonSave = MenuItemImage::create("/ui/dialog/button_save.png", "/ui/dialog/button_save_down.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
 	buttonSave->setPosition(Vec2(900,220));
 
-	auto buttonLoad = MenuItemImage::create("/ui/dialog/button_load.png", "/ui/dialog/button_load_down.png");
+	auto buttonLoad = MenuItemImage::create("/ui/dialog/button_load.png", "/ui/dialog/button_load_down.png", CC_CALLBACK_0(GameScene::clear, this));
 	buttonLoad->setPosition(Vec2(960,220));
 
 	auto buttonLog = MenuItemImage::create("/ui/dialog/button_log.png", "/ui/dialog/button_log_down.png");
@@ -142,23 +142,23 @@ bool GameScene::init()
 	_dialogWindow->getEventDispatcher()->addEventListenerWithSceneGraphPriority(dialogClickEvent, _dialogWindow);
 
 	//创建ScriptReader对象
-	_reader = new ScriptReader();
-	_reader->initWithStage(stageLayer);
+	
+	ScriptReader::getInstance()->initWithStage(stageLayer);
 	//绑定reader功能
-	_reader->showText = CC_CALLBACK_1(GameScene::showText, this);
-	_reader->showName = CC_CALLBACK_1(GameScene::showName, this);
-	_reader->changeBackground = CC_CALLBACK_1(GameScene::changeBackground, this);
-	_reader->playBackgroundMusic = CC_CALLBACK_1(GameScene::playBackgroundMusic, this);
-	_reader->stopBackgroundMusic = CC_CALLBACK_0(GameScene::stopBackgroundMusic, this);
-	_reader->playSound = CC_CALLBACK_1(GameScene::playSound, this);
-	_reader->stopSound = CC_CALLBACK_0(GameScene::stopSound, this);
-	_reader->showCharator = CC_CALLBACK_2(GameScene::displayCharator, this);
-	_reader->hideCharator = CC_CALLBACK_1(GameScene::unDisplayCharator, this);
+	ScriptReader::getInstance()->showText = CC_CALLBACK_1(GameScene::showText, this);
+	ScriptReader::getInstance()->showName = CC_CALLBACK_1(GameScene::showName, this);
+	ScriptReader::getInstance()->changeBackground = CC_CALLBACK_1(GameScene::changeBackground, this);
+	ScriptReader::getInstance()->playBackgroundMusic = CC_CALLBACK_1(GameScene::playBackgroundMusic, this);
+	ScriptReader::getInstance()->stopBackgroundMusic = CC_CALLBACK_0(GameScene::stopBackgroundMusic, this);
+	ScriptReader::getInstance()->playSound = CC_CALLBACK_1(GameScene::playSound, this);
+	ScriptReader::getInstance()->stopSound = CC_CALLBACK_0(GameScene::stopSound, this);
+	ScriptReader::getInstance()->showCharator = CC_CALLBACK_2(GameScene::displayCharator, this);
+	ScriptReader::getInstance()->hideCharator = CC_CALLBACK_1(GameScene::unDisplayCharator, this);
 
-	_reader->loadScriptFile("/scenario/TestII.txt");
+	ScriptReader::getInstance()->loadScriptFile("/scenario/TestII.txt");
 	if (GameSystem::getInstance()->getIsNewGame())
 	{
-		_reader->nextScript();
+		ScriptReader::getInstance()->nextScript();
 	}
 	else
 	{
@@ -184,12 +184,12 @@ void GameScene::showClickSign()
 
 void GameScene::screenClicked()
 {
-	//_reader->nextScript();
+	//ScriptReader::getInstance()->nextScript();
 }
 
 void GameScene::dialogClicked()
 {
-	_reader->nextScript();
+	ScriptReader::getInstance()->nextScript();
 }
 
 void GameScene::showName(std::string &name)
@@ -287,7 +287,7 @@ void GameScene::stopAutoPlay()
 
 void GameScene::autoPlay(float dt)
 {
-	_reader->nextScript();
+	ScriptReader::getInstance()->nextScript();
 }
 
 void GameScene::createGameDate()
@@ -308,8 +308,8 @@ void GameScene::createGameDate()
 			n++;
 		}
 	}
-	tmpGameData->currentCommandIndex = _reader->getCurrentCommandIndex();
-	tmpGameData->currentSignName = _reader->getCurrentSignName();
+	tmpGameData->currentCommandIndex = ScriptReader::getInstance()->getCurrentCommandIndex();
+	tmpGameData->currentSignName = ScriptReader::getInstance()->getCurrentSignName();
 	tmpGameData->currentName = _currentName;
 	tmpGameData->currentText = _currentText;
 	GameSystem::getInstance()->setGameSceneInfo(tmpGameData);
@@ -602,4 +602,38 @@ void GameScene::ScreenShoot()
 	render->retain();
 	GameSystem::getInstance()->setScreenShoot(render);
 	this->setScale(1.0f);
+}
+
+void GameScene::clear()
+{
+	
+	/*清除所有立绘*/
+	for (int i = 0; i < MAX_CHARACTOR_NUMBER; i++)
+	{
+		if (_chars[i]->faceSprite)
+		{
+			_chars[i]->leave();
+		}
+	}
+	_charNumber = 0;
+
+	/*停止播放音乐*/
+	stopBackgroundMusic();
+
+	/*清楚当前背景*/
+	//std::string black = "black";
+	//changeBackground(black);
+
+	auto backgroundSprite = Sprite::create("/bgimage/Black.jpg");
+	backgroundSprite->setAnchorPoint(Vec2(0, 0));
+	_backgroundLayer->addChild(backgroundSprite);
+	_backgroundSprite = backgroundSprite;
+
+	/*停止当前音效*/
+	stopSound();
+
+	/*清空当前文本层*/
+	std::string empty = "";
+	showName(empty);
+	showText(empty);
 }

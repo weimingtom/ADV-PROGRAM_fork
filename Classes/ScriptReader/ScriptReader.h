@@ -2,6 +2,11 @@
 #include "cocos2d.h"
 //#include "CharactorManager.h"
 
+/*
+ScriptReader使用单例模式设计
+主要作用是对脚本进行读取、解析
+*/
+
 USING_NS_CC;
 struct Charactor;
 
@@ -63,9 +68,14 @@ class ScriptReader
 	std::string _currentSignName;	//当前章节名称
 	int _currentCommandIndex;	//脚本记录
 
+	static ScriptReader* _instance;	//实例
+
 public:
 	ScriptReader();
 	~ScriptReader();
+
+	static ScriptReader* getInstance();	//获取实例
+	static void destoryInstance();	//销毁实例
 
 	Sprite* charSprites[5];//储存五个角色，0左，1左中，2中，3右中，4右
 	Layer* charStage;	//存储立绘的层
