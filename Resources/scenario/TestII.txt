@@ -1,10 +1,13 @@
 ﻿
 @gameStart
 #Background:cxc_1
+来测试一下
 t1#s1:这是一个对话测试
 #Set:key=1
 t1:现在创建了一个key值，并且设定值为一
 t1:一
+t2#s1:现在T2出现啦
+t3#s1:T3也跟着出现啦！
 t1:二
 t1:三
 t1:嘿
@@ -21,6 +24,12 @@ t1:嘿
 @part_one
 #Background:cxc_2
 t2#s1:现在触发了分支1
+#Select
+>part_two:分支四
+>part_three:分支三
+#If:key>1:gameone:gametw
 @part_two
 #Background:cxc_3
 t2#s1:现在触发了分支2
+@part_three
+这里是分支三
