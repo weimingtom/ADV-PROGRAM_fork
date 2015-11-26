@@ -19,12 +19,15 @@ GameScene::GameScene()
 	, _currentName("")
 	, _currentText("")
 {
-
+	_emptyChar = new Charactor;
 }
 
 
 GameScene::~GameScene()
 {
+	delete _emptyChar;
+	for (int i = 0; i < MAX_CHARACTOR_NUMBER; i++)
+		delete _chars[i];
 	ScriptReader::destoryInstance();
 }
 
@@ -89,7 +92,7 @@ bool GameScene::init()
 	auto buttonSave = MenuItemImage::create("/ui/dialog/button_save.png", "/ui/dialog/button_save_down.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
 	buttonSave->setPosition(Vec2(900,220));
 
-	auto buttonLoad = MenuItemImage::create("/ui/dialog/button_load.png", "/ui/dialog/button_load_down.png", CC_CALLBACK_0(GameScene::clear, this));
+	auto buttonLoad = MenuItemImage::create("/ui/dialog/button_load.png", "/ui/dialog/button_load_down.png", CC_CALLBACK_0(GameScene::showLoadScene, this));
 	buttonLoad->setPosition(Vec2(960,220));
 
 	auto buttonLog = MenuItemImage::create("/ui/dialog/button_log.png", "/ui/dialog/button_log_down.png");
@@ -368,7 +371,7 @@ void GameScene::displayCharator(std::string cName, std::string face)
 						{
 							_chars[2]->moveTo(PositionType::LEFT_CENTER);
 							_chars[1] = _chars[2];
-							_chars[2] = nullptr;
+							_chars[2] = _emptyChar;
 							_charNumber++;
 							pChar = &_chars[3];
 							tmpPT = PositionType::RIGHT_CENTER;
@@ -393,10 +396,10 @@ void GameScene::displayCharator(std::string cName, std::string face)
 								{
 									_chars[1]->moveTo(PositionType::LEFT);
 									_chars[0] = _chars[1];
-									_chars[1] = nullptr;
+									_chars[1] = _emptyChar;
 									_chars[3]->moveTo(PositionType::RIGHT);
 									_chars[4] = _chars[3];
-									_chars[3] = nullptr;
+									_chars[3] = _emptyChar;
 									_charNumber++;
 									pChar = &_chars[2];
 									tmpPT = PositionType::CENTER;
@@ -491,7 +494,7 @@ void GameScene::unDisplayCharator(std::string cName)
 		{
 			if (_charNumber == 1)
 			{
-				_chars[2] = nullptr;
+				_chars[2] = _emptyChar;
 			}
 			else
 				if (_charNumber == 2)
@@ -500,18 +503,18 @@ void GameScene::unDisplayCharator(std::string cName)
 					{
 					case PositionType::LEFT_CENTER:
 					{
-						_chars[1] = nullptr;
+						_chars[1] = _emptyChar;
 						_chars[3]->moveTo(PositionType::CENTER);
 						_chars[2] = _chars[3];
-						_chars[3] = nullptr;
+						_chars[3] = _emptyChar;
 						break;
 					}
 					case PositionType::RIGHT_CENTER:
 					{
-						_chars[3] = nullptr;
+						_chars[3] = _emptyChar;
 						_chars[1]->moveTo(PositionType::CENTER);
 						_chars[2] = _chars[1];
-						_chars[1] = nullptr;
+						_chars[1] = _emptyChar;
 						break;
 					}
 					default:
@@ -527,35 +530,35 @@ void GameScene::unDisplayCharator(std::string cName)
 						{
 						case PositionType::LEFT:
 						{
-							_chars[0] = nullptr;
+							_chars[0] = _emptyChar;
 							_chars[2]->moveTo(PositionType::LEFT_CENTER);
 							_chars[1] = _chars[2];
-							_chars[2] = nullptr;
+							_chars[2] = _emptyChar;
 							_chars[4]->moveTo(PositionType::RIGHT_CENTER);
 							_chars[3] = _chars[4];
-							_chars[4] = nullptr;
+							_chars[4] = _emptyChar;
 							break;
 						}
 						case PositionType::CENTER:
 						{
-							_chars[2] = nullptr;
+							_chars[2] = _emptyChar;
 							_chars[0]->moveTo(PositionType::LEFT_CENTER);
 							_chars[1] = _chars[0];
-							_chars[0] = nullptr;
+							_chars[0] = _emptyChar;
 							_chars[4]->moveTo(PositionType::RIGHT_CENTER);
 							_chars[3] = _chars[4];
-							_chars[4] = nullptr;
+							_chars[4] = _emptyChar;
 							break;
 						}
 						case PositionType::RIGHT:
 						{
-							_chars[4] = nullptr;
+							_chars[4] = _emptyChar;
 							_chars[0]->moveTo(PositionType::LEFT_CENTER);
 							_chars[1] = _chars[0];
-							_chars[0] = nullptr;
+							_chars[0] = _emptyChar;
 							_chars[2]->moveTo(PositionType::RIGHT_CENTER);
 							_chars[3] = _chars[2];
-							_chars[2] = nullptr;
+							_chars[2] = _emptyChar;
 							break;
 						}
 						default:
@@ -636,4 +639,124 @@ void GameScene::clear()
 	std::string empty = "";
 	showName(empty);
 	showText(empty);
+}
+
+void GameScene::showLoadScene()
+{
+	clear();
+	reloadScene();
+}
+
+void GameScene::reloadScene()
+{
+	if (GameSystem::getInstance()->loadGameSceneInfo(1))
+	{ 
+		/*设置背景*/
+		auto background = BM->getBackground(GameSystem::getInstance()->getGameSceneInfo()->backgroundKey);
+		if (background.compare("") == 0)
+			background = "black";
+		auto backgroundSprite = Sprite::create(background);
+		backgroundSprite->setAnchorPoint(Vec2(0, 0));
+		_backgroundLayer->addChild(backgroundSprite);
+		_backgroundSprite = backgroundSprite;
+		/*设置当前名字*/
+		showName(GameSystem::getInstance()->getGameSceneInfo()->currentName);
+		/*设置当前文本*/
+		showText(GameSystem::getInstance()->getGameSceneInfo()->currentText);
+		/*设置当前立绘*/
+		_charNumber = GameSystem::getInstance()->getGameSceneInfo()->charactorCount;
+		for (int i = 0; i < _charNumber; i++)
+		{
+			auto name = GameSystem::getInstance()->getGameSceneInfo()->fgCharactors[i].name;
+			auto face = GameSystem::getInstance()->getGameSceneInfo()->fgCharactors[i].face;
+			auto number = GameSystem::getInstance()->getGameSceneInfo()->fgCharactors[i].number;
+			auto cha = CM->getCharactor(name);	//获取角色
+			if (cha)
+			{
+				auto pChar = &_chars[number];
+				PositionType tmpPT = PositionType::EMPTY;
+
+				Sprite *sp = nullptr;
+				if (cha->getCharactorFace(face))
+					sp = Sprite::create(cha->getCharactorFace(face));
+				cha->faceSprite = sp;
+				cha->key = name;
+				cha->currentFace = face;
+				switch (number)
+				{
+				case 0:
+					tmpPT = PositionType::LEFT;
+					break;
+				case 1:
+					tmpPT = PositionType::LEFT_CENTER;
+					break;
+				case 2:
+					tmpPT = PositionType::CENTER;
+					break;
+				case 3:
+					tmpPT = PositionType::RIGHT_CENTER;
+					break;
+				case 4:
+					tmpPT = PositionType::RIGHT;
+					break;
+				default:
+					break;
+				}
+				if (face.compare("") != 0)
+				{
+
+					if (((Charactor*)*pChar))
+					{
+						((Charactor*)*pChar)->leave();
+					}
+
+
+
+					cha->currentPosition = tmpPT;
+					if (sp)
+						*pChar = cha;
+
+					switch (tmpPT)
+					{
+					case PositionType::LEFT:
+					{
+						sp->setPositionX(320);
+						break;
+					}
+					case PositionType::LEFT_CENTER:
+					{
+						sp->setPositionX(427);
+						break;
+					}
+					case PositionType::CENTER:
+					{
+						sp->setPositionX(640);
+						break;
+					}
+					case PositionType::RIGHT_CENTER:
+					{
+						sp->setPositionX(853);
+						break;
+					}
+					case PositionType::RIGHT:
+					{
+						sp->setPositionX(960);
+						break;
+					}
+					default:
+					{
+						break;
+					}
+					}
+
+					sp->setAnchorPoint(Vec2(0.5, 0));
+
+					_charactorsLayer->addChild(sp);
+				}
+			}
+		}
+		/*设置当前播放bgm信息*/
+		playBackgroundMusic(GameSystem::getInstance()->getGameSceneInfo()->bgmKey);
+		/*设置当前播放音效*/
+	}
 }

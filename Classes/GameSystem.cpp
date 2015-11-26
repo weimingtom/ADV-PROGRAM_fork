@@ -178,6 +178,8 @@ GameData* GameSystem::getGameSceneInfo()
 
 void GameSystem::setGameSceneInfo(GameData* gameData)
 {
+	if (_gameSceneInfo)
+		delete _gameSceneInfo;
 	_gameSceneInfo = gameData;
 }
 
@@ -371,5 +373,86 @@ void GameSystem::updateGameSavedata(int i)
 		//cocos2d::log(temp.c_str());
 		_savedataList[i].text = temp;
 		sPos = ePos + 1;
+	}
+}
+
+bool GameSystem::loadGameSceneInfo(int i)
+{
+	char path[] = "savedata/savedata";
+	char ch[4];
+	sprintf(ch, "%d", i + 1);
+	char file[100];
+	sprintf(file, "%s%s%s%s", FileUtils::getInstance()->getWritablePath().c_str(), path, ch, ".sav");
+	std::string data = FileUtils::getInstance()->getStringFromFile(file);
+	if (_gameSceneInfo)	//删掉旧信息
+		delete _gameSceneInfo;
+	_gameSceneInfo = new GameData;
+	if (data.compare("") != 0)
+	{
+		int sPos = 0;	//行头
+		int ePos = 0;	//行尾
+		std::string temp;	//临时储存一行信息
+		/*丢弃读取存档截图路径*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		//_savedataList[i].imageFile = temp;
+		sPos = ePos + 1;
+		/*丢弃读取存档时间*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		//_savedataList[i].date = temp;
+		sPos = ePos + 1;
+		/*丢弃读取存档文本*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		_gameSceneInfo->currentText = temp;
+		sPos = ePos + 1;
+		/*读取当前名字*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		sPos = ePos + 1;
+		_gameSceneInfo->currentName = temp;
+		/*读取当前背景key*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		sPos = ePos + 1;
+		_gameSceneInfo->backgroundKey = temp;
+		/*读取当前立绘数量*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		sPos = ePos + 1;
+		_gameSceneInfo->charactorCount = atoi(temp.c_str());
+
+		/*读取当前立绘信息*/
+		for (int j = 0; j < _gameSceneInfo->charactorCount; j++)
+		{
+			/*读取角色key*/
+			ePos = data.find('\n', sPos);
+			temp = data.substr(sPos, ePos - sPos - 1);
+			sPos = ePos + 1;
+			_gameSceneInfo->fgCharactors[j].name = temp;
+			/*读取角色表情*/
+			ePos = data.find('\n', sPos);
+			temp = data.substr(sPos, ePos - sPos - 1);
+			sPos = ePos + 1;
+			_gameSceneInfo->fgCharactors[j].face = temp;
+			/*读取角色位置*/
+			ePos = data.find('\n', sPos);
+			temp = data.substr(sPos, ePos - sPos - 1);
+			sPos = ePos + 1; 
+			_gameSceneInfo->fgCharactors[j].number = atoi(temp.c_str());
+		}
+		/*读取当前BGM信息*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		sPos = ePos + 1;
+		_gameSceneInfo->bgmKey = temp;
+		/*读取当前sound信息*/
+		return true;
+	}
+	else
+	{
+		log("%s not found", file);
+		return false;
 	}
 }

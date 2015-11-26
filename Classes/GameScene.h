@@ -19,6 +19,7 @@ class GameScene : public cocos2d::Layer
 	Layer* _charactorsLayer;	//立绘层
 
 	Charactor* _chars[MAX_CHARACTOR_NUMBER];	//储存当前立绘资料
+	Charactor* _emptyChar;	//空角色
 	int _charNumber;	//储存立绘数量
 
 	bool _isPlayingMusic;	//音乐播放状态
@@ -73,9 +74,11 @@ public:
 	void createGameDate();
 
 	void showSaveScene();	//进入存档界面
+	void showLoadScene();	//进入读档界面
 
 	void ScreenShoot();	//截屏
 
 	void clear();	//清楚屏幕的所有东西
+	void reloadScene();	//重载场景，通常读档用
 };
 

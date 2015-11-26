@@ -98,7 +98,7 @@ public:
 	GameData* getGameSceneInfo();//获取游戏信息
 	void setGameSceneInfo(GameData* gameData);//设置游戏信息，从GameScene中传入GameData*
 	void saveGameSceneInfo(int i);//将GameData转成文档，储存在i位置
-	void loadGameSceneInfo(int i);//将i位置的文件作为存档读取为GameData
+	bool loadGameSceneInfo(int i);//将i位置的文件作为存档读取为GameData
 
 	void setIsNewGame(bool value);
 	bool getIsNewGame();
@@ -107,6 +107,7 @@ public:
 	GameSaveData* getGameSavedata(int i);	//获取单个存档信息
 	void updateGameSavedata(int i);	//重新加载单个存档信息
 	void deleteGameSavedata(int i);	//删除某个存档信息
+	bool loadGameSavedata(int i);	//读取某个存档信息
 
 	void createSavedata();
 

@@ -110,5 +110,6 @@ public:
 
 	std::string getCurrentSignName();
 	int getCurrentCommandIndex();
+	void setCurrentCommandIndex(int value);
 };
 

@@ -457,3 +457,8 @@ int ScriptReader::getCurrentCommandIndex()
 {
 	return _currentCommandIndex;
 }
+
+void ScriptReader::setCurrentCommandIndex(int value)
+{
+	_currentCommandIndex = value;
+}
