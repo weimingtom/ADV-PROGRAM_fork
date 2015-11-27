@@ -105,6 +105,7 @@ public:
 	void loadScriptFile(std::string path);	//载入脚本数据
 	void clearScript();	//清理脚本数据
 	void jumpToSign(std::string &sign);	//章节脚本跳转
+	void jumpToSign(std::string &sign, int index);
 
 	void nextScript();	//执行下一条脚本
 

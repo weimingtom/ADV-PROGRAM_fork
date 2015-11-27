@@ -1,6 +1,7 @@
 #include "GameSystem.h"
 #include "cocos2d\cocos\base\CCUserDefault.h"
 #include <stdlib.h>
+#include "ScriptReader\ScriptReader.h"
 
 #define DEFAULT_SYSTEMVOLUME 1.0f
 #define DEFAULT_MUSICVOLUME 1.0f
@@ -259,9 +260,18 @@ void GameSystem::saveGameSceneInfo(int i)
 		fwrite(_gameSceneInfo->bgmKey.c_str(), sizeof(char), strlen(_gameSceneInfo->bgmKey.c_str()), savedata);
 		fputs("\r\n", savedata);
 		/*保存当前sound信息*/
-		fwrite(_gameSceneInfo->bgmKey.c_str(), sizeof(char), strlen(_gameSceneInfo->bgmKey.c_str()), savedata);
+		//fwrite(_gameSceneInfo->bgmKey.c_str(), sizeof(char), strlen(_gameSceneInfo->bgmKey.c_str()), savedata);
+		//fputs("\r\n", savedata);
+		/*保存当前ScriptReader标签*/
+		auto sign = ScriptReader::getInstance()->getCurrentSignName();
+		fwrite(sign.c_str(), sizeof(char), strlen(sign.c_str()), savedata);
 		fputs("\r\n", savedata);
-
+		/*保存当前的CommandIndex*/
+		auto commandIndex = ScriptReader::getInstance()->getCurrentCommandIndex();
+		char sCommandIndex[4];
+		sprintf(sCommandIndex, "%d", commandIndex);
+		fwrite(sCommandIndex, sizeof(char), strlen(sCommandIndex), savedata);
+		fputs("\r\n", savedata);
 		fclose(savedata);
 
 		
@@ -448,6 +458,20 @@ bool GameSystem::loadGameSceneInfo(int i)
 		sPos = ePos + 1;
 		_gameSceneInfo->bgmKey = temp;
 		/*读取当前sound信息*/
+
+		log("Load sign");
+		/*读取当前sign信息*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		sPos = ePos + 1;
+		_gameSceneInfo->currentSignName = temp;
+		/*读取当前commandIndex信息*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		sPos = ePos + 1;
+		_gameSceneInfo->currentCommandIndex = atoi(temp.c_str());
+
+		log("Load done.");
 		return true;
 	}
 	else

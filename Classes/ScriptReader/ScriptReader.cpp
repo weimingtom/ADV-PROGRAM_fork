@@ -407,6 +407,8 @@ void ScriptReader::nextScript()
 
 	auto cmd = cmdList->at(_currentCommandIndex-1);
 
+	log("sign = %s, commandIndex = %d", _currentSignName.c_str(), _currentCommandIndex);
+
 	switch (cmd->type)
 	{
 	case ScriptCommandType::CharactorSpeak:
@@ -461,4 +463,23 @@ int ScriptReader::getCurrentCommandIndex()
 void ScriptReader::setCurrentCommandIndex(int value)
 {
 	_currentCommandIndex = value;
+}
+
+void ScriptReader::jumpToSign(std::string &sign, int index)
+{
+	if (sign.compare("") == 0)
+	{
+		log("Sign is null");
+		return;
+	}
+	isWaitingForSelection = false;
+	auto list = _scripts.find(sign);
+	if (list == _scripts.end())
+	{
+		log("Sign [%s] not found", sign.c_str());
+		return;
+	}
+	_currentSignName = sign;
+	_currentCommandIndex = index;
+	//nextScript();
 }

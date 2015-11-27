@@ -758,5 +758,12 @@ void GameScene::reloadScene()
 		/*设置当前播放bgm信息*/
 		playBackgroundMusic(GameSystem::getInstance()->getGameSceneInfo()->bgmKey);
 		/*设置当前播放音效*/
+
+		/*设置ScriptReader*/
+		auto sign = GameSystem::getInstance()->getGameSceneInfo()->currentSignName;
+		auto commandIndex = GameSystem::getInstance()->getGameSceneInfo()->currentCommandIndex;
+		log("sign = %s, commandIndex = %d", sign.c_str(), commandIndex);
+		ScriptReader::getInstance()->jumpToSign(sign, commandIndex);
+		log("Next ~");
 	}
 }
