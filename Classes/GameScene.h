@@ -17,6 +17,7 @@ class GameScene : public cocos2d::Layer
 	Layer* _backgroundLayer;	//背景层
 	Sprite* _backgroundSprite;	//背景图片
 	Layer* _charactorsLayer;	//立绘层
+	Layer* _selectLayer;	//选项层
 
 	Charactor* _chars[MAX_CHARACTOR_NUMBER];	//储存当前立绘资料
 	Charactor* _emptyChar;	//空角色
@@ -29,11 +30,13 @@ class GameScene : public cocos2d::Layer
 	std::string _soundKey;	//当前音效
 	std::string _currentText;	//当前文本
 	std::string _currentName;	//当前姓名
+	std::map<std::string, std::string> _currentOptions;	//当前选项
+	int _optionsNumber;	//当前选项数量
 
 public:
 	GameScene();
 	~GameScene();
-
+	
 	static cocos2d::Scene* createScene();
 
 	virtual bool init();
@@ -80,5 +83,7 @@ public:
 
 	void clear();	//清楚屏幕的所有东西
 	void reloadScene();	//重载场景，通常读档用
+
+	void showSelect(std::map<std::string, std::string> &options);	//显示选项
 };
 

@@ -18,6 +18,8 @@ GameScene::GameScene()
 	, _soundKey("")
 	, _currentName("")
 	, _currentText("")
+	//, _currentOptions(nullptr)
+	, _optionsNumber(0)
 {
 	_emptyChar = new Charactor;
 }
@@ -26,8 +28,16 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete _emptyChar;
+	_emptyChar = nullptr;
 	for (int i = 0; i < MAX_CHARACTOR_NUMBER; i++)
-		delete _chars[i];
+	{
+		if (_chars[i])
+		{
+			delete _chars[i];
+			_chars[i] = nullptr;
+		}
+	}
+		
 	ScriptReader::destoryInstance();
 }
 
@@ -122,6 +132,9 @@ bool GameScene::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 13);
 
+	//选项层
+	_selectLayer = Layer::create();
+	this->addChild(_selectLayer, 13);
 
 
 	//监听器
@@ -157,6 +170,7 @@ bool GameScene::init()
 	ScriptReader::getInstance()->stopSound = CC_CALLBACK_0(GameScene::stopSound, this);
 	ScriptReader::getInstance()->showCharator = CC_CALLBACK_2(GameScene::displayCharator, this);
 	ScriptReader::getInstance()->hideCharator = CC_CALLBACK_1(GameScene::unDisplayCharator, this);
+	ScriptReader::getInstance()->showSelect = CC_CALLBACK_1(GameScene::showSelect, this);
 
 	ScriptReader::getInstance()->loadScriptFile("/scenario/TestII.txt");
 	if (GameSystem::getInstance()->getIsNewGame())
@@ -303,7 +317,7 @@ void GameScene::createGameDate()
 	int n = 0;
 	for (int i = 0; i < MAX_CHARACTOR_NUMBER; i++)
 	{
-		if (_chars[i])
+		if (_chars[i]->faceSprite)
 		{
 			tmpGameData->fgCharactors[n].name = _chars[i]->key;
 			tmpGameData->fgCharactors[n].face = _chars[i]->currentFace;
@@ -315,6 +329,15 @@ void GameScene::createGameDate()
 	tmpGameData->currentSignName = ScriptReader::getInstance()->getCurrentSignName();
 	tmpGameData->currentName = _currentName;
 	tmpGameData->currentText = _currentText;
+	tmpGameData->optionsNumber = _optionsNumber;
+	log("Test 1");
+	if(_optionsNumber)
+	{
+		log("Select::> optionSize[%d]", _currentOptions.size());
+		tmpGameData->options.insert(_currentOptions.begin(), _currentOptions.end());
+	}
+		//tmpGameData->options = *_currentOptions;
+	log("Test 2");
 	GameSystem::getInstance()->setGameSceneInfo(tmpGameData);
 }
 
@@ -639,6 +662,14 @@ void GameScene::clear()
 	std::string empty = "";
 	showName(empty);
 	showText(empty);
+
+	/*清空选项*/
+	if (_optionsNumber)
+	{
+		_optionsNumber = 0;
+		_currentOptions.clear();
+		_selectLayer->removeAllChildren();
+	}
 }
 
 void GameScene::showLoadScene()
@@ -665,6 +696,7 @@ void GameScene::reloadScene()
 		showText(GameSystem::getInstance()->getGameSceneInfo()->currentText);
 		/*设置当前立绘*/
 		_charNumber = GameSystem::getInstance()->getGameSceneInfo()->charactorCount;
+		log("load charator");
 		for (int i = 0; i < _charNumber; i++)
 		{
 			auto name = GameSystem::getInstance()->getGameSceneInfo()->fgCharactors[i].name;
@@ -758,12 +790,49 @@ void GameScene::reloadScene()
 		/*设置当前播放bgm信息*/
 		playBackgroundMusic(GameSystem::getInstance()->getGameSceneInfo()->bgmKey);
 		/*设置当前播放音效*/
-
+		/*设置选项信息*/
+		log("load select start");
+		if (GameSystem::getInstance()->getGameSceneInfo()->optionsNumber)
+		{
+			showSelect(GameSystem::getInstance()->getGameSceneInfo()->options);
+		}
 		/*设置ScriptReader*/
 		auto sign = GameSystem::getInstance()->getGameSceneInfo()->currentSignName;
 		auto commandIndex = GameSystem::getInstance()->getGameSceneInfo()->currentCommandIndex;
-		log("sign = %s, commandIndex = %d", sign.c_str(), commandIndex);
 		ScriptReader::getInstance()->jumpToSign(sign, commandIndex);
-		log("Next ~");
 	}
+}
+
+void GameScene::showSelect(std::map<std::string, std::string> &options)
+{
+	_currentOptions = options;
+
+	auto menu = Menu::create();
+	int startY = options.size()*(60) / 2;
+	int size = options.size();
+	log("Select::> optionSize[%d]", options.size());
+	for (auto itr = options.begin(); itr != options.end(); itr++)
+	{
+		_optionsNumber++;	//选择数量+1
+		auto label = Label::createWithSystemFont(itr->second, "MSYH", 30);
+		label->setColor(Color3B::WHITE);
+		label->enableShadow();
+		log("OPTION[%s] SIGN[%s]", itr->second.c_str(), itr->first.c_str());
+		//auto tmp = (std::string)itr->first.c_str();
+		auto tmp = itr->first;
+		
+		//int *test;
+		auto button = MenuItemLabel::create(label, [=](Ref*)
+		{
+			ScriptReader::getInstance()->jumpToSign(tmp);
+			menu->removeFromParent();
+			_currentOptions.clear();
+			_optionsNumber = 0;
+		});
+
+		menu->addChild(button);
+		button->setPosition(0, startY);
+		startY -= 60;
+	}
+	_selectLayer->addChild(menu, 13);
 }

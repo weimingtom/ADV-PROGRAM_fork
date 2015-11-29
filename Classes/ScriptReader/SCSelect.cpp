@@ -22,6 +22,7 @@ void ScriptReader::SCSelect::execute(Node* stage)
 {
 	reader->isWaitingForSelection = true;
 
+	/*
 	auto menu = Menu::create();
 	int startY = options.size()*(60) / 2;
 	int size = options.size();
@@ -43,4 +44,7 @@ void ScriptReader::SCSelect::execute(Node* stage)
 		startY -= 60;
 	}
 	stage->addChild(menu, 13);
+	*/
+
+	reader->showSelect(options);
 }

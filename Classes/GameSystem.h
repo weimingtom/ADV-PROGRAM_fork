@@ -33,6 +33,8 @@ struct GameData
 	int currentCommandIndex;	//脚本位置
 	std::string currentName;	//当前名字
 	std::string currentText;	//当前文本
+	int optionsNumber;
+	std::map<std::string, std::string> options;
 };
 
 struct GameSaveData

@@ -362,8 +362,9 @@ void ScriptReader::loadScriptFile(std::string path)
 
 }
 
-void ScriptReader::jumpToSign(std::string &sign)
+void ScriptReader::jumpToSign(const std::string &sign)
 {
+	log("sign: %s", sign.c_str());
 	if (sign.compare("") == 0)
 	{
 		log("Sign is null");
@@ -465,7 +466,7 @@ void ScriptReader::setCurrentCommandIndex(int value)
 	_currentCommandIndex = value;
 }
 
-void ScriptReader::jumpToSign(std::string &sign, int index)
+void ScriptReader::jumpToSign(const std::string &sign, int index)
 {
 	if (sign.compare("") == 0)
 	{

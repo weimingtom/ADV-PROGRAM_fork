@@ -180,7 +180,10 @@ GameData* GameSystem::getGameSceneInfo()
 void GameSystem::setGameSceneInfo(GameData* gameData)
 {
 	if (_gameSceneInfo)
+	{
 		delete _gameSceneInfo;
+		_gameSceneInfo = nullptr;
+	}
 	_gameSceneInfo = gameData;
 }
 
@@ -262,6 +265,21 @@ void GameSystem::saveGameSceneInfo(int i)
 		/*保存当前sound信息*/
 		//fwrite(_gameSceneInfo->bgmKey.c_str(), sizeof(char), strlen(_gameSceneInfo->bgmKey.c_str()), savedata);
 		//fputs("\r\n", savedata);
+		/*保存当前选项*/
+		char num[2];
+		sprintf(num, "%d", _gameSceneInfo->optionsNumber);
+		fwrite(num, sizeof(char), strlen(num), savedata);
+		fputs("\r\n", savedata);
+		if (_gameSceneInfo->optionsNumber)
+		{
+			for (auto itr = _gameSceneInfo->options.begin(); itr != _gameSceneInfo->options.end(); itr++)
+			{
+				fwrite(itr->first.c_str(), sizeof(char), strlen(itr->first.c_str()), savedata);
+				fputs("\r\n", savedata);
+				fwrite(itr->second.c_str(), sizeof(char), strlen(itr->second.c_str()), savedata);
+				fputs("\r\n", savedata);
+			}
+		}
 		/*保存当前ScriptReader标签*/
 		auto sign = ScriptReader::getInstance()->getCurrentSignName();
 		fwrite(sign.c_str(), sizeof(char), strlen(sign.c_str()), savedata);
@@ -395,7 +413,10 @@ bool GameSystem::loadGameSceneInfo(int i)
 	sprintf(file, "%s%s%s%s", FileUtils::getInstance()->getWritablePath().c_str(), path, ch, ".sav");
 	std::string data = FileUtils::getInstance()->getStringFromFile(file);
 	if (_gameSceneInfo)	//删掉旧信息
-		delete _gameSceneInfo;
+	{
+		//delete _gameSceneInfo;
+		_gameSceneInfo = nullptr;
+	}
 	_gameSceneInfo = new GameData;
 	if (data.compare("") != 0)
 	{
@@ -459,7 +480,23 @@ bool GameSystem::loadGameSceneInfo(int i)
 		_gameSceneInfo->bgmKey = temp;
 		/*读取当前sound信息*/
 
-		log("Load sign");
+		/*读取当前选项信息*/
+		ePos = data.find('\n', sPos);
+		temp = data.substr(sPos, ePos - sPos - 1);
+		sPos = ePos + 1;
+		_gameSceneInfo->optionsNumber = atoi(temp.c_str());
+		for (int j = 0; j < _gameSceneInfo->optionsNumber; j++)
+		{
+			std::string sign;
+			std::string text;
+			ePos = data.find('\n', sPos);
+			sign = data.substr(sPos, ePos - sPos - 1);
+			sPos = ePos + 1;
+			ePos = data.find('\n', sPos);
+			text = data.substr(sPos, ePos - sPos - 1);
+			sPos = ePos + 1;
+			_gameSceneInfo->options.insert(std::pair<std::string, std::string>(sign, text));
+		}
 		/*读取当前sign信息*/
 		ePos = data.find('\n', sPos);
 		temp = data.substr(sPos, ePos - sPos - 1);
