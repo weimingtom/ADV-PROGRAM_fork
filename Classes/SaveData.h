@@ -26,5 +26,6 @@ public:
 	static SaveData* create(int i);	//创建一个SaveData按钮
 	std::function <void(int)> onTouchEnded;
 	void updataData();	//刷新按钮数据
+	Sprite* getStageLayer();
 };
 

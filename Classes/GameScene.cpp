@@ -6,6 +6,7 @@
 #include "ScriptReader/BackgroundMusicManager.h"
 #include "ScriptReader/SoundManager.h"
 #include "SaveScene.h"
+#include "LoadScene.h"
 
 USING_NS_CC;
 
@@ -33,12 +34,12 @@ GameScene::~GameScene()
 	{
 		if (_chars[i])
 		{
-			delete _chars[i];
+			//delete _chars[i];
 			_chars[i] = nullptr;
 		}
 	}
 		
-	ScriptReader::destoryInstance();
+	//ScriptReader::destoryInstance();
 }
 
 Scene* GameScene::createScene()
@@ -173,13 +174,17 @@ bool GameScene::init()
 	ScriptReader::getInstance()->showSelect = CC_CALLBACK_1(GameScene::showSelect, this);
 
 	ScriptReader::getInstance()->loadScriptFile("/scenario/TestII.txt");
-	if (GameSystem::getInstance()->getIsNewGame())
+
+	if (!GameSystem::getInstance()->getIsLoadSuccess())
 	{
 		ScriptReader::getInstance()->nextScript();
 	}
 	else
 	{
-		//loaddata
+		log("reload!");
+		clear();
+		reloadScene();
+		GameSystem::getInstance()->setIsLoadSuccess(false);
 	}
 
 	return true;
@@ -674,13 +679,16 @@ void GameScene::clear()
 
 void GameScene::showLoadScene()
 {
-	clear();
-	reloadScene();
+	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
+	Director::getInstance()->replaceScene(LoadScene::createScene());
+	log("show Loading done");
+	//clear();
+	//reloadScene();
 }
 
 void GameScene::reloadScene()
 {
-	if (GameSystem::getInstance()->loadGameSceneInfo(1))
+	if (GameSystem::getInstance()->getIsLoadSuccess())
 	{ 
 		/*设置背景*/
 		auto background = BM->getBackground(GameSystem::getInstance()->getGameSceneInfo()->backgroundKey);

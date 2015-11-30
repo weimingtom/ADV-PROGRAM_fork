@@ -22,22 +22,32 @@ GameSystem::GameSystem()
 	{
 		setDefault();
 	}
-	_isNewGame = true;
+	_isLoadSuccess = false;
 	_savedata = new std::map<std::string, int>[100];
 	_gameSceneInfo = nullptr;
 	//初始化存档列表
 	_savedataList = new GameSaveData[MAX_SAVEDATA_NUMBER];
 	createSavedata();
 	initGameSavedataList();
+	_gameScene = nullptr;
 }
 
 
 GameSystem::~GameSystem()
 {
 	delete _savedata;
-	if (_gameSceneInfo) delete _gameSceneInfo;
+	if (_gameSceneInfo)
+	{
+		delete _gameSceneInfo;
+		_gameSceneInfo = nullptr;
+	}
 	delete _savedataList;
 	if (_screenShoot) _screenShoot->release();
+	if (_gameScene)
+	{
+		//delete _gameScene;
+		_gameScene = nullptr;
+	}
 }
 
 GameSystem* GameSystem::getInstance()
@@ -187,14 +197,14 @@ void GameSystem::setGameSceneInfo(GameData* gameData)
 	_gameSceneInfo = gameData;
 }
 
-void GameSystem::setIsNewGame(bool value)
+void GameSystem::setIsLoadSuccess(bool value)
 {
-	_isNewGame = value;
+	_isLoadSuccess = value;
 }
 
-bool GameSystem::getIsNewGame()
+bool GameSystem::getIsLoadSuccess()
 {
-	return _isNewGame;
+	return _isLoadSuccess;
 }
 
 void GameSystem::saveGameSceneInfo(int i)
@@ -516,4 +526,14 @@ bool GameSystem::loadGameSceneInfo(int i)
 		log("%s not found", file);
 		return false;
 	}
+}
+
+void GameSystem::setGameScene(Scene* scene)
+{
+	_gameScene = scene;
+}
+
+Scene* GameSystem::getGameScene()
+{
+	return _gameScene;
 }

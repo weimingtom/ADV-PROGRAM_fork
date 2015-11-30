@@ -33,6 +33,7 @@ SaveData::SaveData(int i)
 
 	updataData();
 
+	onTouchEnded = [=](int i){};
 	//this->setTouchEnabled(true);
 
 	auto touchImage = Sprite::create("/ui/saveload/selected_bg.png");
@@ -57,10 +58,8 @@ SaveData::SaveData(int i)
 		touchImage->setVisible(false);
 		if (_stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
 		{
-			log("Wow!");
 			onTouchEnded(_number);
-			GameSystem::getInstance()->updateGameSavedata(_number);
-			updataData();
+			log("Wow!");
 		}
 		else
 		{
@@ -166,4 +165,10 @@ void SaveData::updataData()
 		/*显示存档备注*/
 		//待实现
 	}
+}
+
+Sprite* SaveData::getStageLayer()
+{
+	//log("data Number = %d", _number);
+	return _stageLayer;
 }

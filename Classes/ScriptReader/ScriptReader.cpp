@@ -24,6 +24,7 @@ ScriptReader::ScriptReader()
 	, nextPositionIsLeft(true)
 	, charNumber(0)
 	, stage(nullptr)
+	, isWaitingForSelection(0)
 {
 }
 
@@ -392,6 +393,7 @@ void ScriptReader::nextScript()
 		return;
 	}
 	_currentCommandIndex++;
+	//log("Size of Script = [%d]", _scripts.size);
 	auto list = _scripts.find(_currentSignName);
 	if (list == _scripts.end())
 	{

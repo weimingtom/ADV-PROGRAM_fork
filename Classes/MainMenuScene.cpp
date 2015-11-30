@@ -4,6 +4,7 @@
 #include "SimpleAudioEngine.h"
 #include "GameSystem.h"
 #include "SaveScene.h"
+#include "LoadScene.h"
 
 USING_NS_CC;
 
@@ -101,7 +102,9 @@ void MainMenu::menuExit(Ref* pSender)
 
 void MainMenu::newgame()
 {
-	Director::getInstance()->replaceScene(GameScene::createScene());
+	GameSystem::getInstance()->setGameScene(GameScene::createScene());
+	auto scene = GameSystem::getInstance()->getGameScene();
+	Director::getInstance()->replaceScene(scene);
 }
 
 void MainMenu::config()
@@ -113,5 +116,5 @@ void MainMenu::config()
 void MainMenu::load()
 {
 	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
-	Director::getInstance()->replaceScene(SaveScene::createScene());
+	Director::getInstance()->replaceScene(LoadScene::createScene());
 }

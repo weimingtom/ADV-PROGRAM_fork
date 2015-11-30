@@ -68,8 +68,11 @@ class GameSystem
 	std::map<std::string, int>* _savedata;		//游戏变量
 	GameData* _gameSceneInfo;	//记录当前游戏画面信息
 	GameSaveData* _savedataList; //记录当前游戏的存档信息
-	bool _isNewGame;	//供GameScene判断是否开始新游戏，false为读档
+	bool _isLoadSuccess;	//是够载入成功
 	RenderTexture* _screenShoot;	//储存屏幕截图
+
+	//界面管理
+	Scene* _gameScene;	//游戏主画面
 
 public:
 	GameSystem();
@@ -102,8 +105,8 @@ public:
 	void saveGameSceneInfo(int i);//将GameData转成文档，储存在i位置
 	bool loadGameSceneInfo(int i);//将i位置的文件作为存档读取为GameData
 
-	void setIsNewGame(bool value);
-	bool getIsNewGame();
+	void setIsLoadSuccess(bool value);
+	bool getIsLoadSuccess();
 
 	void initGameSavedataList();	//初始化存档列表
 	GameSaveData* getGameSavedata(int i);	//获取单个存档信息
@@ -115,5 +118,9 @@ public:
 
 	void setScreenShoot(RenderTexture* render);	
 	RenderTexture* getScreenShoot();
+
+	void setGameScene(Scene* scene);	//设置游戏场景
+	Scene* getGameScene();	//获取游戏场景
+	
 };
 

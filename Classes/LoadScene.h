@@ -6,6 +6,8 @@ USING_NS_CC;
 
 class LoadScene : public Layer
 {
+	SaveData* dataButtons[8];
+	EventListenerTouchOneByOne* eventTouch[8];
 public:
 	LoadScene();
 	~LoadScene();

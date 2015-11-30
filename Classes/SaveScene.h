@@ -6,6 +6,8 @@ USING_NS_CC;
 
 class SaveScene : public Layer
 {
+	SaveData* dataButtons[8];
+	EventListenerTouchOneByOne* eventTouch[8];
 public:
 	SaveScene();
 	~SaveScene();
