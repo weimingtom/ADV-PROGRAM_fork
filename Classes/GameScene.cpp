@@ -7,6 +7,11 @@
 #include "ScriptReader/SoundManager.h"
 #include "SaveScene.h"
 #include "LoadScene.h"
+#include "HistoryScene.h"
+#ifndef History_hpp
+#define History_hpp
+#include "History.hpp"
+#endif /* History_hpp */
 
 USING_NS_CC;
 
@@ -106,7 +111,7 @@ bool GameScene::init()
 	auto buttonLoad = MenuItemImage::create("/ui/dialog/button_load.png", "/ui/dialog/button_load_down.png", CC_CALLBACK_0(GameScene::showLoadScene, this));
 	buttonLoad->setPosition(Vec2(960,220));
 
-	auto buttonLog = MenuItemImage::create("/ui/dialog/button_log.png", "/ui/dialog/button_log_down.png");
+	auto buttonLog = MenuItemImage::create("/ui/dialog/button_log.png", "/ui/dialog/button_log_down.png", CC_CALLBACK_0(GameScene::showHistoryScene, this));
 	buttonLog->setPosition(Vec2(1020,220));
 
 	auto buttonConfig = MenuItemImage::create("/ui/dialog/button_config.png", "/ui/dialog/button_config_down.png");
@@ -181,8 +186,7 @@ bool GameScene::init()
 	}
 	else
 	{
-		log("reload!");
-		clear();
+		//clear();
 		reloadScene();
 		GameSystem::getInstance()->setIsLoadSuccess(false);
 	}
@@ -681,9 +685,6 @@ void GameScene::showLoadScene()
 {
 	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
 	Director::getInstance()->replaceScene(LoadScene::createScene());
-	log("show Loading done");
-	//clear();
-	//reloadScene();
 }
 
 void GameScene::reloadScene()
@@ -828,10 +829,11 @@ void GameScene::showSelect(std::map<std::string, std::string> &options)
 		log("OPTION[%s] SIGN[%s]", itr->second.c_str(), itr->first.c_str());
 		//auto tmp = (std::string)itr->first.c_str();
 		auto tmp = itr->first;
-		
+		auto tmp2 = itr->second;
 		//int *test;
 		auto button = MenuItemLabel::create(label, [=](Ref*)
 		{
+			HistoryLogger::getInstance()->addRecord("null", tmp2, "");
 			ScriptReader::getInstance()->jumpToSign(tmp);
 			menu->removeFromParent();
 			_currentOptions.clear();
@@ -843,4 +845,10 @@ void GameScene::showSelect(std::map<std::string, std::string> &options)
 		startY -= 60;
 	}
 	_selectLayer->addChild(menu, 13);
+}
+
+void GameScene::showHistoryScene()
+{
+	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
+	Director::getInstance()->replaceScene(HistoryScene::createScene());
 }

@@ -44,15 +44,17 @@ class HistoryLogger
 {
     int _maximum;   //最大记录数
     int _currentLog;    //当前记录
-    record* _records;
+    record* _records[MAXIMUM];
     static HistoryLogger* _instance;    //实例
 public:
     HistoryLogger();
     ~HistoryLogger();
     static HistoryLogger* getInstance(); //获取实例
 	void destoryInstance(); //销毁实例
-    record* createRecord(std::string type, std::string text, std::string name, Color4B color);    //生成记录
-    void addRecord(recordType type, std::string text, std::string name, Color4B color);
+	record* createRecord(const std::string type, std::string text, std::string name, Color4B color = Color4B::WHITE);    //生成记录
+	void addRecord(const std::string type, std::string text, std::string name, Color4B color = Color4B::WHITE);
     void pushRecord(record record);
-    
+	void addRecord(record* record);	//添加记录
+	int getLength();	//获取当前历史记录条数
+	record* getRecord(int i);
 };

@@ -78,6 +78,7 @@ public:
 
 	void showSaveScene();	//进入存档界面
 	void showLoadScene();	//进入读档界面
+	void showHistoryScene();	//进入历史记录界面
 
 	void ScreenShoot();	//截屏
 
@@ -85,5 +86,6 @@ public:
 	void reloadScene();	//重载场景，通常读档用
 
 	void showSelect(std::map<std::string, std::string> &options);	//显示选项
+
 };
 
