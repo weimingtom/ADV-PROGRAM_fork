@@ -45,12 +45,14 @@ struct Charactor
 		, hate(0)
 		, faceSprite(nullptr)
 		, currentFace("")
-	{}
+	{
+        fgList = new std::map<std::string, char*>;
+    }
 
 	char* getCharactorFace(std::string &face)	//根据face值获取角色表情
 	{
 		log("CM> result.first = %s", face.c_str());
-		auto result = fgList->find(face);
+        auto result = fgList->find(face);
 		if (result != fgList->end())
 		{
 			log("CM> result.second = %s", result->second);
