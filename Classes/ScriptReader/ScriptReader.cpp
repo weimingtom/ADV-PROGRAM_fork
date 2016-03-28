@@ -173,8 +173,6 @@ void ScriptReader::loadScriptFile(std::string path)
 				if (command[0] == '@')
 				{
 					//解读为记录脚本段落
-					//currentSelect = nullptr;
-					//log("Sign[%s] Size[%d]", currentSign.capacity(), cms->size());
 					currentSign = command.substr(1, command.length() - 1);
 					cms = new std::vector<ScriptCommand*>();
 					_scripts.insert(std::pair < std::string, std::vector<ScriptCommand*>*>(currentSign,cms));

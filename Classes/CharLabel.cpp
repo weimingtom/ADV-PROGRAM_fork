@@ -145,6 +145,5 @@ std::string CharLabel::getNextChar(std::string &src, int pos)
 		len += 1;
 	}
 	std::string subString = src.substr(pos, len);
-    log("SubString = %s",subString.c_str());
 	return subString;
 }

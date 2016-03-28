@@ -179,7 +179,7 @@ bool GameScene::init()
 	ScriptReader::getInstance()->showSelect = CC_CALLBACK_1(GameScene::showSelect, this);
 
     
-	ScriptReader::getInstance()->loadScriptFile("scenario/TestII.txt");
+	ScriptReader::getInstance()->loadScriptFile("scenario/LD.txt");
     
      
 	if (!GameSystem::getInstance()->getIsLoadSuccess())
