@@ -1,4 +1,6 @@
-#pragma once
+#ifndef EASYBUTTON_H
+#define EASYBUTTON_H
+
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -29,3 +31,4 @@ public:
 	//std::function<void(int i)> touchEventWithInt;	//带int参数的触碰事件方法指针
 };
 
+#endif

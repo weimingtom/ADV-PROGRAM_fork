@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef __CHAR_LABEL_H__
+#define __CHAR_LABEL_H__
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -64,3 +64,4 @@ public:
 
 };
 
+#endif

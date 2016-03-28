@@ -64,7 +64,7 @@ bool HistoryScene::init()
 	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
 	stageLayer->addChild(backgroundLayer);
 
-	auto backgroundImage = Sprite::create("/ui/backgroundEffect/fullscreen_smoke.png");
+	auto backgroundImage = Sprite::create("ui/backgroundEffect/fullscreen_smoke.png");
 	backgroundImage->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundImage);
 
@@ -122,7 +122,7 @@ bool HistoryScene::init()
 	*/
 
 	//·µ»Ø°´Å¥
-	auto buttonBack = MenuItemImage::create("/ui/button_return.png", "/ui/button_return_down.png", CC_CALLBACK_0(HistoryScene::back, this));
+	auto buttonBack = MenuItemImage::create("ui/button_return.png", "/ui/button_return_down.png", CC_CALLBACK_0(HistoryScene::back, this));
 	buttonBack->setPosition(Vec2(175, 90)); 
 	auto menu = Menu::create(buttonBack, NULL);
 	menu->setPosition(Vec2::ZERO);

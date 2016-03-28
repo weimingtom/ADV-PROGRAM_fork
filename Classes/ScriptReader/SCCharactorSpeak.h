@@ -1,8 +1,9 @@
-#pragma once
+#ifndef __SC_CHARACTOR_SPEAK_H__
+#define __SC_CHARACTOR_SPEAK_H__
 #include "ScriptReader.h"
 #include "ScriptCommand.h"
 
-enum CharactorFaceType;
+//enum CharactorFaceType;
 
 class ScriptReader::SCCharactorSpeak :public ScriptCommand
 {
@@ -19,3 +20,5 @@ public:
 
 
 };
+
+#endif

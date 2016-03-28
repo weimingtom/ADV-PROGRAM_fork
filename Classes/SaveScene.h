@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SAVESCENE_H
+#define SAVESCENE_H
 #include "cocos2d.h"
 #include "SaveData.h"
 
@@ -23,3 +24,4 @@ public:
 	void save(int i);	//´æµµ
 };
 
+#endif

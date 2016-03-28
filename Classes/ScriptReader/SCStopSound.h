@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __SC_STOP_SOUND_H__
+#define __SC_STOP_SOUND_H__
 #include "ScriptReader.h"
 #include "ScriptCommand.h"
 
@@ -11,3 +12,4 @@ public:
 	void execute(cocos2d::Node* stage);
 };
 
+#endif

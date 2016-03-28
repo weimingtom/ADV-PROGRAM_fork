@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef __SOUND_MANAGER_H__
+#define __SOUND_MANAGER_H__
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -23,3 +23,5 @@ public:
 
 	void addSound(std::string key, std::string sound);	//¥Ê¥¢“Ù¿÷–≈œ¢
 };
+
+#endif

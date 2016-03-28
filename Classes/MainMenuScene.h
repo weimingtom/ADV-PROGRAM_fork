@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAINMENUSCENE_H
+#define MAINMENUSCENE_H
 
 #include "cocos2d.h"
 
@@ -24,3 +25,4 @@ public:
 
 };
 
+#endif

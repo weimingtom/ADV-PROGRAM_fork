@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SLIDEBAR_H
+#define SLIDEBAR_H
+
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -36,3 +38,4 @@ public:
 	std::function<void()> moveEvent;	//ÒÆ¶¯ÊÂ¼þ
 };
 
+#endif

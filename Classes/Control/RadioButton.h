@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RADIO_BUTTON_H
+#define RADIO_BUTTON_H
+
 #include "cocos2d.h"
 #include "EasyButton.h"
 
@@ -25,3 +27,4 @@ public:
 	void setSelectedNumber(int selectedNumber);	//设置默认被选中的按钮
 };
 
+#endif

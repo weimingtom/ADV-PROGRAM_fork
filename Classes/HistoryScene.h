@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HISTORYSCENE_H
+#define HISTORYSCENE_H
 #include "cocos2d.h"
 #include "History.hpp"
 USING_NS_CC;
@@ -29,4 +30,6 @@ public:
 
 	void back();
 };
+
+#endif
 

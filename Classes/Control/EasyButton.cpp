@@ -1,3 +1,5 @@
+#ifndef __EASY_BUTTON_H__
+#define __EASY_BUTTON_H__
 #include "EasyButton.h"
 
 
@@ -56,10 +58,18 @@ EasyButton::~EasyButton()
 
 EasyButton* EasyButton::createEasyButton(const std::string &_normalFile)
 {
+   
 	auto normalSprite = Sprite::create(_normalFile);
 	//Sprite* touchSprite = nullptr;
 	//Sprite* selectSprite = nullptr;
-	return new EasyButton(normalSprite, nullptr, nullptr);
+	auto ret= new EasyButton(normalSprite, nullptr, nullptr);
+    if(ret && ret->init()){
+        ret->autorelease();
+        return ret;
+    }
+    delete ret;
+    ret=nullptr;
+    return nullptr;
 };
 
 EasyButton* EasyButton::createEasyButton(const std::string &_normalFile, const std::string &_touchFile)
@@ -109,3 +119,5 @@ Sprite* EasyButton::getNormal()
 {
 	return _normal;
 }
+
+#endif

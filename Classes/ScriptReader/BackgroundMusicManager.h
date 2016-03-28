@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BACKGROUND_MUSIC_MANAGER_H__
+#define __BACKGROUND_MUSIC_MANAGER_H__
 
 #include "cocos2d.h"
 
@@ -23,3 +24,5 @@ public:
 
 	void addBackgroundMusic(std::string key, std::string bgm);	//¥Ê¥¢“Ù¿÷–≈œ¢
 };
+
+#endif

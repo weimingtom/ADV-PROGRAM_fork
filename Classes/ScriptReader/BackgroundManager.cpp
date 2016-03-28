@@ -1,7 +1,7 @@
 #include "BackgroundManager.h"
 
 //脚本文件路径
-#define BGLISTPATH "/bgimage/bgList.txt"
+#define BGLISTPATH "bgimage/bgList.txt"
 
 BackgroundManager* BackgroundManager::_instance = nullptr;
 
@@ -40,7 +40,7 @@ BackgroundManager::BackgroundManager()
 		int tempPos = temp.find_first_of(',', 0);
 		key = temp.substr(0, tempPos);
 		background = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
-		background = "/bgimage/" + background;
+		background = "bgimage/" + background;
 
 		//log("bgkey = %s , backgroundPath = %s", key.c_str(), background.c_str());
 
@@ -76,8 +76,8 @@ std::string BackgroundManager::getBackground(std::string key)
 	}
 	else
 	{
-		log("BM> Unfind &s", key);
-		defaultBackground = "/bgimage/Black.jpg";
+		log("BM> Unfind &s", key.c_str());
+		defaultBackground = "bgimage/Black.jpg";
 		return defaultBackground;
 	}
 }

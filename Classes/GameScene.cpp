@@ -8,10 +8,7 @@
 #include "SaveScene.h"
 #include "LoadScene.h"
 #include "HistoryScene.h"
-#ifndef History_hpp
-#define History_hpp
 #include "History.hpp"
-#endif /* History_hpp */
 
 USING_NS_CC;
 
@@ -39,12 +36,14 @@ GameScene::~GameScene()
 	{
 		if (_chars[i])
 		{
-			//delete _chars[i];
+            if (_chars[i]->faceSprite)
+            {
+                _chars[i]->leave();
+            }
+            //delete _chars[i];
 			_chars[i] = nullptr;
 		}
 	}
-		
-	//ScriptReader::destoryInstance();
 }
 
 Scene* GameScene::createScene()
@@ -85,7 +84,7 @@ bool GameScene::init()
 	}
 
 	//对话框
-	auto _dialogWindow = Sprite::create("/ui/dialog/dialog_bg.png");
+	auto _dialogWindow = Sprite::create("ui/dialog/dialog_bg.png");
 	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 110));
 	this->addChild(_dialogWindow,10);
 
@@ -102,29 +101,29 @@ bool GameScene::init()
 	_dialogWindow->addChild(_textLabel,12);
 
 	//对话框按钮
-	auto buttonDict = MenuItemImage::create("/ui/dialog/button_dict.png", "/ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
+	auto buttonDict = MenuItemImage::create("ui/dialog/button_dict.png", "ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
 	buttonDict->setPosition(Vec2(840,220));
 
-	auto buttonSave = MenuItemImage::create("/ui/dialog/button_save.png", "/ui/dialog/button_save_down.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
+	auto buttonSave = MenuItemImage::create("ui/dialog/button_save.png", "ui/dialog/button_save_down.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
 	buttonSave->setPosition(Vec2(900,220));
 
-	auto buttonLoad = MenuItemImage::create("/ui/dialog/button_load.png", "/ui/dialog/button_load_down.png", CC_CALLBACK_0(GameScene::showLoadScene, this));
+	auto buttonLoad = MenuItemImage::create("ui/dialog/button_load.png", "ui/dialog/button_load_down.png", CC_CALLBACK_0(GameScene::showLoadScene, this));
 	buttonLoad->setPosition(Vec2(960,220));
 
-	auto buttonLog = MenuItemImage::create("/ui/dialog/button_log.png", "/ui/dialog/button_log_down.png", CC_CALLBACK_0(GameScene::showHistoryScene, this));
+	auto buttonLog = MenuItemImage::create("ui/dialog/button_log.png", "ui/dialog/button_log_down.png", CC_CALLBACK_0(GameScene::showHistoryScene, this));
 	buttonLog->setPosition(Vec2(1020,220));
 
-	auto buttonConfig = MenuItemImage::create("/ui/dialog/button_config.png", "/ui/dialog/button_config_down.png");
+	auto buttonConfig = MenuItemImage::create("ui/dialog/button_config.png", "ui/dialog/button_config_down.png");
 	buttonConfig->setPosition(Vec2(1080,220));
 
-	auto buttonTitle = MenuItemImage::create("/ui/dialog/button_title.png", "/ui/dialog/button_title_down.png");
+	auto buttonTitle = MenuItemImage::create("ui/dialog/button_title.png", "ui/dialog/button_title_down.png");
 	buttonTitle->setPosition(Vec2(1200,220));
 
-	auto CBskip = ui::CheckBox::create("/ui/dialog/charbox_skip_off.png", "/ui/dialog/charbox_skip_off.png", "/ui/dialog/charbox_skip_on.png", "/ui/dialog/charbox_skip_off.png", "/ui/dialog/charbox_skip_on.png");
+	auto CBskip = ui::CheckBox::create("ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_on.png", "ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_on.png");
 	CBskip->setPosition(Vec2(1000, 125));
 	_dialogWindow->addChild(CBskip, 0);
 
-	auto CBauto = ui::CheckBox::create("/ui/dialog/charbox_auto_off.png", "/ui/dialog/charbox_auto_off.png", "/ui/dialog/charbox_auto_on.png", "/ui/dialog/charbox_auto_off.png", "/ui/dialog/charbox_auto_on.png");
+	auto CBauto = ui::CheckBox::create("ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_on.png", "ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_on.png");
 	CBauto->setPosition(Vec2(1000, 75));
 	/*
 	CBauto->onTouchEnded = [=](Touch *touch, Event *unusedEvent)
@@ -167,6 +166,7 @@ bool GameScene::init()
 	
 	ScriptReader::getInstance()->initWithStage(stageLayer);
 	//绑定reader功能
+    
 	ScriptReader::getInstance()->showText = CC_CALLBACK_1(GameScene::showText, this);
 	ScriptReader::getInstance()->showName = CC_CALLBACK_1(GameScene::showName, this);
 	ScriptReader::getInstance()->changeBackground = CC_CALLBACK_1(GameScene::changeBackground, this);
@@ -178,15 +178,17 @@ bool GameScene::init()
 	ScriptReader::getInstance()->hideCharator = CC_CALLBACK_1(GameScene::unDisplayCharator, this);
 	ScriptReader::getInstance()->showSelect = CC_CALLBACK_1(GameScene::showSelect, this);
 
-	ScriptReader::getInstance()->loadScriptFile("/scenario/TestII.txt");
-
+    
+	ScriptReader::getInstance()->loadScriptFile("scenario/TestII.txt");
+    
+     
 	if (!GameSystem::getInstance()->getIsLoadSuccess())
 	{
 		ScriptReader::getInstance()->nextScript();
 	}
 	else
 	{
-		//clear();
+		clear();
 		reloadScene();
 		GameSystem::getInstance()->setIsLoadSuccess(false);
 	}
@@ -339,14 +341,14 @@ void GameScene::createGameDate()
 	tmpGameData->currentName = _currentName;
 	tmpGameData->currentText = _currentText;
 	tmpGameData->optionsNumber = _optionsNumber;
-	log("Test 1");
+	
 	if(_optionsNumber)
 	{
 		log("Select::> optionSize[%d]", _currentOptions.size());
 		tmpGameData->options.insert(_currentOptions.begin(), _currentOptions.end());
 	}
 		//tmpGameData->options = *_currentOptions;
-	log("Test 2");
+	
 	GameSystem::getInstance()->setGameSceneInfo(tmpGameData);
 }
 
@@ -474,7 +476,10 @@ void GameScene::displayCharator(std::string cName, std::string face)
 
 				cha->currentPosition = tmpPT;
 				if (sp)
+                {
 					*pChar = cha;
+                    log("pChar->name = %s",((Charactor*)*pChar)->name.c_str());
+                }
 
 				switch (tmpPT)
 				{
@@ -641,13 +646,15 @@ void GameScene::ScreenShoot()
 
 void GameScene::clear()
 {
-	
+    log("Clearing");
 	/*清除所有立绘*/
 	for (int i = 0; i < MAX_CHARACTOR_NUMBER; i++)
 	{
+        log("_chars[%i]->key = %s",i,_chars[i]->key.c_str());
 		if (_chars[i]->faceSprite)
 		{
 			_chars[i]->leave();
+            log("Chars[%i] clear.", i);
 		}
 	}
 	_charNumber = 0;
@@ -659,7 +666,7 @@ void GameScene::clear()
 	//std::string black = "black";
 	//changeBackground(black);
 
-	auto backgroundSprite = Sprite::create("/bgimage/Black.jpg");
+	auto backgroundSprite = Sprite::create("bgimage/Black.jpg");
 	backgroundSprite->setAnchorPoint(Vec2(0, 0));
 	_backgroundLayer->addChild(backgroundSprite);
 	_backgroundSprite = backgroundSprite;
@@ -694,7 +701,10 @@ void GameScene::reloadScene()
 		/*设置背景*/
 		auto background = BM->getBackground(GameSystem::getInstance()->getGameSceneInfo()->backgroundKey);
 		if (background.compare("") == 0)
+        {
+            log("ReloadScene> No Background in the savedata.");
 			background = "black";
+        }
 		auto backgroundSprite = Sprite::create(background);
 		backgroundSprite->setAnchorPoint(Vec2(0, 0));
 		_backgroundLayer->addChild(backgroundSprite);

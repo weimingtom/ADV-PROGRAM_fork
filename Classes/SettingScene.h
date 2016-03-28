@@ -1,10 +1,15 @@
-#pragma once
+#ifndef SETTING_SCENE_H
+#define SETTING_SCENE_H
+
 #include "cocos2d.h"
-#include "Control/RadioButton.h"
-#include "Control/Slidebar.h"
+//#include "Control/RadioButton.h"
+//#include "Control/Slidebar.h"
 
 USING_NS_CC;
 
+class RadioButton;
+
+class Slidebar;
 
 class SettingScene : public Layer
 {
@@ -32,3 +37,4 @@ public:
 	void changeMusicVolume();
 };
 
+#endif

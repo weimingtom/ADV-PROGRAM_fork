@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __SC_IF_H__
+#define __SC_IF_H__
 #include "ScriptReader.h"
 #include "ScriptCommand.h"
 
@@ -14,3 +15,5 @@ public:
 	bool expressionJudge();
 	void jump(std::string tag);
 };
+
+#endif

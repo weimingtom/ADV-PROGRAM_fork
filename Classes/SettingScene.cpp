@@ -1,7 +1,8 @@
 #include "SettingScene.h"
 #include "GameSystem.h"
 #include "SimpleAudioEngine.h"
-
+#include "Control/RadioButton.h"
+#include "Control/Slidebar.h"
 
 SettingScene::SettingScene()
 {
@@ -40,18 +41,18 @@ bool SettingScene::init()
 	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
 	stageLayer->addChild(backgroundLayer);
 
-	auto backgroundImage = Sprite::create("/ui/backgroundEffect/fullscreen_smoke.png");
+	auto backgroundImage = Sprite::create("ui/backgroundEffect/fullscreen_smoke.png");
 	backgroundImage->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundImage);
 
-	auto backgroundBox = Sprite::create("/ui/config/window_bg.png");
+	auto backgroundBox = Sprite::create("ui/config/window_bg.png");
 	backgroundBox->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundBox);
 	
 	/*加载按钮*/
 
 	//SliderBar
-	_musicVolumeSlidebar = Slidebar::createSlidebar("/ui/scroll_bar.png", "/ui/scroll_point.png");
+	_musicVolumeSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
 	_musicVolumeSlidebar->setPosition(Vec2(750, 400));
 	_musicVolumeSlidebar->setFloat(GameSystem::getInstance()->getMusicVolume());
 	_musicVolumeSlidebar->moveEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
@@ -61,9 +62,9 @@ bool SettingScene::init()
 	//
 
 	//测试按钮
-	auto testButton = EasyButton::createEasyButton("/ui/charbox_off.png", "/ui/charbox_off.png", "/ui/charbox_on.png");
+	auto testButton = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
 	testButton->setPosition(Vec2(710, 275));
-	auto testButton2 = EasyButton::createEasyButton("/ui/charbox_off.png", "/ui/charbox_off.png", "/ui/charbox_on.png");
+	auto testButton2 = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
 	testButton2->setPosition(Vec2(920, 275));
 
 	_testRadio = RadioButton::createRadioButton(testButton, testButton2, nullptr);
@@ -74,7 +75,7 @@ bool SettingScene::init()
 
 
 	//返回按钮
-	auto buttonBack = MenuItemImage::create("/ui/button_return.png", "/ui/button_return_down.png", CC_CALLBACK_0(SettingScene::back, this));
+	auto buttonBack = MenuItemImage::create("ui/button_return.png", "ui/button_return_down.png", CC_CALLBACK_0(SettingScene::back, this));
 	buttonBack->setPosition(Vec2(175, 90));
 	auto menu = Menu::create(buttonBack, NULL);
 	menu->setPosition(Vec2::ZERO);

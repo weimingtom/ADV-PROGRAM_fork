@@ -170,6 +170,7 @@ bool ScriptReader::SCIf::expressionJudge()
 		}
 
 	}
+    return false;
 }
 
 void ScriptReader::SCIf::jump(std::string tag)

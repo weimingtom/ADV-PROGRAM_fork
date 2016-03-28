@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __CHARATOR_MANAGER_H__
+#define __CHARATOR_MANAGER_H__
 
 #include "cocos2d.h"
 
@@ -117,7 +118,7 @@ struct Charactor
 		if (faceSprite)
 		{
 			faceSprite->removeFromParent();
-			faceSprite=nullptr;
+			faceSprite = nullptr;
 			currentFace = "";
 			currentPosition = PositionType::EMPTY;
 		}
@@ -148,4 +149,6 @@ public:
 
 	void addCharactor(std::string &key, Charactor* cha);	//´æ´¢½ÇÉ«ÐÅÏ¢
 };
+
+#endif
 

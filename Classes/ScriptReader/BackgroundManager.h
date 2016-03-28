@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BACKGROUNDMANAGER_H
+#define BACKGROUNDMANAGER_H
 
 #include "cocos2d.h"
 
@@ -23,4 +24,6 @@ public:
 
 	void addBackground(std::string key, std::string background);	//¥Ê¥¢≥°æ∞–≈œ¢
 };
+
+#endif
 

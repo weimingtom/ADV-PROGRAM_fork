@@ -1,17 +1,8 @@
-//
-//  History.hpp
-//  
-//
-//  Created by Sunny on 15/10/23.
-//
-//
-
-#ifndef History_hpp
-#define History_hpp
+#ifndef HISTORY_H
+#define HISTORY_H
 
 #include <stdio.h>
 #include "cocos2d.h"
-#endif /* History_hpp */
 
 USING_NS_CC;
 #define MAXIMUM 80 //最大记录数
@@ -58,3 +49,5 @@ public:
 	int getLength();	//获取当前历史记录条数
 	record* getRecord(int i);
 };
+
+#endif

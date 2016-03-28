@@ -1,4 +1,8 @@
-#pragma once
+
+#ifndef GAMESCENE_H
+
+#define GAMESCENE_H
+
 #include "ScriptReader/ScriptReader.h"
 #include "cocos2d.h"
 #include "CharLabel.h"
@@ -89,3 +93,4 @@ public:
 
 };
 
+#endif

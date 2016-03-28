@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LOADSCENE_H
+#define LOADSCENE_H
 #include "cocos2d.h"
 #include "SaveData.h"
 
@@ -21,5 +22,7 @@ public:
 	void back();	//·µ»Ø
 
 	void load(int i);	//¶Áµµ
+    
 };
 
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __SCRIPT_READER_H__
+#define __SCRIPT_READER_H__
 #include "cocos2d.h"
 //#include "CharactorManager.h"
 
@@ -101,7 +102,7 @@ public:
 	std::function<void()> stopSound;								//停止音效
 	std::function<void(std::string &cName, std::string &face)> showCharator;	//显示立绘
 	std::function<void(std::string &name)> hideCharator;	//隐藏立绘
-	std::function<void(std::map<std::string, std::string>)> showSelect;	//显示选项
+	std::function<void(std::map<std::string, std::string> &options)> showSelect;	//显示选项
 
 	void loadScriptFile(std::string path);	//载入脚本数据
 	void clearScript();	//清理脚本数据
@@ -115,3 +116,4 @@ public:
 	void setCurrentCommandIndex(int value);
 };
 
+#endif

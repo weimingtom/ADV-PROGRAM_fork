@@ -1,5 +1,5 @@
 #include "CharactorManager.h"
-#define charactorPath "/charactor/charactorList.txt"
+#define charactorPath "charactor/charactorList.txt"
 
 CharactorManager* CharactorManager::_instance = nullptr;
 
@@ -50,8 +50,8 @@ CharactorManager::CharactorManager()
 			int tempPos = temp.find_first_of(',', 0);
 			face = temp.substr(0, tempPos);
 			facePath = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
-			facePath = "/charactor/" + facePath + ".png";
-			char* tmpfacePath = new char;
+			facePath = "charactor/" + facePath + ".png";
+			char* tmpfacePath = new char[50];
 			facePath.copy(tmpfacePath,facePath.length(),0);
 			*(tmpfacePath + facePath.length()) = '\0';
 			tempCharactor->fgList->insert(std::pair<std::string, char*>(face, tmpfacePath));

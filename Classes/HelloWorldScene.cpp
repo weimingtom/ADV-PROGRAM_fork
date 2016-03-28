@@ -1,5 +1,7 @@
 #include "HelloWorldScene.h"
 
+//#include "TestLayer.h"
+
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -68,23 +70,26 @@ bool HelloWorld::init()
 
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("HelloWorld.png");
-	auto Junyu = Sprite::create("IMG_4656.JPG");
-	auto TestButton = MenuItemImage::create("IMG_5226.JPG", "IMG_5226.JPG",CC_CALLBACK_1(HelloWorld::menuTestButton, this));
+	//auto Junyu = Sprite::create("IMG_4656.JPG");
+	//auto TestButton = MenuItemImage::create("IMG_5226.JPG", "IMG_5226.JPG",CC_CALLBACK_1(HelloWorld::menuTestButton, this));
 
     // position the sprite on the center of the screen
 	sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	Junyu->setScale(0.25);
-	Junyu->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	TestButton->setPosition(Vec2(200, 200));
+	//Junyu->setScale(0.25);
+	//Junyu->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	//TestButton->setPosition(Vec2(200, 200));
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
-	this->addChild(Junyu, 1);
+	//this->addChild(Junyu, 1);
 	//this->addChild(TestButton, 2);
     
-	auto TestMenu = Menu::create(TestButton, NULL);
-	TestMenu->setPosition(Vec2::ZERO);
-	this->addChild(TestMenu, 2);
+	//auto TestMenu = Menu::create(TestButton, NULL);
+	//TestMenu->setPosition(Vec2::ZERO);
+	//this->addChild(TestMenu, 2);
+    
+    //auto ly=TestLayer::create();
+    //addChild(ly);
 
 
     return true;

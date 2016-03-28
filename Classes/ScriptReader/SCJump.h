@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __SC_JUMP_H__
+#define __SC_JUMP_H__
 #include "ScriptReader.h"
 #include "ScriptCommand.h"
 
@@ -11,3 +12,4 @@ public:
 	void execute(cocos2d::Node* stage);
 };
 
+#endif

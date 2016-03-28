@@ -1,6 +1,6 @@
 #include "BackgroundMusicManager.h"
 
-#define BGMLISTPATH "/bgm/bgmList.txt"
+#define BGMLISTPATH "bgm/bgmList.txt"
 
 BackgroundMusicManager* BackgroundMusicManager::_instance = nullptr;
 
@@ -36,7 +36,7 @@ BackgroundMusicManager::BackgroundMusicManager()
 		int tempPos = temp.find_first_of(',', 0);
 		key = temp.substr(0, tempPos);
 		background = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
-		background = "/bgm/" + background + ".mp3";
+		background = "bgm/" + background + ".mp3";
 
 		//log("bgmkey = %s , backgroundmusicPath = %s", key.c_str(), background.c_str());
 
@@ -71,7 +71,7 @@ std::string BackgroundMusicManager::getBackgroundMusic(std::string key)
 	}
 	else
 	{
-		log("BMM> Unfind &s", key);
+		log("BMM> Unfind &s", key.c_str());
 		defaultBackgroundMusic = "";
 		return defaultBackgroundMusic;
 	}

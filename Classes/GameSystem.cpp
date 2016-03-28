@@ -1,7 +1,11 @@
 #include "GameSystem.h"
-#include "cocos2d\cocos\base\CCUserDefault.h"
+#include "CCUserDefault.h"
 #include <stdlib.h>
-#include "ScriptReader\ScriptReader.h"
+#include "ScriptReader/ScriptReader.h"
+#include "ScriptReader/CharactorManager.h"
+#include "ScriptReader/BackgroundManager.h"
+#include "ScriptReader/BackgroundMusicManager.h"
+
 
 #define DEFAULT_SYSTEMVOLUME 1.0f
 #define DEFAULT_MUSICVOLUME 1.0f
@@ -30,6 +34,11 @@ GameSystem::GameSystem()
 	createSavedata();
 	initGameSavedataList();
 	_gameScene = nullptr;
+    
+    //initialization Manager
+    CharactorManager::getInstance();
+    BackgroundManager::getInstance();
+    BackgroundMusicManager::getInstance();
 }
 
 
@@ -171,14 +180,16 @@ void GameSystem::setData(std::map<std::string, int> *map)// = nullptr)
 void GameSystem::setSavedata(int i, bool value)
 {
 	char* ch = new char[4];
-	itoa(i, ch, 10);
+	//itoa(i, ch, 10);
+    sprintf(ch, "%d", i);
 	cocos2d::UserDefault::getInstance()->setBoolForKey(ch, value);
 }
 
 bool GameSystem::getSavedata(int i)
 {
 	char* ch = new char[4];
-	itoa(i, ch, 10);
+	//itoa(i, ch, 10);
+    sprintf(ch, "%d", i);
 	return cocos2d::UserDefault::getInstance()->getBoolForKey(ch);
 }
 
@@ -211,12 +222,13 @@ void GameSystem::saveGameSceneInfo(int i)
 {
 	setSavedata(i, true);
 	/*将信息保存到savedata对应的file*/
-	char path[] = "savedata/savedata";
-	char ch[3];
+	const char * path = "savedata/savedata";
+	char *ch = new char[3];
 	sprintf(ch, "%d", i+1);
-	char file[100];
-	sprintf(file, "%s%s%s%s", FileUtils::getInstance()->getWritablePath().c_str(), path, ch, ".sav");
-	char image[100];
+    cocos2d::log("ch = %s", ch);
+    char *file = new char[500];
+	sprintf(file, "%s%s%s.sav", FileUtils::getInstance()->getWritablePath().c_str(), path, ch);
+    char *image = new char[100];
 	sprintf(image, "%s%d.jpg", path, i+1);
 	cocos2d::log("Savedata file path = %s",file);
 	cocos2d::log("Savedata image path = %s", image);
@@ -290,6 +302,7 @@ void GameSystem::saveGameSceneInfo(int i)
 				fputs("\r\n", savedata);
 			}
 		}
+        
 		/*保存当前ScriptReader标签*/
 		auto sign = ScriptReader::getInstance()->getCurrentSignName();
 		fwrite(sign.c_str(), sizeof(char), strlen(sign.c_str()), savedata);
@@ -301,14 +314,17 @@ void GameSystem::saveGameSceneInfo(int i)
 		fwrite(sCommandIndex, sizeof(char), strlen(sCommandIndex), savedata);
 		fputs("\r\n", savedata);
 		fclose(savedata);
-
-		
+        
+        cocos2d::log("savedata done");
 		
 	}
 	else
 	{
 		cocos2d::log("savedata file error.");
 	}
+    delete ch;
+    delete file;
+    delete image;
 	savedata = NULL;
  }
 
@@ -350,6 +366,7 @@ void GameSystem::createSavedata()
 	path += "savedata";
 	//log("path=%s", pathToSave.c_str());
 
+/*
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
 	DIR *pDir = NULL;
 	//打开该路径
@@ -365,7 +382,17 @@ void GameSystem::createSavedata()
 		CreateDirectoryA(path.c_str(), 0);
 	}
 #endif
-	log("savadata created.");
+*/
+    if (!FileUtils::getInstance()->isDirectoryExist(path))
+    {
+        FileUtils::getInstance()->createDirectory(path);
+        log("savedata created.");
+    }
+    else
+    {
+        log("savedata has created.");
+    }
+	
 }
 
 void GameSystem::setScreenShoot(RenderTexture* render)

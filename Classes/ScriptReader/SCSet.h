@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __SC_SET_H__
+#define __SC_SET_H__
 #include "ScriptCommand.h"
 #include "ScriptReader.h"
 
@@ -17,4 +18,4 @@ public:
 
 }; 
 
- 
+#endif

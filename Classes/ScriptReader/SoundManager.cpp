@@ -1,6 +1,6 @@
 #include "SoundManager.h"
 
-#define SOUNDLISTPATH "/sound/soundList.txt"
+#define SOUNDLISTPATH "sound/soundList.txt"
 
 SoundManager* SoundManager::_instance = nullptr;
 
@@ -36,7 +36,7 @@ SoundManager::SoundManager()
 		int tempPos = temp.find_first_of(',', 0);
 		key = temp.substr(0, tempPos);
 		sound = temp.substr(tempPos + 1, temp.length() - tempPos - 1);
-		sound = "/sound/" + sound + ".mp3";
+		sound = "sound/" + sound + ".mp3";
 
 		log("soundkey = %s , soundPath = %s", key.c_str(), sound.c_str());
 
@@ -71,7 +71,7 @@ std::string SoundManager::getSound(std::string key)
 	}
 	else
 	{
-		log("SM> Unfind &s", key);
+		log("SM> Unfind &s", key.c_str());
 		defaultSound = "";
 		return defaultSound;
 	}

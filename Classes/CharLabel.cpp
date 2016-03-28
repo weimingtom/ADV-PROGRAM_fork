@@ -45,11 +45,13 @@ bool CharLabel::init(std::string &text, int fontSize)
 void CharLabel::setString(std::string &text)
 {
 	Node::removeAllChildren();
+    //removeAllChildren();
 	_charLabel = nullptr;
 	_text = text;
 	_pos = 0;
 	_x = 0;
 	_y = 0;
+    log("ShowText = %s", text.c_str());
 	showNextChar();
 }
 
@@ -69,7 +71,7 @@ void CharLabel::finishShow()
 
 void CharLabel::showNextChar()
 {
-	if (_pos >= (int)_text.length() - 1)
+	if ( _text[_text.length() - 1] == 13 || _pos >= (int)_text.length())
 	{
 		if (_showFinishCallback)
 		{
@@ -109,10 +111,10 @@ void CharLabel::showNextChar()
 	tmpLabel->setColor(_defaultFontColor);
 
 	_pos += charString.length();
-	tmpLabel->setOpacity(0);
+	//tmpLabel->setOpacity(0);
 	tmpLabel->setPosition(_x, _y);
 	_x += tmpLabel->getContentSize().width;
-	tmpLabel->runAction(Spawn::createWithTwoActions(FadeIn::create(_fadeTime), Sequence::createWithTwoActions(DelayTime::create(_defaultDelayTime), CallFunc::create(CC_CALLBACK_0(CharLabel::showNextChar, this)))));
+	tmpLabel->runAction(Sequence::createWithTwoActions(DelayTime::create(_defaultDelayTime), CallFunc::create(CC_CALLBACK_0(CharLabel::showNextChar, this))));
 	_charLabel = tmpLabel;
 }
 
@@ -143,5 +145,6 @@ std::string CharLabel::getNextChar(std::string &src, int pos)
 		len += 1;
 	}
 	std::string subString = src.substr(pos, len);
+    log("SubString = %s",subString.c_str());
 	return subString;
 }

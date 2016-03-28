@@ -1,7 +1,8 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "MainMenuScene.h"
-#include "GameScene.h"
+//#include "GameScene.h"
+//#include "TestLayer.h"
 
 USING_NS_CC;
 
@@ -33,7 +34,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
 		//改变窗口大小和自适应策略
 		glview->setFrameSize(1280, 720);
-		glview->setDesignResolutionSize(1280, 720, kResolutionShowAll);
+		//glview->setDesignResolutionSize(1280, 720, kResolutionShowAll);
+        glview->setDesignResolutionSize(1280, 720, ResolutionPolicy::NO_BORDER);
+        
     }
 
     // turn on display FPS
@@ -45,8 +48,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
     //auto scene = HelloWorld::createScene();
 	auto mainScene = MainMenu::createScene();
+    // auto scene = TestLayer::create();
 
     // run 进入游戏时候首先显示哪个场景
+    //director->runWithScene(scene);
     director->runWithScene(mainScene);
 
     return true;
@@ -67,3 +72,17 @@ void AppDelegate::applicationWillEnterForeground() {
     // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }
+
+/*
+extern "C"
+{
+    size_t fwrite$UNIX2003(const void *a, size_t b, size_t c, FILE *d)
+    {
+        return fwrite(a, b, c, d);
+    }
+    char* strerror$UNIX2003(int errnum)
+    {
+        return strerror(errnum);
+    }
+}
+ */

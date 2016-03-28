@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SAVEDATA_H
+#define SAVEDATA_H
 #include "cocos2d.h"
 #include "GameSystem.h"
 
@@ -29,3 +30,4 @@ public:
 	Sprite* getStageLayer();
 };
 
+#endif

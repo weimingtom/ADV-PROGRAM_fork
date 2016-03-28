@@ -1,6 +1,8 @@
-#pragma once
+#ifndef GAMESYSTEM_H
+#define GAMESYSTEM_H
+
 #include "cocos2d.h"
-#include "ScriptReader\CharactorManager.h"
+#include "ScriptReader/CharactorManager.h"
 #include <list>
 
 #define SYSTEMVOLUME "SystemVolume"
@@ -123,4 +125,6 @@ public:
 	Scene* getGameScene();	//获取游戏场景
 	
 };
+
+#endif
 

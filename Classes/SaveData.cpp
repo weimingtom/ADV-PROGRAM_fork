@@ -27,7 +27,7 @@ SaveData::SaveData(int i)
 	_stageLayer->setContentSize(Size(400,110));
 	_stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	*/
-	_stageLayer = Sprite::create("/ui/saveload/noselected_bg.png");
+	_stageLayer = Sprite::create("ui/saveload/noselected_bg.png");
 	
 	_number = i;
 
@@ -36,7 +36,7 @@ SaveData::SaveData(int i)
 	onTouchEnded = [=](int i){};
 	//this->setTouchEnabled(true);
 
-	auto touchImage = Sprite::create("/ui/saveload/selected_bg.png");
+	auto touchImage = Sprite::create("ui/saveload/selected_bg.png");
 	touchImage->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	touchImage->setVisible(false);
 	_stageLayer->addChild(touchImage);
@@ -151,7 +151,7 @@ void SaveData::updataData()
 		*/
 
 		/*ÏÔÊ¾´æµµ½ØÍ¼*/
-		_dataImage = Sprite::create("/ui/saveload/pic_bg.png");
+		_dataImage = Sprite::create("ui/saveload/pic_bg.png");
 		_dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 		_dataImage->setPosition(15, 101);
 		_stageLayer->addChild(_dataImage);
