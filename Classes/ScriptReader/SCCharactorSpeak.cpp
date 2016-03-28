@@ -30,7 +30,8 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
         if (cName.compare("") != 0)
         {
             cha = CM->getCharactor(cName);
-            reader->showCharator(cName, face);
+            if (face.compare("") != 0)
+                reader->showCharator(cName, face);
             reader->showName(cha->name);
         }
         else

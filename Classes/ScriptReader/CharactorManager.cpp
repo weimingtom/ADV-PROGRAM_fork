@@ -118,7 +118,8 @@ Charactor* CharactorManager::getCharactor(std::string &key)
 	}
 	else
 	{
-		defaultCharactor->name = "Undefind Charactor[" + key + "]";
+		// defaultCharactor->name = "Undefind Charactor[" + key + "]";
+        defaultCharactor->name = key;
 		return defaultCharactor;
 	}
 }
