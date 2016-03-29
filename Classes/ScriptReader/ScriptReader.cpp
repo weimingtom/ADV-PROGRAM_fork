@@ -162,7 +162,6 @@ void ScriptReader::loadScriptFile(std::string path)
             else
                 command = ss.substr(sPos, ePos - sPos);
 			sPos = ePos + 1;
-            log("String = %s, Last String = %d %d",command.c_str(), ss[ePos - 1], ss[ePos]);
 		}
 
 		if (command.length() > 1 && !command.empty())

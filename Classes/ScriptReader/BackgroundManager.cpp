@@ -76,7 +76,7 @@ std::string BackgroundManager::getBackground(std::string key)
 	}
 	else
 	{
-		log("BM> Unfind &s", key.c_str());
+		log("BM> Unfind %s", key.c_str());
 		defaultBackground = "bgimage/Black.jpg";
 		return defaultBackground;
 	}

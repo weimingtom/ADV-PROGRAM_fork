@@ -51,7 +51,6 @@ void CharLabel::setString(std::string &text)
 	_pos = 0;
 	_x = 0;
 	_y = 0;
-    log("ShowText = %s", text.c_str());
 	showNextChar();
 }
 
