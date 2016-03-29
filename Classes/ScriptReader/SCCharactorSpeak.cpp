@@ -50,6 +50,5 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
         {
             HistoryLogger::getInstance()->addRecord("null", text, "");
         }
-        cocos2d::log("%s",text.c_str());
     }
 }
