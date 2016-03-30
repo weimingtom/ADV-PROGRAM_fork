@@ -355,6 +355,7 @@ void GameScene::createGameDate()
 void GameScene::displayCharator(std::string cName, std::string face)
 {
 	auto cha = CM->getCharactor(cName);	//获取角色
+    log("cName = %s, Name = %s",cName.c_str(),cha->name.c_str());
 	if (cha && cha->getCharactorFace(face))
 	{
 		bool isNeedShow = false;	//判断是否需要重新显示人物立绘
