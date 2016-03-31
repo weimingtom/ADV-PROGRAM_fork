@@ -5,7 +5,7 @@ smile1,0101
 smile2,0103
 
 t1
-Test1
+小绿
 s1,t1
 s2,t2
 
@@ -17,4 +17,24 @@ t3
 Test3
 s1,n1
 
+少女
+少女
+a,a
+c,c
+cb,cb
+cz,cz
+j,j
+n,n
+xb,xb
+xz,xz
 
+曦梦
+曦梦
+a,a
+c,c
+cb,cb
+cz,cz
+j,j
+n,n
+xb,xb
+xz,xz

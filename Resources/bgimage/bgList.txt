@@ -3,3 +3,11 @@ cxc_1,chenxingcheng_day.png
 cxc_2,chenxingcheng_night.png
 cxc_3,chenxingcheng_midnight.png
 black,Black.jpg
+南湖公园,南湖公园.jpg
+山边医院,山边医院.jpg
+五十米大道夜,五十米大道夜.jpg
+五十米大道雨,五十米大道雨.jpg
+K市阳光公寓内客厅,K市阳光公寓内客厅.jpg
+K市阳光公寓内卧室,K市阳光公寓内卧室.jpg
+K市阳光公寓内杂物室,K市阳光公寓内杂物室.jpg
+K市最大的综合性超市美多,K市最大的综合性超市美多.jpg
