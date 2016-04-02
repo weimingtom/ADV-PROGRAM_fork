@@ -13,6 +13,7 @@ CharLabel::CharLabel()
 	, _defaultFontSize(20)
 	, _showFinishCallback(nullptr)
 	, _defaultFontColor(Color3B::BLACK)
+    , _isRunning(false)
 {
 }
 
@@ -51,6 +52,7 @@ void CharLabel::setString(std::string &text)
 	_pos = 0;
 	_x = 0;
 	_y = 0;
+    _isRunning = true;
 	showNextChar();
 }
 
@@ -62,6 +64,7 @@ void CharLabel::finishShow()
 	_charLabel->setColor(_defaultFontColor);
 
 	Node::addChild(_charLabel);
+    _isRunning = false;
 	if (_showFinishCallback)
 	{
 		_showFinishCallback();
@@ -72,6 +75,7 @@ void CharLabel::showNextChar()
 {
 	if ( _text[_text.length() - 1] == 13 || _pos >= (int)_text.length())
 	{
+        _isRunning = false;
 		if (_showFinishCallback)
 		{
 			auto eventSprite = Sprite::create();

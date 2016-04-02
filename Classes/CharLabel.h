@@ -12,6 +12,8 @@ class CharLabel:public Node
 	float _fadeTime;	//文字fadein的时间
 	int _defaultFontSize;	//默认文字大小
 	std::string _text;	//要显示的字符串
+    
+    bool _isRunning;    //CharLabel is running?
 
 	Color3B _defaultFontColor;
 
@@ -62,6 +64,10 @@ public:
 		_defaultFontColor = color;
 	}
 
+    bool isRunning()
+    {
+        return _isRunning;
+    }
 };
 
 #endif

@@ -838,10 +838,8 @@ void GameScene::showSelect(std::map<std::string, std::string> &options)
 		label->setColor(Color3B::WHITE);
 		label->enableShadow();
 		log("OPTION[%s] SIGN[%s]", itr->second.c_str(), itr->first.c_str());
-		//auto tmp = (std::string)itr->first.c_str();
 		auto tmp = itr->first;
 		auto tmp2 = itr->second;
-		//int *test;
 		auto button = MenuItemLabel::create(label, [=](Ref*)
 		{
 			HistoryLogger::getInstance()->addRecord("null", tmp2, "");
@@ -862,4 +860,13 @@ void GameScene::showHistoryScene()
 {
 	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
 	Director::getInstance()->replaceScene(HistoryScene::createScene());
+}
+
+void GameScene::skipAction()
+{
+    auto chaList = _charactorsLayer->getChildren();
+    for (auto iter=chaList.begin();iter!=chaList.end();iter++)
+    {
+        
+    }
 }

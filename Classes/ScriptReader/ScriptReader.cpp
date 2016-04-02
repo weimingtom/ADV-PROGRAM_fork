@@ -386,8 +386,12 @@ void ScriptReader::jumpToSign(const std::string &sign)
 
 void ScriptReader::nextScript()
 {
-	//log("loading");
-	
+	//如果立绘动作还在进行，即时显示完毕
+    
+    
+    //如果文字还在显示中，即时显示完毕
+    
+	//如果有选项，等待选项
 	if (isWaitingForSelection)
 	{
 		log("waitting");

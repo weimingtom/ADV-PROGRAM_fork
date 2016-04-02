@@ -33,9 +33,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
         glview = GLViewImpl::create("Karma Beta 0.0725");
         director->setOpenGLView(glview);
 		//改变窗口大小和自适应策略
-		glview->setFrameSize(1280, 720);
+		glview->setFrameSize(1136, 640);
 		//glview->setDesignResolutionSize(1280, 720, kResolutionShowAll);
-        glview->setDesignResolutionSize(1280, 720, ResolutionPolicy::NO_BORDER);
+        glview->setDesignResolutionSize(1136, 640, ResolutionPolicy::NO_BORDER);
         
     }
 

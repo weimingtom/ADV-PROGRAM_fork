@@ -90,6 +90,8 @@ public:
 	void reloadScene();	//重载场景，通常读档用
 
 	void showSelect(std::map<std::string, std::string> &options);	//显示选项
+    
+    void skipAction();
 
 };
 
