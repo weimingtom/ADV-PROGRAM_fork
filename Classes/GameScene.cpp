@@ -217,6 +217,11 @@ void GameScene::screenClicked()
 
 void GameScene::dialogClicked()
 {
+    if(_textLabel->isRunning())
+    {
+        _textLabel->finishShow();
+        return;
+    }
 	ScriptReader::getInstance()->nextScript();
 }
 
