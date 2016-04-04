@@ -78,6 +78,7 @@ void CharLabel::showNextChar()
         _isRunning = false;
 		if (_showFinishCallback)
 		{
+            /*
 			auto eventSprite = Sprite::create();
 			addChild(eventSprite);
 			eventSprite->runAction
@@ -89,6 +90,8 @@ void CharLabel::showNextChar()
 				nullptr
 				)
 				);
+             */
+            _showFinishCallback();
 		}
 		return;
 	}

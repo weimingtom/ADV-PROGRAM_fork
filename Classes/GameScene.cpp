@@ -84,10 +84,16 @@ bool GameScene::init()
 	}
 
 	//对话框
-	auto _dialogWindow = Sprite::create("ui/dialog/dialog_bg.png");
+	_dialogWindow = Sprite::create("ui/dialog/dialog_bg.png");
 	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 110));
 	this->addChild(_dialogWindow,10);
 
+    //wtIcon
+    _wtIcon = Sprite::create("ui/scroll_point.png");
+    _wtIcon->setPosition(Vec2(visibleSize.width / 2, 110));
+    _wtIcon->setOpacity(0);
+    _dialogWindow->addChild(_wtIcon);
+    
 	//文本框
 	_nameLabel = Label::createWithSystemFont("", "微软雅黑", 24);
 	_nameLabel->setColor(Color3B::BLACK);
@@ -95,7 +101,7 @@ bool GameScene::init()
 	_nameLabel->setPosition(70, _dialogWindow->getContentSize().height - 40);
 	_dialogWindow->addChild(_nameLabel,11);
 
-	_textLabel = CharLabel::create("", 24, CC_CALLBACK_0(GameScene::showClickSign, this));
+	_textLabel = CharLabel::create("", 24, CC_CALLBACK_0(GameScene::showWaittingAnime, this));
 	_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
 	_textLabel->setColor(Color3B::BLACK);
 	_dialogWindow->addChild(_textLabel,12);
@@ -222,6 +228,7 @@ void GameScene::dialogClicked()
         _textLabel->finishShow();
         return;
     }
+    hideWaittingAnime();
 	ScriptReader::getInstance()->nextScript();
 }
 
@@ -874,4 +881,18 @@ void GameScene::skipAction()
     {
         
     }
+}
+
+void GameScene::showWaittingAnime()
+{
+    _wtIcon->setOpacity(255);
+    auto action = FadeOut::create(0.8f);
+    auto actionBack = action->reverse();
+    _wtIcon->runAction(RepeatForever::create(Sequence::create(action,actionBack, NULL)));
+}
+
+void GameScene::hideWaittingAnime()
+{
+    _wtIcon->stopAllActions();
+    _wtIcon->setOpacity(0);
 }

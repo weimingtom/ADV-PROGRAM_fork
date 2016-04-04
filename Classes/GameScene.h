@@ -22,7 +22,8 @@ class GameScene : public cocos2d::Layer
 	Sprite* _backgroundSprite;	//背景图片
 	Layer* _charactorsLayer;	//立绘层
 	Layer* _selectLayer;	//选项层
-
+    Sprite* _wtIcon;
+    
 	Charactor* _chars[MAX_CHARACTOR_NUMBER];	//储存当前立绘资料
 	Charactor* _emptyChar;	//空角色
 	int _charNumber;	//储存立绘数量
@@ -92,6 +93,8 @@ public:
 	void showSelect(std::map<std::string, std::string> &options);	//显示选项
     
     void skipAction();
+    void showWaittingAnime();
+    void hideWaittingAnime();
 
 };
 
