@@ -11,6 +11,8 @@
 #define TEXTSPEED "TextSpeed"
 #define AUTOSPEED "AutoSpeed"
 
+
+
 struct fgCharactor
 {
 	std::string name;
@@ -124,6 +126,7 @@ public:
 	void setGameScene(Scene* scene);	//设置游戏场景
 	Scene* getGameScene();	//获取游戏场景
 	
+    float getPosition(PositionType pt);
 };
 
 #endif

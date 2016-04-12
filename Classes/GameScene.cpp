@@ -223,6 +223,7 @@ void GameScene::screenClicked()
 
 void GameScene::dialogClicked()
 {
+    skipAction();
     if(_textLabel->isRunning())
     {
         _textLabel->finishShow();
@@ -252,21 +253,25 @@ void GameScene::changeBackground(std::string &key)
 	backgroundSprite->setAnchorPoint(Vec2(0, 0));
 	backgroundSprite->setOpacity(0);
 	_backgroundLayer->addChild(backgroundSprite);
-	backgroundSprite->runAction(Sequence::createWithTwoActions(FadeIn::create(1.0f), CallFunc::create([&]()
-	{
-		if (_backgroundSprite)
-		{
-			//auto tmp = _backgroundSprite;
-			_backgroundSprite = backgroundSprite;
-			//tmp->removeFromParent();
-		}
-		else
-		{
-			_backgroundSprite = backgroundSprite;
-		}
-	}
-		)
-		));
+    //auto mtAction = FadeIn::create(0.8f);
+    //mtAction->setTag(1);
+    auto mtAction = Sequence::createWithTwoActions(FadeIn::create(0.8f), CallFunc::create([&]()
+                                                                                                          {
+                                                                                                              if (_backgroundSprite)
+                                                                                                              {
+                                                                                                                  //auto tmp = _backgroundSprite;
+                                                                                                                  _backgroundSprite = backgroundSprite;
+                                                                                                                  //tmp->removeFromParent();
+                                                                                                              }
+                                                                                                              else
+                                                                                                              {
+                                                                                                                  _backgroundSprite = backgroundSprite;
+                                                                                                              }
+                                                                                                          }
+                                                                                                          )
+                                                                   );
+    mtAction->setTag(1);
+	backgroundSprite->runAction(mtAction);
 }
 
 void GameScene::playBackgroundMusic(std::string &key)
@@ -491,7 +496,7 @@ void GameScene::displayCharator(std::string cName, std::string face)
 				if (sp)
                 {
 					*pChar = cha;
-                    log("pChar->name = %s",((Charactor*)*pChar)->name.c_str());
+                    // log("pChar->name = %s",((Charactor*)*pChar)->name.c_str());
                 }
 
 				switch (tmpPT)
@@ -540,7 +545,7 @@ void GameScene::unDisplayCharator(std::string cName)
 	auto cha = CM->getCharactor(cName);
 	if (cha->faceSprite)
 	{
-		cha->faceSprite->runAction(Sequence::createWithTwoActions(FadeOut::create(1.0f), CallFunc::create([=]()
+		auto mtAction = Sequence::createWithTwoActions(FadeOut::create(0.8f), CallFunc::create([=]()
 		{
 			if (_charNumber == 1)
 			{
@@ -623,8 +628,9 @@ void GameScene::unDisplayCharator(std::string cName)
 			return;
 		}
 			)
-			)
 			);
+        mtAction->setTag(1);
+        cha->faceSprite->runAction(mtAction);
 	}
 	else
 		return;
@@ -876,10 +882,23 @@ void GameScene::showHistoryScene()
 
 void GameScene::skipAction()
 {
+    //skip Background Action
+    auto bgList = _backgroundLayer->getChildren();
+    for (auto iter=bgList.begin();iter!=bgList.end();iter++)
+    {
+        if ((*iter)->getActionByTag(1))
+        {
+            (*iter)->getActionByTag(1)->step(3.0f);
+        }
+    }
+    //skip Charactor Action
     auto chaList = _charactorsLayer->getChildren();
     for (auto iter=chaList.begin();iter!=chaList.end();iter++)
     {
-        
+        if ((*iter)->getActionByTag(1))
+        {
+            (*iter)->getActionByTag(1)->step(3.0f);
+        }
     }
 }
 

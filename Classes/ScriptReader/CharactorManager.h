@@ -7,6 +7,7 @@ USING_NS_CC;
 
 #define CM CharactorManager::getInstance()
 
+
 //立绘位置
 enum PositionType
 {
@@ -17,6 +18,7 @@ enum PositionType
 	RIGHT_CENTER,	//右中
 	RIGHT
 };
+
 
 /*
 角色信息
@@ -51,11 +53,11 @@ struct Charactor
 
 	char* getCharactorFace(std::string &face)	//根据face值获取角色表情
 	{
-		log("CM> result.first = %s", face.c_str());
+		// log("CM> result.first = %s", face.c_str());
         auto result = fgList->find(face);
 		if (result != fgList->end())
 		{
-			log("CM> result.second = %s", result->second);
+			// log("CM> result.second = %s", result->second);
 			return result->second;
 		}
 		else
@@ -73,37 +75,31 @@ struct Charactor
 		case PositionType::LEFT:
 		{
 			//faceSprite->setPositionX(320);
-			Distance = 320;
-			faceSprite->runAction(MoveTo::create(0.3f, Point(Distance, 0)));
+            setAction(320);
 			break;
 		}
 		case PositionType::LEFT_CENTER:
 		{
 			//faceSprite->setPositionX(427);
-			Distance = 427;
-			log("name = %s", name.c_str());
-			faceSprite->runAction(MoveTo::create(0.3f, Point(Distance, 0)));
+            setAction(427);
 			break;
 		}
 		case PositionType::CENTER:
 		{
 			//faceSprite->setPositionX(640);
-			Distance = 640;
-			faceSprite->runAction(MoveTo::create(0.3f, Point(Distance, 0)));
+			setAction(640);
 			break;
 		}
 		case PositionType::RIGHT_CENTER:
 		{
 			//faceSprite->setPositionX(853);
-			Distance = 853;
-			faceSprite->runAction(MoveTo::create(0.3f, Point(Distance, 0)));
+            setAction(853);
 			break;
 		}
 		case PositionType::RIGHT:
 		{
 			//faceSprite->setPositionX(960);
-			Distance = 960;
-			faceSprite->runAction(MoveTo::create(0.3f, Point(Distance, 0)));
+            setAction(960);
 			break;
 		}
 		default:
@@ -114,6 +110,13 @@ struct Charactor
 		}
 		currentPosition = pt;
 	}
+    
+    void setAction(int Distance)
+    {
+        auto mtAction = MoveTo::create(0.3f,Point(Distance,0));
+        mtAction->setTag(1);
+        faceSprite->runAction(MoveTo::create(0.3f, Point(Distance, 0)));
+    }
 
 	void leave()
 	{

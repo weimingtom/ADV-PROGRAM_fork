@@ -20,29 +20,30 @@ ScriptReader::SCCharactorSpeak::~SCCharactorSpeak()
 void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
 {
 	bool isName = true;
+    Charactor* cha;
+    if (cName.compare("") != 0)
+    {
+        cha = CM->getCharactor(cName);
+        if (face.compare("") != 0)
+            reader->showCharator(cName, face);
+        reader->showName(cha->name);
+    }
+    else
+    {
+        isName = false;
+        std::string nullstring = "";
+        //reader->showName(&nullstring);
+        reader->showName(nullstring);
+    }
     if (text.compare("") == 0)
     {
         reader->nextScript();
     }
     else
     {
-        Charactor* cha;
-        if (cName.compare("") != 0)
-        {
-            cha = CM->getCharactor(cName);
-            if (face.compare("") != 0)
-                reader->showCharator(cName, face);
-            reader->showName(cha->name);
-        }
-        else
-        {
-            isName = false;
-            std::string nullstring = "";
-            //reader->showName(&nullstring);
-            reader->showName(nullstring);
-        }
         reader->showText(text);
-        if (isName)
+    }
+        if (isName && text.compare(""))
         {
             HistoryLogger::getInstance()->addRecord("talk", text, cha->name);
         }
@@ -50,5 +51,4 @@ void ScriptReader::SCCharactorSpeak::execute(cocos2d::Node* stage)
         {
             HistoryLogger::getInstance()->addRecord("null", text, "");
         }
-    }
 }
