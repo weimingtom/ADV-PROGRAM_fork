@@ -68,6 +68,7 @@ public:
     {
         return _isRunning;
     }
+    
 };
 
 #endif

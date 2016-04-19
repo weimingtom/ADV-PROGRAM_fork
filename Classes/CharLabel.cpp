@@ -78,19 +78,6 @@ void CharLabel::showNextChar()
         _isRunning = false;
 		if (_showFinishCallback)
 		{
-            /*
-			auto eventSprite = Sprite::create();
-			addChild(eventSprite);
-			eventSprite->runAction
-				(
-				Sequence::create
-				(
-				DelayTime::create(_fadeTime),
-				CallFunc::create(_showFinishCallback),
-				nullptr
-				)
-				);
-             */
             _showFinishCallback();
 		}
 		return;
@@ -119,7 +106,15 @@ void CharLabel::showNextChar()
 	_pos += charString.length();
 	//tmpLabel->setOpacity(0);
 	tmpLabel->setPosition(_x, _y);
-	_x += tmpLabel->getContentSize().width;
+    if (_x + tmpLabel->getContentSize().width > this->getContentSize().width)
+    {
+        _y -= tmpLabel->getContentSize().height;
+        _x = 0;
+    }
+    else
+    {
+        _x += tmpLabel->getContentSize().width;
+    }
 	tmpLabel->runAction(Sequence::createWithTwoActions(DelayTime::create(_defaultDelayTime), CallFunc::create(CC_CALLBACK_0(CharLabel::showNextChar, this))));
 	_charLabel = tmpLabel;
 }

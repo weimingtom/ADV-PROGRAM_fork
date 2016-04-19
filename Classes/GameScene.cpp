@@ -106,6 +106,8 @@ bool GameScene::init()
 	_textLabel = CharLabel::create("", 24, CC_CALLBACK_0(GameScene::showWaittingAnime, this));
 	_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
 	_textLabel->setColor(Color3B::BLACK);
+    _textLabel->setCharLabelSize(800, 200);
+    _textLabel->setContentSize(Size(800, 200));
 	_dialogWindow->addChild(_textLabel,12);
 
 	//对话框按钮
