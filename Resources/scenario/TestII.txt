@@ -3,8 +3,16 @@
 #Background:cxc_1
 来测试一下
 t1#s1:这是一个对话测试
-#Set:key=1
+t1#s2:This is a face changed test!
+t1#s1:changed 2!
+t1#s2:changed 3!
+#Set:key=2
 t1:现在创建了一个key值，并且设定值为一
+#If:key=1:zero:one
+@zero
+This is Zero
+@one
+This is One
 t1:一
 t2#s1:现在T2出现啦
 t3#s1:T3也跟着出现啦！

@@ -7,7 +7,7 @@ smile2,0103
 t1
 小绿
 s1,t1
-s2,t2
+s2,m1
 
 t2
 Test2
