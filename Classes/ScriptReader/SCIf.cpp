@@ -11,8 +11,6 @@ ScriptReader::SCIf::SCIf(ScriptReader *reader, std::string expression, std::stri
 	this->reader = reader;
 	this->type = ScriptCommandType::If;
 }
-
-
 ScriptReader::SCIf::~SCIf()
 {
 }
@@ -56,8 +54,7 @@ bool ScriptReader::SCIf::expressionJudge()
 		int iSecondValue;
 		std::stringstream ssFirstValue;
 		std::stringstream ssSecondValue;
-
-		//从表达式中提取第一个值
+        //从表达式中提取第一个值
 		sFirstValue = exp.substr(0, pos);
 		if ((exp[0] >= '0') && (exp[0] <= '9'))	//当第一个值是常数
 		{
@@ -152,8 +149,8 @@ bool ScriptReader::SCIf::expressionJudge()
 		}
 		else if (exp[pos] == '=')	//相等的情况下
 		{
-			sSecondValue = exp.substr(pos + 2, exp.length() - 1);
-			if ((exp[pos + 3] >= '0') && (exp[pos + 3] <= '9'))
+			sSecondValue = exp.substr(pos + 1, exp.length() - 1);
+			if ((sSecondValue[0] >='0') && (sSecondValue[0] <= '9'))
 			{
 				ssSecondValue << sSecondValue;
 				ssSecondValue >> iSecondValue;
@@ -163,6 +160,8 @@ bool ScriptReader::SCIf::expressionJudge()
 				iSecondValue = GameSystem::getInstance()->getDataValue(sSecondValue);
 			}
 
+            log("SC#If> FirstValue = %d, SecondValue = %d",iFirstValue,iSecondValue);
+            
 			if (iFirstValue == iSecondValue)
 				return true;
 			else

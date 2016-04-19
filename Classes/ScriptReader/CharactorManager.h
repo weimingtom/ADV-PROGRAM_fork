@@ -122,6 +122,7 @@ struct Charactor
 	{
 		if (faceSprite)
 		{
+            log("%s is leaving.",name.c_str());
 			faceSprite->removeFromParent();
 			faceSprite = nullptr;
 			currentFace = "";

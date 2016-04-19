@@ -7,6 +7,7 @@
 #include "cocos2d.h"
 #include "CharLabel.h"
 #include "ScriptReader/CharactorManager.h"
+#include "ui/CocosGUI.h"
 
 #define MAX_CHARACTOR_NUMBER 5
 
@@ -74,6 +75,7 @@ public:
 
 	void startAutoPlay();	//开始自动前进
 	void stopAutoPlay();	//停止自动前进
+    void startSkipPlay();
 	void autoPlay(float dt);	//自动前进
 
 	void displayCharator(std::string cName,std::string face);
@@ -95,6 +97,8 @@ public:
     void skipAction();
     void showWaittingAnime();
     void hideWaittingAnime();
+    
+    void selectEventOfSkip(Ref* pSender,cocos2d::ui::CheckBoxEventType type);
 
 };
 

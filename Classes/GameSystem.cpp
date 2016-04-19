@@ -154,9 +154,10 @@ void GameSystem::setDataValue(std::string &key, int value)
 int GameSystem::getDataValue(std::string &key)
 {
 	auto result = _savedata[0].find(key);
+    cocos2d::log("GS> key = %s", key.c_str());
 	if (result != _savedata[0].end())
 	{
-		// cocos2d::log("GS> key = %s , value = %d", key.c_str(), result->second);
+		cocos2d::log("GS> key = %s , value = %d", key.c_str(), result->second);
 		return result->second;
 	}
 	else

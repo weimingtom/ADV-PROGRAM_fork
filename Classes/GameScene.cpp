@@ -1,5 +1,5 @@
 ﻿#include "GameScene.h"
-#include "ui/CocosGUI.h"
+
 #include "SimpleAudioEngine.h"
 #include "GameSystem.h"
 #include "ScriptReader/BackgroundManager.h"
@@ -9,6 +9,8 @@
 #include "LoadScene.h"
 #include "HistoryScene.h"
 #include "History.hpp"
+
+#define SCRIPT_FILE "scenario/LD.txt"
 
 USING_NS_CC;
 
@@ -119,10 +121,10 @@ bool GameScene::init()
 	auto buttonLog = MenuItemImage::create("ui/dialog/button_log.png", "ui/dialog/button_log_down.png", CC_CALLBACK_0(GameScene::showHistoryScene, this));
 	buttonLog->setPosition(Vec2(1020,220));
 
-	auto buttonConfig = MenuItemImage::create("ui/dialog/button_config.png", "ui/dialog/button_config_down.png");
+	auto buttonConfig = MenuItemImage::create("ui/dialog/button_config.png", "ui/dialog/button_config_down.png",CC_CALLBACK_0(GameScene::startSkipPlay, this));
 	buttonConfig->setPosition(Vec2(1080,220));
 
-	auto buttonTitle = MenuItemImage::create("ui/dialog/button_title.png", "ui/dialog/button_title_down.png");
+    auto buttonTitle = MenuItemImage::create("ui/dialog/button_title.png", "ui/dialog/button_title_down.png", CC_CALLBACK_0(GameScene::stopAutoPlay, this));
 	buttonTitle->setPosition(Vec2(1200,220));
 
 	auto CBskip = ui::CheckBox::create("ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_on.png", "ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_on.png");
@@ -131,12 +133,9 @@ bool GameScene::init()
 
 	auto CBauto = ui::CheckBox::create("ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_on.png", "ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_on.png");
 	CBauto->setPosition(Vec2(1000, 75));
-	/*
-	CBauto->onTouchEnded = [=](Touch *touch, Event *unusedEvent)
-	{
-		//startAutoPlay();
-	};
-	*/
+	
+    // CBauto->addEventListenerCheckBox(this, checkboxselectedeventselector(GameScene::selectEventOfSkip);
+	
 	_dialogWindow->addChild(CBauto, 1);
 
 	auto menu = Menu::create(buttonDict, buttonSave, buttonLoad, buttonLog, buttonConfig, buttonTitle, NULL);
@@ -184,8 +183,7 @@ bool GameScene::init()
 	ScriptReader::getInstance()->hideCharator = CC_CALLBACK_1(GameScene::unDisplayCharator, this);
 	ScriptReader::getInstance()->showSelect = CC_CALLBACK_1(GameScene::showSelect, this);
 
-    
-	ScriptReader::getInstance()->loadScriptFile("scenario/LD.txt");
+	ScriptReader::getInstance()->loadScriptFile(SCRIPT_FILE);
     
      
 	if (!GameSystem::getInstance()->getIsLoadSuccess())
@@ -328,6 +326,11 @@ void GameScene::startAutoPlay()
 void GameScene::stopAutoPlay()
 {
 	unschedule(schedule_selector(GameScene::autoPlay));
+}
+
+void GameScene::startSkipPlay()
+{
+    schedule(schedule_selector(GameScene::autoPlay),0.01f);
 }
 
 void GameScene::autoPlay(float dt)
@@ -484,19 +487,18 @@ void GameScene::displayCharator(std::string cName, std::string face)
 						}
 					}
 
-
+                /*
 				if (((Charactor*)*pChar))
 				{
 					((Charactor*)*pChar)->leave();
 				}
-
+                */
 
 
 				cha->currentPosition = tmpPT;
 				if (sp)
                 {
 					*pChar = cha;
-                    // log("pChar->name = %s",((Charactor*)*pChar)->name.c_str());
                 }
 
 				switch (tmpPT)
@@ -914,4 +916,19 @@ void GameScene::hideWaittingAnime()
 {
     _wtIcon->stopAllActions();
     _wtIcon->setOpacity(0);
+}
+
+void GameScene::selectEventOfSkip(cocos2d::Ref *pSender, cocos2d::ui::CheckBoxEventType type)
+{
+    switch (type) {
+        case cocos2d::ui::CHECKBOX_STATE_EVENT_SELECTED:
+            startSkipPlay();
+            break;
+            
+        case cocos2d::ui::CHECKBOX_STATE_EVENT_UNSELECTED:
+            stopAutoPlay();
+            break;
+        default:
+            break;
+    }
 }

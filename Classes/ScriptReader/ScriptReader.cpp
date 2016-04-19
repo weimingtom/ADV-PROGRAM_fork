@@ -215,10 +215,11 @@ void ScriptReader::loadScriptFile(std::string path)
 							pos = cmdParams.find_first_of("+-=", 0);
 							key = cmdParams.substr(0, pos);
 							mark = cmdParams[pos];
-							cmdParams.substr(pos + 1, cmdParams.length() - 1);
+							cmdParams = cmdParams.substr(pos + 1, cmdParams.length() - 1);
 							pos = cmdParams.find_first_of("+-", 0);
 							if (pos < 0)
 							{
+                                pos = cmdParams.find_first_of("=", 0);
 								value = atoi(cmdParams.c_str());
 							}
 							else
@@ -232,7 +233,7 @@ void ScriptReader::loadScriptFile(std::string path)
 									//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// -atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
 									break;
 								case '+':
-									//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0, pos));// +atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
+									//value = GameSystem::getInstance()->getDataValue(cmdParams.substr(0,  pos));// +atoi(cmdParams.substr(pos + 1, cmdParams.length() - 1).c_str());
 									value = 1;
 									break;
 								default:
