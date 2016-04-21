@@ -1,4 +1,5 @@
 #include "HistoryScene.h"
+#include "ui/CocosGUI.h"
 
 HistoryMessage::HistoryMessage(std::string text, std::string name, Color4B color)
 {
@@ -59,6 +60,8 @@ bool HistoryScene::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	auto stageLayer = Layer::create();
+    //stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    //stageLayer->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	/*加载背景*/
 	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
@@ -70,6 +73,17 @@ bool HistoryScene::init()
 
 	/*加载历史记录*/
 	auto historyList = Sprite::create();
+    //historyList->cocos2d::Node::setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    historyList->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    
+    
+    auto historyListView = ui::ScrollView::create();
+    historyListView->setDirection(ui::SCROLLVIEW_DIR_VERTICAL);
+    historyListView->setTouchEnabled(true);
+    historyListView->setBounceEnabled(true);
+    historyListView->setSize(Size(visibleSize.width,visibleSize.height));
+    //historyListView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    //historyListView->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	int startY = 0;
 	for (int i = 0; i < HistoryLogger::getInstance()->getLength(); i++)
 	{
@@ -77,14 +91,15 @@ bool HistoryScene::init()
 		auto record = HistoryLogger::getInstance()->getRecord(i);
 		log("Record[%d] = [%s , %s]", i, record->name.c_str(), record->text.c_str());
 		auto hm = HistoryMessage::create(record);
-		hm->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-		hm->setPosition(visibleSize.width / 2, startY);
-		historyList->addChild(hm);
+		//hm->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        hm->setPosition(0, startY);
+        historyList->addChild(hm);
+        //historyListView->addChild(hm);
 		startY -= hm->getContentSize().height + 50;
 
 	}
-	historyList->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	stageLayer->addChild(historyList);
+    historyListView->addChild(historyList);
+    stageLayer->addChild(historyListView);
 
 	/*给历史记录添加触碰事件*/
 	/*
@@ -123,12 +138,14 @@ bool HistoryScene::init()
 
 	//返回按钮
 	auto buttonBack = MenuItemImage::create("ui/button_return.png", "/ui/button_return_down.png", CC_CALLBACK_0(HistoryScene::back, this));
-	buttonBack->setPosition(Vec2(175, 90)); 
+	buttonBack->setPosition(Vec2(175 + origin.x, 90 + origin.y));
 	auto menu = Menu::create(buttonBack, NULL);
 	menu->setPosition(Vec2::ZERO);
 	stageLayer->addChild(menu);
-
-	
+    
+    auto testS = Sprite::create("ui/cg/cg_bg_unget.png");
+    testS->setPosition(Vec2(0,0));
+    stageLayer->addChild(testS);
 
 	addChild(stageLayer);
 

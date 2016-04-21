@@ -11,12 +11,16 @@
 
 #define MAX_CHARACTOR_NUMBER 5
 
+#define TEXTLABEL_SIZE_WIDTH 800
+#define TEXTLABEL_SIZE_HEIGHT 100
+
 class GameScene : public cocos2d::Layer
 {
 	cocos2d::Label* _label;//文本框的文本层
 	//ScriptReader* _reader;	//脚本解析器
 
 	Label* _nameLabel;	//姓名框
+    Sprite* _nameWindow;
 	CharLabel* _textLabel;	//对白框
 	Sprite* _dialogWindow;	//文本框背景
 	Layer* _backgroundLayer;	//背景层

@@ -87,60 +87,73 @@ bool GameScene::init()
 
 	//对话框
 	_dialogWindow = Sprite::create("ui/dialog/dialog_bg.png");
-	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 110));
+    _dialogWindow->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 176));
 	this->addChild(_dialogWindow,10);
 
     //wtIcon
-    _wtIcon = Sprite::create("ui/scroll_point.png");
-    _wtIcon->setPosition(Vec2(visibleSize.width / 2, 110));
+    _wtIcon = Sprite::create("ui/wait_point.png");
+    _wtIcon->setPosition(Vec2(950, 65));
     _wtIcon->setOpacity(0);
     _dialogWindow->addChild(_wtIcon);
     
 	//文本框
-	_nameLabel = Label::createWithSystemFont("", "微软雅黑", 24);
-	_nameLabel->setColor(Color3B::BLACK);
+	_nameLabel = Label::createWithSystemFont("", "微软雅黑", 30);
+	_nameLabel->setColor(Color3B::WHITE);
 	_nameLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-	_nameLabel->setPosition(70, _dialogWindow->getContentSize().height - 40);
+	_nameLabel->setPosition(140, 190);
 	_dialogWindow->addChild(_nameLabel,11);
+    
+    _nameWindow = Sprite::create("ui/dialog/dialog_name.png");
+    _nameWindow->setPosition(170,190);
+    _nameWindow->setOpacity(0);
+    _dialogWindow->addChild(_nameWindow,10);
 
-	_textLabel = CharLabel::create("", 24, CC_CALLBACK_0(GameScene::showWaittingAnime, this));
-	_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
-	_textLabel->setColor(Color3B::BLACK);
-    _textLabel->setCharLabelSize(800, 200);
-    _textLabel->setContentSize(Size(800, 200));
+	_textLabel = CharLabel::create("", 30, CC_CALLBACK_0(GameScene::showWaittingAnime, this));
+	//_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
+    _textLabel->setPosition(104,134);
+	_textLabel->setColor(Color3B::WHITE);
+    //_textLabel->setCharLabelSize(800, 200);
+    _textLabel->setContentSize(Size(TEXTLABEL_SIZE_WIDTH, TEXTLABEL_SIZE_HEIGHT));
 	_dialogWindow->addChild(_textLabel,12);
 
 	//对话框按钮
-	auto buttonDict = MenuItemImage::create("ui/dialog/button_dict.png", "ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
-	buttonDict->setPosition(Vec2(840,220));
+	//auto buttonDict = MenuItemImage::create("ui/dialog/button_dict.png", "ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
+	//buttonDict->setPosition(Vec2(840,220));
 
-	auto buttonSave = MenuItemImage::create("ui/dialog/button_save.png", "ui/dialog/button_save_down.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
-	buttonSave->setPosition(Vec2(900,220));
+	auto buttonSave = MenuItemImage::create("ui/dialog/save.png", "ui/dialog/save_on.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
+    buttonSave->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	buttonSave->setPosition(Vec2(600,20));
 
-	auto buttonLoad = MenuItemImage::create("ui/dialog/button_load.png", "ui/dialog/button_load_down.png", CC_CALLBACK_0(GameScene::showLoadScene, this));
-	buttonLoad->setPosition(Vec2(960,220));
+	auto buttonLoad = MenuItemImage::create("ui/dialog/load.png", "ui/dialog/load_on.png", CC_CALLBACK_0(GameScene::showLoadScene, this));
+    buttonLoad->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	buttonLoad->setPosition(Vec2(680,20));
 
-	auto buttonLog = MenuItemImage::create("ui/dialog/button_log.png", "ui/dialog/button_log_down.png", CC_CALLBACK_0(GameScene::showHistoryScene, this));
-	buttonLog->setPosition(Vec2(1020,220));
+	auto buttonLog = MenuItemImage::create("ui/dialog/log.png", "ui/dialog/log_on.png", CC_CALLBACK_0(GameScene::showHistoryScene, this));
+    buttonLog->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	buttonLog->setPosition(Vec2(920,20));
 
-	auto buttonConfig = MenuItemImage::create("ui/dialog/button_config.png", "ui/dialog/button_config_down.png",CC_CALLBACK_0(GameScene::startSkipPlay, this));
-	buttonConfig->setPosition(Vec2(1080,220));
+    //auto buttonConfig = MenuItemImage::create("ui/dialog/button_config.png", "ui/dialog/button_config_down.png",CC_CALLBACK_0(GameScene::startSkipPlay, this));
+	//buttonConfig->setPosition(Vec2(1080,220));
 
-    auto buttonTitle = MenuItemImage::create("ui/dialog/button_title.png", "ui/dialog/button_title_down.png", CC_CALLBACK_0(GameScene::stopAutoPlay, this));
-	buttonTitle->setPosition(Vec2(1200,220));
+    auto buttonTitle = MenuItemImage::create("ui/dialog/menu.png", "ui/dialog/menu_on.png", CC_CALLBACK_0(GameScene::stopAutoPlay, this));
+    buttonTitle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	buttonTitle->setPosition(Vec2(1000,20));
 
-	auto CBskip = ui::CheckBox::create("ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_on.png", "ui/dialog/charbox_skip_off.png", "ui/dialog/charbox_skip_on.png");
-	CBskip->setPosition(Vec2(1000, 125));
-	_dialogWindow->addChild(CBskip, 0);
+	auto CBskip = ui::CheckBox::create("ui/dialog/skip_off.png", "ui/dialog/skip_off.png", "ui/dialog/skip_on.png", "ui/dialog/skip_off.png", "ui/dialog/skip_on.png");
+	CBskip->setPosition(Vec2(840, 20));
+    CBskip->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	this->addChild(CBskip, 13);
 
-	auto CBauto = ui::CheckBox::create("ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_on.png", "ui/dialog/charbox_auto_off.png", "ui/dialog/charbox_auto_on.png");
-	CBauto->setPosition(Vec2(1000, 75));
+	auto CBauto = ui::CheckBox::create("ui/dialog/auto_off.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png");
+    CBauto->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	CBauto->setPosition(Vec2(760, 20));
 	
-    // CBauto->addEventListenerCheckBox(this, checkboxselectedeventselector(GameScene::selectEventOfSkip);
+    //CBauto->addEventListenerCheckBox(this, cocos2d::ui::checkboxselectedeventselector(GameScene::selectEventOfSkip));
 	
-	_dialogWindow->addChild(CBauto, 1);
+	this->addChild(CBauto, 13);
 
-	auto menu = Menu::create(buttonDict, buttonSave, buttonLoad, buttonLog, buttonConfig, buttonTitle, NULL);
+	auto menu = Menu::create(buttonSave, buttonLoad, buttonLog, buttonTitle, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 13);
 
@@ -167,7 +180,7 @@ bool GameScene::init()
 		}
 		return true;
 	};
-	_dialogWindow->getEventDispatcher()->addEventListenerWithSceneGraphPriority(dialogClickEvent, _dialogWindow);
+	//_dialogWindow->getEventDispatcher()->addEventListenerWithSceneGraphPriority(dialogClickEvent, _dialogWindow);
 
 	//创建ScriptReader对象
 	
@@ -219,6 +232,7 @@ void GameScene::showClickSign()
 void GameScene::screenClicked()
 {
 	//ScriptReader::getInstance()->nextScript();
+    dialogClicked();
 }
 
 void GameScene::dialogClicked()
@@ -237,6 +251,14 @@ void GameScene::showName(std::string &name)
 {
 	_currentName = name;
 	_nameLabel->setString(name);
+    if (name.compare("") == 0)
+    {
+        _nameWindow->setOpacity(0);
+    }
+    else
+    {
+        _nameWindow->setOpacity(255);
+    }
 }
 
 void GameScene::showText(std::string &text)
@@ -337,7 +359,7 @@ void GameScene::startSkipPlay()
 
 void GameScene::autoPlay(float dt)
 {
-	ScriptReader::getInstance()->nextScript();
+	dialogClicked();
 }
 
 void GameScene::createGameDate()
@@ -920,7 +942,7 @@ void GameScene::hideWaittingAnime()
     _wtIcon->setOpacity(0);
 }
 
-void GameScene::selectEventOfSkip(cocos2d::Ref *pSender, cocos2d::ui::CheckBoxEventType type)
+void GameScene::selectEventOfSkip(Ref* pSender,cocos2d::ui::CheckBoxEventType type)
 {
     switch (type) {
         case cocos2d::ui::CHECKBOX_STATE_EVENT_SELECTED:

@@ -15,6 +15,7 @@ class SettingScene : public Layer
 {
 	//单选按钮组
 	RadioButton* _testRadio;
+    RadioButton* _testRadio2;
 	RadioButton* _isWindowRadio;	//窗口or全屏
 	RadioButton* _isSkipReaded;		//是否跳过已阅
 	//滑动条

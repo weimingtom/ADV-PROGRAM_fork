@@ -53,27 +53,48 @@ bool SettingScene::init()
 
 	//SliderBar
 	_musicVolumeSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
-	_musicVolumeSlidebar->setPosition(Vec2(750, 400));
+	_musicVolumeSlidebar->setPosition(Vec2(712, 127));
 	_musicVolumeSlidebar->setFloat(GameSystem::getInstance()->getMusicVolume());
 	_musicVolumeSlidebar->moveEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
 	_musicVolumeSlidebar->touchEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
 	stageLayer->addChild(_musicVolumeSlidebar);
 	
+    _autoSpeedSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
+    _autoSpeedSlidebar->setPosition(Vec2(712,320));
+    stageLayer->addChild(_autoSpeedSlidebar);
+    
+    _skipSpeedSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
+    _skipSpeedSlidebar->setPosition(Vec2(712,280));
+    stageLayer->addChild(_skipSpeedSlidebar);
+    
+    _soundVolumeSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
+    _soundVolumeSlidebar->setPosition(Vec2(712,77));
+    stageLayer->addChild(_soundVolumeSlidebar);
+    
 	//
 
 	//²âÊÔ°´Å¥
 	auto testButton = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
-	testButton->setPosition(Vec2(710, 275));
+	testButton->setPosition(Vec2(515, 438));
 	auto testButton2 = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
-	testButton2->setPosition(Vec2(920, 275));
+	testButton2->setPosition(Vec2(664, 438));
 
-	_testRadio = RadioButton::createRadioButton(testButton, testButton2, nullptr);
+    auto testButton3 = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
+    testButton3->setPosition(Vec2(515, 243));
+    auto testButton4 = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
+    testButton4->setPosition(Vec2(664, 243));
+    
+	_testRadio = RadioButton::createRadioButton(testButton, testButton2,nullptr);
 	_testRadio->setSelectedNumber(1);
 	stageLayer->addChild(_testRadio);
 	_testRadio->touchEvent = CC_CALLBACK_0(SettingScene::test, this);
 
-
-
+    _testRadio2 = RadioButton::createRadioButton(testButton3, testButton4,nullptr);
+    _testRadio2->setSelectedNumber(1);
+    stageLayer->addChild(_testRadio2);
+    
+    
+    
 	//·µ»Ø°´Å¥
 	auto buttonBack = MenuItemImage::create("ui/button_return.png", "ui/button_return_down.png", CC_CALLBACK_0(SettingScene::back, this));
 	buttonBack->setPosition(Vec2(175, 90));

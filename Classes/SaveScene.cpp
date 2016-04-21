@@ -37,11 +37,7 @@ bool SaveScene::init()
 	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
 	stageLayer->addChild(backgroundLayer);
 
-	auto backgroundImage = Sprite::create("ui/backgroundEffect/fullscreen_smoke.png");
-	backgroundImage->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	stageLayer->addChild(backgroundImage);
-
-	auto backgroundWindow = Sprite::create("ui/saveload/window_bg.png");
+	auto backgroundWindow = Sprite::create("ui/saveload/save_bg.png");
 	backgroundWindow->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundWindow);
 

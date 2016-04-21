@@ -3,6 +3,8 @@
 #include "cocos2d.h"
 #include "GameSystem.h"
 
+#define TEXT_MAX_LENGTH 10
+
 USING_NS_CC;
 
 class SaveData : public Node

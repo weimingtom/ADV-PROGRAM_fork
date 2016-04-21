@@ -46,17 +46,20 @@ bool MainMenu::init()
 	backgroundLayer->addChild(backgroundjpg, 0);
 
 	//logo
-
+    
+    auto lastdayLogo = Sprite::create("ui/Title/title.png");
+    lastdayLogo->setPosition(700,522);
+    backgroundLayer->addChild(lastdayLogo);
 
 	//²Ëµ¥°´Å¥
 	auto buttonNew = MenuItemImage::create("ui/Title/mainNewNormal.png", "ui/Title/mainNewTouch.png", CC_CALLBACK_0(MainMenu::newgame, this));
-	buttonNew->setPosition(Vec2(900, visibleSize.height - 250));
+	buttonNew->setPosition(Vec2(800, 350));
 
 	auto buttonLoad = MenuItemImage::create("ui/Title/mainLoadNormal.png", "ui/Title/mainLoadTouch.png", CC_CALLBACK_0(MainMenu::load, this));
-	buttonLoad->setPosition(Vec2(900, visibleSize.height - 300));
+	buttonLoad->setPosition(Vec2(800, 250));
 
 	auto buttonConfig = MenuItemImage::create("ui/Title/mainConfigNormal.png", "ui/Title/mainConfigTouch.png",CC_CALLBACK_0(MainMenu::config, this));
-	buttonConfig->setPosition(Vec2(900, visibleSize.height - 350));
+	buttonConfig->setPosition(Vec2(800, 150));
 
 	//auto buttonExit = MenuItemImage::create("ui/Title/button_exit.png", "ui/Title/button_exit_down.png",CC_CALLBACK_1(MainMenu::menuExit, this));
 	//buttonExit->setPosition(Vec2(900, visibleSize.height - 443));

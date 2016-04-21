@@ -123,7 +123,10 @@ void SaveData::updataData()
 
 		/*显示存档信息*/
 		std::string text = savedata->text;
-
+        if (text.length() > MAX_LOG_LENGTH)
+        {
+            text = text.substr(0, MAX_LOG_LENGTH);
+        }
 		_dataText = Label::createWithSystemFont(text, "黑体", 20);
 		_dataText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 		_dataText->setPosition(160, 35);

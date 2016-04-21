@@ -12,7 +12,7 @@ CharLabel::CharLabel()
 	, _y(0)
 	, _defaultFontSize(20)
 	, _showFinishCallback(nullptr)
-	, _defaultFontColor(Color3B::BLACK)
+	, _defaultFontColor(Color3B::WHITE)
     , _isRunning(false)
 {
 }
@@ -53,18 +53,23 @@ void CharLabel::setString(std::string &text)
 	_x = 0;
 	_y = 0;
     _isRunning = true;
+
 	showNextChar();
 }
 
 void CharLabel::finishShow()
 {
+    
 	removeAllChildren();
 	_charLabel = Label::createWithSystemFont(_text, "Î¢ÈíÑÅºÚ", _defaultFontSize);
+    _charLabel->setDimensions(this->getContentSize().width, this->getContentSize().height);
 	_charLabel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 	_charLabel->setColor(_defaultFontColor);
-
 	Node::addChild(_charLabel);
+    
+    
     _isRunning = false;
+
 	if (_showFinishCallback)
 	{
 		_showFinishCallback();
@@ -115,6 +120,7 @@ void CharLabel::showNextChar()
     {
         _x += tmpLabel->getContentSize().width;
     }
+
 	tmpLabel->runAction(Sequence::createWithTwoActions(DelayTime::create(_defaultDelayTime), CallFunc::create(CC_CALLBACK_0(CharLabel::showNextChar, this))));
 	_charLabel = tmpLabel;
 }
