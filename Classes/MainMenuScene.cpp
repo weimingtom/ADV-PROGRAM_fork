@@ -40,7 +40,7 @@ bool MainMenu::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//Éè¶¨±³¾°²ã
-	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
+	auto backgroundLayer = LayerColor::create(Color4B::RED                  );
 	auto backgroundjpg = Sprite::create("ui/Title/50mRoadRain.jpg");
 	backgroundjpg->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	backgroundLayer->addChild(backgroundjpg, 0);

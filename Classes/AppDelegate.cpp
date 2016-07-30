@@ -34,10 +34,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
 		//改变窗口大小和自适应策略
 		glview->setFrameSize(1136, 640);
-		//glview->setDesignResolutionSize(1280, 720, kResolutionShowAll);
-        glview->setDesignResolutionSize(1136, 640, ResolutionPolicy::FIXED_HEIGHT);
+		glview->setDesignResolutionSize(1136, 640, kResolutionShowAll);
+        //glview->setDesignResolutionSize(1136, 640, ResolutionPolicy::FIXED_HEIGHT);
         
     }
+    glview->setDesignResolutionSize(1136, 640, ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
     director->setDisplayStats(true);

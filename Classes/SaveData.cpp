@@ -22,12 +22,12 @@ SaveData::SaveData(int i)
 	, _dataText(nullptr)
 {
 	/*加载按钮底层*/
-	/*
-	auto stageLayer = Layer::create();
-	_stageLayer->setContentSize(Size(400,110));
-	_stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	*/
-	_stageLayer = Sprite::create("ui/saveload/noselected_bg.png");
+	
+	_stageLayer = Layer::create();
+	_stageLayer->setContentSize(Size(917,130));
+	//_stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	
+	//_stageLayer = Sprite::create("ui/saveload/noselected_bg.png");
 	
 	_number = i;
 
@@ -47,7 +47,7 @@ SaveData::SaveData(int i)
 	{
 		if (_stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//如果碰到指针
 		{
-			touchImage->setVisible(true);
+			//touchImage->setVisible(true);
 			return true;
 		}
 		return false;
@@ -123,21 +123,18 @@ void SaveData::updataData()
 
 		/*显示存档信息*/
 		std::string text = savedata->text;
-        if (text.length() > MAX_LOG_LENGTH)
-        {
-            text = text.substr(0, MAX_LOG_LENGTH);
-        }
-		_dataText = Label::createWithSystemFont(text, "黑体", 20);
+		_dataText = Label::createWithSystemFont(text, "黑体", 26);
+        _dataText->setDimensions(TEXT_MAX_LENGTH, 24);
 		_dataText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		_dataText->setPosition(160, 35);
+		_dataText->setPosition(240, 35);
 		_stageLayer->addChild(_dataText);
 
 		/*显示存档日期*/
 		std::string date = savedata->date;
 
-		_dataDate = Label::createWithSystemFont(date, "黑体", 20);
+		_dataDate = Label::createWithSystemFont(date, "黑体", 26);
 		_dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		_dataDate->setPosition(160, 65);
+		_dataDate->setPosition(240, 65);
 		_stageLayer->addChild(_dataDate);
 
 		/*显示存档备注*/
@@ -170,7 +167,7 @@ void SaveData::updataData()
 	}
 }
 
-Sprite* SaveData::getStageLayer()
+Layer* SaveData::getStageLayer()
 {
 	//log("data Number = %d", _number);
 	return _stageLayer;

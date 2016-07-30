@@ -37,45 +37,17 @@ bool SaveScene::init()
 	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
 	stageLayer->addChild(backgroundLayer);
 
-	auto backgroundWindow = Sprite::create("ui/saveload/save_bg.png");
+	auto backgroundWindow = Sprite::create("ui/saveload/save_bg.jpg");
 	backgroundWindow->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundWindow);
 
 	/*加载按钮*/
 
 	//dataButtons[8];
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		dataButtons[i] = SaveData::create(i);
-		dataButtons[i]->setPosition(425, 520 - 115 * i);
-		//dataButtons[i]->onTouchEnded = CC_CALLBACK_1(GameSystem::saveGameSceneInfo, GameSystem::getInstance());
-		eventTouch[i] = EventListenerTouchOneByOne::create();
-		eventTouch[i]->onTouchBegan = [=](Touch *t, Event *e)
-		{
-			if (dataButtons[i]->getStageLayer()->getBoundingBox().containsPoint(dataButtons[i]->convertTouchToNodeSpace(t)))	//如果碰到指针
-			{
-				return true;
-			}
-			return false;
-		};
-		eventTouch[i]->onTouchEnded = [=](Touch *t, Event *e)
-		{
-			if (dataButtons[i]->getStageLayer()->getBoundingBox().containsPoint(dataButtons[i]->convertTouchToNodeSpace(t)))	//如果碰到指针
-			{
-				save(i);
-			}
-			else
-			{
-
-			}
-		};
-		this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventTouch[i], this);
-		stageLayer->addChild(dataButtons[i]);
-	}
-	for (int i = 4; i < 8; i++)
-	{
-		dataButtons[i] = SaveData::create(i);
-		dataButtons[i]->setPosition(850, 520 - 115 * (i - 4));
+		dataButtons[i]->setPosition(116, 368 - 150 * i);
 		//dataButtons[i]->onTouchEnded = CC_CALLBACK_1(GameSystem::saveGameSceneInfo, GameSystem::getInstance());
 		eventTouch[i] = EventListenerTouchOneByOne::create();
 		eventTouch[i]->onTouchBegan = [=](Touch *t, Event *e)

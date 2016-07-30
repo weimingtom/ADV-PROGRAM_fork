@@ -3,7 +3,7 @@
 #include "cocos2d.h"
 #include "GameSystem.h"
 
-#define TEXT_MAX_LENGTH 10
+#define TEXT_MAX_LENGTH 500
 
 USING_NS_CC;
 
@@ -20,7 +20,9 @@ class SaveData : public Node
 	Label* _dataText;	//文本层
 	Label* _dataDate;	//时间
 
-	Sprite* _stageLayer;	//储存底层
+	//Sprite* _stageLayer;	//储存底层
+    Layer* _stageLayer;
+    
 public:
 	SaveData(int number, std::string imageFile, std::string text, std::string date);
 	SaveData(int number);
@@ -29,7 +31,7 @@ public:
 	static SaveData* create(int i);	//创建一个SaveData按钮
 	std::function <void(int)> onTouchEnded;
 	void updataData();	//刷新按钮数据
-	Sprite* getStageLayer();
+	Layer* getStageLayer();
 };
 
 #endif

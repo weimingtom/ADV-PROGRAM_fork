@@ -70,36 +70,37 @@ struct Charactor
 	{
 		int Distance;	//立绘移动的位置
 		//auto actionTo = MoveTo::create(1, Point(Distance, 0));
+        Size visibleSize = Director::getInstance()->getVisibleSize();
 		switch (pt)
 		{
 		case PositionType::LEFT:
 		{
 			//faceSprite->setPositionX(320);
-            setAction(320);
+            setAction(visibleSize.width / 4);
 			break;
 		}
 		case PositionType::LEFT_CENTER:
 		{
 			//faceSprite->setPositionX(427);
-            setAction(427);
+            setAction(visibleSize.width / 3);
 			break;
 		}
 		case PositionType::CENTER:
 		{
 			//faceSprite->setPositionX(640);
-			setAction(640);
+			setAction(visibleSize.width / 2);
 			break;
 		}
 		case PositionType::RIGHT_CENTER:
 		{
 			//faceSprite->setPositionX(853);
-            setAction(853);
+            setAction(visibleSize.width * 2 / 3);
 			break;
 		}
 		case PositionType::RIGHT:
 		{
 			//faceSprite->setPositionX(960);
-            setAction(960);
+            setAction(visibleSize.width * 3 / 4);
 			break;
 		}
 		default:

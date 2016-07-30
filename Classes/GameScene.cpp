@@ -111,7 +111,7 @@ bool GameScene::init()
 
 	_textLabel = CharLabel::create("", 30, CC_CALLBACK_0(GameScene::showWaittingAnime, this));
 	//_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
-    _textLabel->setPosition(104,134);
+    _textLabel->setPosition(104,150);
 	_textLabel->setColor(Color3B::WHITE);
     //_textLabel->setCharLabelSize(800, 200);
     _textLabel->setContentSize(Size(TEXTLABEL_SIZE_WIDTH, TEXTLABEL_SIZE_HEIGHT));
@@ -306,6 +306,8 @@ void GameScene::playBackgroundMusic(std::string &key)
 		return;
 	}
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(bgm.c_str(), true);
+    if(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
+    log("Playing BGM %s",bgm.c_str());
 	_isPlayingMusic = true;
 	_backgroundMusicKey = key;
 }
@@ -517,7 +519,8 @@ void GameScene::displayCharator(std::string cName, std::string face)
 					((Charactor*)*pChar)->leave();
 				}
                 */
-
+                
+                Size visibleSize = Director::getInstance()->getVisibleSize();
 
 				cha->currentPosition = tmpPT;
 				if (sp)
@@ -529,27 +532,27 @@ void GameScene::displayCharator(std::string cName, std::string face)
 				{
 				case PositionType::LEFT:
 				{
-					sp->setPositionX(320);
+					sp->setPositionX(visibleSize.width / 4);
 					break;
 				}
 				case PositionType::LEFT_CENTER:
 				{
-					sp->setPositionX(427);
+					sp->setPositionX(visibleSize.width / 3);
 					break;
 				}
 				case PositionType::CENTER:
 				{
-					sp->setPositionX(640);
+					sp->setPositionX(visibleSize.width / 2);
 					break;
 				}
 				case PositionType::RIGHT_CENTER:
 				{
-					sp->setPositionX(853);
+					sp->setPositionX(visibleSize.width * 2 / 3);
 					break;
 				}
 				case PositionType::RIGHT:
 				{
-					sp->setPositionX(960);
+					sp->setPositionX(visibleSize.width *3 / 4);
 					break;
 				}
 				default:
@@ -806,7 +809,7 @@ void GameScene::reloadScene()
 						((Charactor*)*pChar)->leave();
 					}
 
-
+                    Size visibleSize = Director::getInstance()->getVisibleSize();
 
 					cha->currentPosition = tmpPT;
 					if (sp)
@@ -816,7 +819,7 @@ void GameScene::reloadScene()
 					{
 					case PositionType::LEFT:
 					{
-						sp->setPositionX(320);
+						sp->setPositionX(360);
 						break;
 					}
 					case PositionType::LEFT_CENTER:
