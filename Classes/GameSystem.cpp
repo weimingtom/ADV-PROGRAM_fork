@@ -323,9 +323,9 @@ void GameSystem::saveGameSceneInfo(int i)
 	{
 		cocos2d::log("savedata file error.");
 	}
-    delete ch;
-    delete file;
-    delete image;
+    delete[] ch;
+    delete[] file;
+    delete[] image;
 	savedata = NULL;
  }
 

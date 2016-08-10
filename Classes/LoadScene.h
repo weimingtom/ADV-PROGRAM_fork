@@ -9,6 +9,7 @@ class LoadScene : public Layer
 {
 	SaveData* dataButtons[8];
 	EventListenerTouchOneByOne* eventTouch[8];
+    int _currentSelectButton;
 public:
 	LoadScene();
 	~LoadScene();
@@ -20,9 +21,12 @@ public:
 	CREATE_FUNC(LoadScene);
 
 	void back();	//·µ»Ø
-
-	void load(int i);	//¶Áµµ
     
+    void popup();   //q
+    
+    void apply();
+    
+    void cancel();
 };
 
 #endif

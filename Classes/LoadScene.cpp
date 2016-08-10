@@ -1,9 +1,11 @@
 #include "LoadScene.h"
 #include "GameSystem.h"
 #include "GameScene.h"
+#include "PopupLayer.hpp"
 
 LoadScene::LoadScene()
 {
+    _currentSelectButton = -1;
 }
 
 
@@ -60,7 +62,8 @@ bool LoadScene::init()
 		{
 			if (dataButtons[i]->getStageLayer()->getBoundingBox().containsPoint(dataButtons[i]->convertTouchToNodeSpace(t)))	//如果碰到指针
 			{
-				load(i);
+                _currentSelectButton = i;
+				popup();
 			}
 			else
 			{
@@ -91,15 +94,38 @@ void LoadScene::back()
 	Director::getInstance()->popScene();
 }
 
-void LoadScene::load(int i)
+void LoadScene::popup()
 {
-	log("loadsave = %d", i + 1);
-	GameSystem::getInstance()->setIsLoadSuccess(GameSystem::getInstance()->loadGameSceneInfo(i));
-	if (GameSystem::getInstance()->getGameScene())
-	{
-		Director::getInstance()->popScene();
-	}
-	GameSystem::getInstance()->setGameScene(GameScene::createScene());
-	auto scene = GameSystem::getInstance()->getGameScene();
-	Director::getInstance()->replaceScene(scene);
+    auto result = GameSystem::getInstance()->loadGameSceneInfo(_currentSelectButton);
+    if (result)
+    {
+        //提示读取存档
+        PopupLayer* popupDialog = PopupLayer::create("ui/popup.png");
+        popupDialog->addLabelButton("Yes", CC_CALLBACK_0(LoadScene::apply, this));
+        popupDialog->addLabelButton("No", CC_CALLBACK_0(LoadScene::cancel, this));
+        popupDialog->setString("Are you sure load this file?");
+        this->addChild(popupDialog);
+    }
+}
+
+void LoadScene::apply()
+{
+    if (_currentSelectButton >= 0)
+    {
+        log("Loading!");
+        GameSystem::getInstance()->setIsLoadSuccess(true);
+        if (GameSystem::getInstance()->getGameScene())
+        {
+            Director::getInstance()->popScene();
+        }
+        GameSystem::getInstance()->setGameScene(GameScene::createScene());
+        auto scene = GameSystem::getInstance()->getGameScene();
+        Director::getInstance()->replaceScene(scene);
+    }
+}
+
+void LoadScene::cancel()
+{
+    log("cancel.");
+    _currentSelectButton = -1;
 }

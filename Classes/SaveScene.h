@@ -9,6 +9,7 @@ class SaveScene : public Layer
 {
 	SaveData* dataButtons[8];
 	EventListenerTouchOneByOne* eventTouch[8];
+    int _currentSelectButton;
 public:
 	SaveScene();
 	~SaveScene();
@@ -20,8 +21,12 @@ public:
 	CREATE_FUNC(SaveScene);
 
 	void back();	//返回
-
-	void save(int i);	//存档
+    
+    void popup();    //弹出对话
+    
+    void apply();    //对话窗按下Yes
+    
+    void cancel();   //对话窗按下No
 };
 
 #endif

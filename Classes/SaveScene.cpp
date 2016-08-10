@@ -1,8 +1,11 @@
 #include "SaveScene.h"
 #include "GameSystem.h"
+#include "PopupLayer.hpp"
+#include <stdlib.h>
 
 SaveScene::SaveScene()
 {
+    _currentSelectButton = -1;
 }
 
 
@@ -62,7 +65,8 @@ bool SaveScene::init()
 		{
 			if (dataButtons[i]->getStageLayer()->getBoundingBox().containsPoint(dataButtons[i]->convertTouchToNodeSpace(t)))	//如果碰到指针
 			{
-				save(i);
+                _currentSelectButton = i;
+                popup();
 			}
 			else
 			{
@@ -93,9 +97,37 @@ void SaveScene::back()
 	Director::getInstance()->popScene();
 }
 
-void SaveScene::save(int i)
+void SaveScene::popup()
 {
-	GameSystem::getInstance()->saveGameSceneInfo(i);
-	GameSystem::getInstance()->updateGameSavedata(i);
-	dataButtons[i]->updataData();
+    auto result = true;
+    if (result)
+    {
+        //提示读取存档
+        PopupLayer* popupDialog = PopupLayer::create("ui/popup.png");
+        popupDialog->addLabelButton("Yes", CC_CALLBACK_0(SaveScene::apply, this));
+        popupDialog->addLabelButton("No", CC_CALLBACK_0(SaveScene::cancel, this));
+        
+        char* text = new char[3];
+        sprintf(text,"%d",_currentSelectButton+1);
+        std::string popupText = "Are you sure save in No." + (std::string)text + " file?";
+        popupDialog->setString(popupText);
+        this->addChild(popupDialog);
+    }
+}
+
+void SaveScene::apply()
+{
+    if (_currentSelectButton >= 0)
+    {
+        log("Saving!");
+        GameSystem::getInstance()->saveGameSceneInfo(_currentSelectButton);
+        GameSystem::getInstance()->updateGameSavedata(_currentSelectButton);
+        dataButtons[_currentSelectButton]->updataData();
+    }
+}
+
+void SaveScene::cancel()
+{
+    log("cancel.");
+    _currentSelectButton = -1;
 }

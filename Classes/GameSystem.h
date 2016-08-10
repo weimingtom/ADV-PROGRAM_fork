@@ -74,7 +74,8 @@ class GameSystem
 	GameSaveData* _savedataList; //记录当前游戏的存档信息
 	bool _isLoadSuccess;	//是够载入成功
 	RenderTexture* _screenShoot;	//储存屏幕截图
-
+    
+    Map<std::string, int>* _readed;    //记录已读的剧本
 	//界面管理
 	Scene* _gameScene;	//游戏主画面
 
