@@ -149,10 +149,8 @@ bool GameScene::init()
 	CBauto = ui::CheckBox::create("ui/dialog/auto_off.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png");
     CBauto->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	CBauto->setPosition(Vec2(760, 20));
-
-    
-	
-	this->addChild(CBauto, 13);
+    CBauto->addEventListener(CC_CALLBACK_2(GameScene::selectEventOfAuto, this));
+    this->addChild(CBauto, 13);
 
 	auto menu = Menu::create(buttonSave, buttonLoad, buttonLog, buttonTitle, NULL);
 	menu->setPosition(Vec2::ZERO);
