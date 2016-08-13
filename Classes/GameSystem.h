@@ -11,7 +11,7 @@
 #define TEXTSPEED "TextSpeed"
 #define AUTOSPEED "AutoSpeed"
 
-
+USING_NS_CC;
 
 struct fgCharactor
 {
@@ -75,7 +75,6 @@ class GameSystem
 	bool _isLoadSuccess;	//是够载入成功
 	RenderTexture* _screenShoot;	//储存屏幕截图
     
-    Map<std::string, int>* _readed;    //记录已读的剧本
 	//界面管理
 	Scene* _gameScene;	//游戏主画面
 
@@ -91,12 +90,14 @@ public:
 	void setSoundVolume(float value);
 	void setTextSpeed(float value);
 	void setAutoSpeed(float value);
+    void setHaveRead(const std::string &key, int value);
 
 	float getSystemVolume();
 	float getMusicVolume();
 	float getSoundVolume();
 	float getTextSpeed();
 	float getAutoSpeed();
+    int getHaveRead(const std::string &key);
 
 	void setDataValue(std::string &key, int value);
 	int getDataValue(std::string &key);
@@ -127,7 +128,7 @@ public:
 	void setGameScene(Scene* scene);	//设置游戏场景
 	Scene* getGameScene();	//获取游戏场景
 	
-    float getPosition(PositionType pt);
+    float getPosition(CMPositionType pt);
 };
 
 #endif

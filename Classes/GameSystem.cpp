@@ -111,7 +111,11 @@ void GameSystem::setAutoSpeed(float value)
 	cocos2d::UserDefault::getInstance()->setFloatForKey(AUTOSPEED, value);
 }
 
-
+void GameSystem::setHaveRead(const std::string &key, int value)
+{
+    cocos2d::UserDefault::getInstance()->setIntegerForKey(key.c_str(), value);
+    cocos2d::UserDefault::sharedUserDefault()->flush();//为什么其它没加这句？因为其它没加这句也在正常运行，我就不加先了。
+}
 
 float GameSystem::getSystemVolume()
 {
@@ -138,6 +142,11 @@ float GameSystem::getAutoSpeed()
 	return cocos2d::UserDefault::getInstance()->getFloatForKey(AUTOSPEED);
 }
 
+int GameSystem::getHaveRead(const std::string &key)
+{
+    return cocos2d::UserDefault::getInstance()->getIntegerForKey(key.c_str());
+}
+
 void GameSystem::setDataValue(std::string &key, int value)
 {
 	auto result = _savedata[0].find(key);
@@ -149,6 +158,7 @@ void GameSystem::setDataValue(std::string &key, int value)
 	{
 		_savedata[0].insert(std::pair<std::string, int>(key, value));
 	}
+    //cocos2d::UserDefault::sharedUserDefault()->flush();
 }
 
 int GameSystem::getDataValue(std::string &key)
@@ -242,7 +252,8 @@ void GameSystem::saveGameSceneInfo(int i)
 		if (result)
 		{
 			char tmp[100];
-			sprintf(tmp, "%s%s", FileUtils::getInstance()->getWritablePath().c_str(), image);
+			//sprintf(tmp, "%s%s", FileUtils::getInstance()->getWritablePath().c_str(), image);
+            sprintf(tmp, "%s", image);
 			fwrite(tmp, sizeof(char), strlen(tmp), savedata);
 		}
 		fputs("\r\n", savedata);

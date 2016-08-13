@@ -399,13 +399,30 @@ void ScriptReader::nextScript()
 		return;
 	}
 	_currentCommandIndex++;
-	//log("Size of Script = [%d]", _scripts.size);
+    //log("Size of Script = [%d]", _scripts.size);
 	auto list = _scripts.find(_currentSignName);
 	if (list == _scripts.end())
 	{
 		log("No Sign of currentSign [%s]", _currentSignName.c_str());
 		return;
 	}
+    
+    //记录已读信息
+    std::string readedSign = "readed_"+_currentSignName;
+    
+    if (_currentCommandIndex > GameSystem::getInstance()->getHaveRead(readedSign))
+    {
+        //log("SR> Hasn't read.");
+        GameSystem::getInstance()->setHaveRead(readedSign, _currentCommandIndex);
+        _isHaveRead = false;
+    }
+    else
+    {
+        //log("SR> Has read");
+        _isHaveRead = true;
+    }
+    
+    
 	auto cmdList = list->second;
 	if (_currentCommandIndex-1 >= (int)cmdList->size())
 	{
@@ -491,4 +508,9 @@ void ScriptReader::jumpToSign(const std::string &sign, int index)
 	_currentSignName = sign;
 	_currentCommandIndex = index;
 	//nextScript();
+}
+
+bool ScriptReader::getIsHaveRead()
+{
+    return _isHaveRead;
 }

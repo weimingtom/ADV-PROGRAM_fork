@@ -14,6 +14,9 @@
 #define TEXTLABEL_SIZE_WIDTH 800
 #define TEXTLABEL_SIZE_HEIGHT 100
 
+USING_NS_CC;
+using namespace ui;
+
 class GameScene : public cocos2d::Layer
 {
 	cocos2d::Label* _label;//文本框的文本层
@@ -28,6 +31,10 @@ class GameScene : public cocos2d::Layer
 	Layer* _charactorsLayer;	//立绘层
 	Layer* _selectLayer;	//选项层
     Sprite* _wtIcon;
+    
+    //窗口按钮
+    CheckBox* CBskip;   //快进
+    CheckBox* CBauto;   //自动
     
 	Charactor* _chars[MAX_CHARACTOR_NUMBER];	//储存当前立绘资料
 	Charactor* _emptyChar;	//空角色
@@ -80,8 +87,13 @@ public:
 	void startAutoPlay();	//开始自动前进
 	void stopAutoPlay();	//停止自动前进
     void startSkipPlay();
+    void stopSkipPlay();
 	void autoPlay(float dt);	//自动前进
-
+    void skipPlay(float dt);    //快进
+    
+    void selectEventOfSkip(Ref* pSender,CheckBox::EventType type);
+    void selectEventOfAuto(Ref* pSender,CheckBox::EventType type);
+    
 	void displayCharator(std::string cName,std::string face);
 	void unDisplayCharator(std::string cName);
 
@@ -102,7 +114,6 @@ public:
     void showWaittingAnime();
     void hideWaittingAnime();
     
-    void selectEventOfSkip(Ref* pSender,cocos2d::ui::CheckBoxEventType type);
 
 };
 

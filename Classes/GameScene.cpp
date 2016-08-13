@@ -140,16 +140,17 @@ bool GameScene::init()
     buttonTitle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	buttonTitle->setPosition(Vec2(1000,20));
 
-	auto CBskip = ui::CheckBox::create("ui/dialog/skip_off.png", "ui/dialog/skip_off.png", "ui/dialog/skip_on.png", "ui/dialog/skip_off.png", "ui/dialog/skip_on.png");
+	CBskip = ui::CheckBox::create("ui/dialog/skip_off.png", "ui/dialog/skip_off.png", "ui/dialog/skip_on.png", "ui/dialog/skip_off.png", "ui/dialog/skip_on.png");
 	CBskip->setPosition(Vec2(840, 20));
     CBskip->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    CBskip->addEventListener(CC_CALLBACK_2(GameScene::selectEventOfSkip, this));
 	this->addChild(CBskip, 13);
 
-	auto CBauto = ui::CheckBox::create("ui/dialog/auto_off.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png");
+	CBauto = ui::CheckBox::create("ui/dialog/auto_off.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png", "ui/dialog/auto_off.png", "ui/dialog/auto_on.png");
     CBauto->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	CBauto->setPosition(Vec2(760, 20));
-	
-    //CBauto->addEventListenerCheckBox(this, cocos2d::ui::checkboxselectedeventselector(GameScene::selectEventOfSkip));
+
+    
 	
 	this->addChild(CBauto, 13);
 
@@ -356,12 +357,43 @@ void GameScene::stopAutoPlay()
 
 void GameScene::startSkipPlay()
 {
-    schedule(schedule_selector(GameScene::autoPlay),0.01f);
+    //schedule(schedule_selector(GameScene::autoPlay),0.01f);
+    if (true)
+    {
+        log("start skip");
+        if(ScriptReader::getInstance()->getIsHaveRead())
+        {
+            log("IsHaveRead");
+            schedule(schedule_selector(GameScene::skipPlay),0.01f);
+        }
+        
+    }
+    else
+    {
+        schedule(schedule_selector(GameScene::autoPlay),0.01f);
+    }
+}
+
+void GameScene::stopSkipPlay()
+{
+    unschedule(schedule_selector(GameScene::skipPlay));
 }
 
 void GameScene::autoPlay(float dt)
 {
 	dialogClicked();
+}
+                     
+void GameScene::skipPlay(float dt)
+{
+    log("Skiping");
+    if(!ScriptReader::getInstance()->getIsHaveRead())
+    {
+        log("Stop skiping!");
+        CBskip->setSelected(false);
+        stopSkipPlay();
+    }
+    dialogClicked();
 }
 
 void GameScene::createGameDate()
@@ -424,7 +456,7 @@ void GameScene::displayCharator(std::string cName, std::string face)
 		if (isNeedShow)
 		{
 			auto pChar = &_chars[2];
-			PositionType tmpPT = PositionType::EMPTY;
+			CMPositionType tmpPT = CMPositionType::EMPTY;
 
 			Sprite *sp = nullptr;
 			if (cha->getCharactorFace(face))
@@ -438,7 +470,7 @@ void GameScene::displayCharator(std::string cName, std::string face)
 				{
 					_charNumber++;
 					pChar = &_chars[2];
-					tmpPT = PositionType::CENTER;
+					tmpPT = CMPositionType::CENTER;
 				}
 				else
 					if (_charNumber == 1)
@@ -446,16 +478,16 @@ void GameScene::displayCharator(std::string cName, std::string face)
 						if (_chars[2] == cha)
 						{
 							pChar = &_chars[2];
-							tmpPT = PositionType::CENTER;
+							tmpPT = CMPositionType::CENTER;
 						}
 						else
 						{
-							_chars[2]->moveTo(PositionType::LEFT_CENTER);
+							_chars[2]->moveTo(CMPositionType::LEFT_CENTER);
 							_chars[1] = _chars[2];
 							_chars[2] = _emptyChar;
 							_charNumber++;
 							pChar = &_chars[3];
-							tmpPT = PositionType::RIGHT_CENTER;
+							tmpPT = CMPositionType::RIGHT_CENTER;
 						}
 					}
 					else
@@ -465,25 +497,25 @@ void GameScene::displayCharator(std::string cName, std::string face)
 							if (_chars[1] == cha)
 							{
 								pChar = &_chars[1];
-								tmpPT = PositionType::LEFT_CENTER;
+								tmpPT = CMPositionType::LEFT_CENTER;
 							}
 							else
 								if (_chars[3] == cha)
 								{
 									pChar = &_chars[3];
-									tmpPT = PositionType::RIGHT_CENTER;
+									tmpPT = CMPositionType::RIGHT_CENTER;
 								}
 								else
 								{
-									_chars[1]->moveTo(PositionType::LEFT);
+									_chars[1]->moveTo(CMPositionType::LEFT);
 									_chars[0] = _chars[1];
 									_chars[1] = _emptyChar;
-									_chars[3]->moveTo(PositionType::RIGHT);
+									_chars[3]->moveTo(CMPositionType::RIGHT);
 									_chars[4] = _chars[3];
 									_chars[3] = _emptyChar;
 									_charNumber++;
 									pChar = &_chars[2];
-									tmpPT = PositionType::CENTER;
+									tmpPT = CMPositionType::CENTER;
 								}
 						}
 						else
@@ -491,24 +523,24 @@ void GameScene::displayCharator(std::string cName, std::string face)
 							if (_chars[0] == cha)
 							{
 								pChar = &_chars[0];
-								tmpPT = PositionType::LEFT;
+								tmpPT = CMPositionType::LEFT;
 							}
 							else
 								if (_chars[2] == cha)
 								{
 									pChar = &_chars[2];
-									tmpPT = PositionType::CENTER;
+									tmpPT = CMPositionType::CENTER;
 								}
 								else
 									if (_chars[4] == cha)
 									{
 										pChar = &_chars[4];
-										tmpPT = PositionType::RIGHT;
+										tmpPT = CMPositionType::RIGHT;
 									}
 									else
 									{
 										pChar = &_chars[2];
-										tmpPT = PositionType::CENTER;
+										tmpPT = CMPositionType::CENTER;
 									}
 						}
 					}
@@ -530,27 +562,27 @@ void GameScene::displayCharator(std::string cName, std::string face)
 
 				switch (tmpPT)
 				{
-				case PositionType::LEFT:
+				case CMPositionType::LEFT:
 				{
 					sp->setPositionX(visibleSize.width / 4);
 					break;
 				}
-				case PositionType::LEFT_CENTER:
+				case CMPositionType::LEFT_CENTER:
 				{
 					sp->setPositionX(visibleSize.width / 3);
 					break;
 				}
-				case PositionType::CENTER:
+				case CMPositionType::CENTER:
 				{
 					sp->setPositionX(visibleSize.width / 2);
 					break;
 				}
-				case PositionType::RIGHT_CENTER:
+				case CMPositionType::RIGHT_CENTER:
 				{
 					sp->setPositionX(visibleSize.width * 2 / 3);
 					break;
 				}
-				case PositionType::RIGHT:
+				case CMPositionType::RIGHT:
 				{
 					sp->setPositionX(visibleSize.width *3 / 4);
 					break;
@@ -585,18 +617,18 @@ void GameScene::unDisplayCharator(std::string cName)
 				{
 					switch (cha->currentPosition)
 					{
-					case PositionType::LEFT_CENTER:
+					case CMPositionType::LEFT_CENTER:
 					{
 						_chars[1] = _emptyChar;
-						_chars[3]->moveTo(PositionType::CENTER);
+						_chars[3]->moveTo(CMPositionType::CENTER);
 						_chars[2] = _chars[3];
 						_chars[3] = _emptyChar;
 						break;
 					}
-					case PositionType::RIGHT_CENTER:
+					case CMPositionType::RIGHT_CENTER:
 					{
 						_chars[3] = _emptyChar;
-						_chars[1]->moveTo(PositionType::CENTER);
+						_chars[1]->moveTo(CMPositionType::CENTER);
 						_chars[2] = _chars[1];
 						_chars[1] = _emptyChar;
 						break;
@@ -612,35 +644,35 @@ void GameScene::unDisplayCharator(std::string cName)
 					{
 						switch (cha->currentPosition)
 						{
-						case PositionType::LEFT:
+						case CMPositionType::LEFT:
 						{
 							_chars[0] = _emptyChar;
-							_chars[2]->moveTo(PositionType::LEFT_CENTER);
+							_chars[2]->moveTo(CMPositionType::LEFT_CENTER);
 							_chars[1] = _chars[2];
 							_chars[2] = _emptyChar;
-							_chars[4]->moveTo(PositionType::RIGHT_CENTER);
+							_chars[4]->moveTo(CMPositionType::RIGHT_CENTER);
 							_chars[3] = _chars[4];
 							_chars[4] = _emptyChar;
 							break;
 						}
-						case PositionType::CENTER:
+						case CMPositionType::CENTER:
 						{
 							_chars[2] = _emptyChar;
-							_chars[0]->moveTo(PositionType::LEFT_CENTER);
+							_chars[0]->moveTo(CMPositionType::LEFT_CENTER);
 							_chars[1] = _chars[0];
 							_chars[0] = _emptyChar;
-							_chars[4]->moveTo(PositionType::RIGHT_CENTER);
+							_chars[4]->moveTo(CMPositionType::RIGHT_CENTER);
 							_chars[3] = _chars[4];
 							_chars[4] = _emptyChar;
 							break;
 						}
-						case PositionType::RIGHT:
+						case CMPositionType::RIGHT:
 						{
 							_chars[4] = _emptyChar;
-							_chars[0]->moveTo(PositionType::LEFT_CENTER);
+							_chars[0]->moveTo(CMPositionType::LEFT_CENTER);
 							_chars[1] = _chars[0];
 							_chars[0] = _emptyChar;
-							_chars[2]->moveTo(PositionType::RIGHT_CENTER);
+							_chars[2]->moveTo(CMPositionType::RIGHT_CENTER);
 							_chars[3] = _chars[2];
 							_chars[2] = _emptyChar;
 							break;
@@ -773,7 +805,7 @@ void GameScene::reloadScene()
 			if (cha)
 			{
 				auto pChar = &_chars[number];
-				PositionType tmpPT = PositionType::EMPTY;
+				CMPositionType tmpPT = CMPositionType::EMPTY;
 
 				Sprite *sp = nullptr;
 				if (cha->getCharactorFace(face))
@@ -784,19 +816,19 @@ void GameScene::reloadScene()
 				switch (number)
 				{
 				case 0:
-					tmpPT = PositionType::LEFT;
+					tmpPT = CMPositionType::LEFT;
 					break;
 				case 1:
-					tmpPT = PositionType::LEFT_CENTER;
+					tmpPT = CMPositionType::LEFT_CENTER;
 					break;
 				case 2:
-					tmpPT = PositionType::CENTER;
+					tmpPT = CMPositionType::CENTER;
 					break;
 				case 3:
-					tmpPT = PositionType::RIGHT_CENTER;
+					tmpPT = CMPositionType::RIGHT_CENTER;
 					break;
 				case 4:
-					tmpPT = PositionType::RIGHT;
+					tmpPT = CMPositionType::RIGHT;
 					break;
 				default:
 					break;
@@ -817,27 +849,27 @@ void GameScene::reloadScene()
 
 					switch (tmpPT)
 					{
-					case PositionType::LEFT:
+					case CMPositionType::LEFT:
 					{
 						sp->setPositionX(360);
 						break;
 					}
-					case PositionType::LEFT_CENTER:
+					case CMPositionType::LEFT_CENTER:
 					{
 						sp->setPositionX(427);
 						break;
 					}
-					case PositionType::CENTER:
+					case CMPositionType::CENTER:
 					{
 						sp->setPositionX(640);
 						break;
 					}
-					case PositionType::RIGHT_CENTER:
+					case CMPositionType::RIGHT_CENTER:
 					{
 						sp->setPositionX(853);
 						break;
 					}
-					case PositionType::RIGHT:
+					case CMPositionType::RIGHT:
 					{
 						sp->setPositionX(960);
 						break;
@@ -945,14 +977,34 @@ void GameScene::hideWaittingAnime()
     _wtIcon->setOpacity(0);
 }
 
-void GameScene::selectEventOfSkip(Ref* pSender,cocos2d::ui::CheckBoxEventType type)
+void GameScene::selectEventOfSkip(Ref* pSender,CheckBox::EventType type)
 {
+    log("CheckBox has active.");
     switch (type) {
-        case cocos2d::ui::CHECKBOX_STATE_EVENT_SELECTED:
+        case CheckBox::EventType::SELECTED:
+            log("SELECTED");
             startSkipPlay();
             break;
             
-        case cocos2d::ui::CHECKBOX_STATE_EVENT_UNSELECTED:
+        case CheckBox::EventType::UNSELECTED:
+            log("UNSELECTED");
+            stopSkipPlay();
+            break;
+        default:
+            break;
+    }
+}
+
+void GameScene::selectEventOfAuto(cocos2d::Ref *pSender, CheckBox::EventType type)
+{
+    switch (type) {
+        case CheckBox::EventType::SELECTED:
+            log("SELECTED");
+            startAutoPlay();
+            break;
+            
+        case CheckBox::EventType::UNSELECTED:
+            log("UNSELECTED");
             stopAutoPlay();
             break;
         default:

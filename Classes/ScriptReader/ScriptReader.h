@@ -66,8 +66,10 @@ class ScriptReader
 	/*
 	历史记录 <sign,index>存储哪个章节，执行到哪个位置。
 	相应逻辑未处理。
+     2016.08.12 已经在nextscript()中使用GameSystem::setDataValue()取代
 	*/
 	std::map<std::string, int> _record;
+    bool _isHaveRead;   //当前正在执行的脚本是否已读
 
 	std::string _currentSignName;	//当前章节名称
 	int _currentCommandIndex;	//脚本记录
@@ -117,6 +119,8 @@ public:
 	std::string getCurrentSignName();
 	int getCurrentCommandIndex();
 	void setCurrentCommandIndex(int value);
+    
+    bool getIsHaveRead();
 };
 
 #endif
