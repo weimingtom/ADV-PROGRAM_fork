@@ -428,6 +428,7 @@ void ScriptReader::nextScript()
 	{
 		log("End of Script..! CurrentScript");
 		//do something to done
+        returnToMenu();
 		return;
 	}
 

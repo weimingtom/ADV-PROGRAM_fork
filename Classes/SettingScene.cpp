@@ -69,6 +69,8 @@ bool SettingScene::init()
     
     _soundVolumeSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
     _soundVolumeSlidebar->setPosition(Vec2(712,77));
+    _soundVolumeSlidebar->setFloat(GameSystem::getInstance()->getSoundVolume());
+    
     stageLayer->addChild(_soundVolumeSlidebar);
     
 	//
@@ -122,4 +124,10 @@ void SettingScene::changeMusicVolume()
 	log("Music Value : %f", _musicVolumeSlidebar->getFloat());
 	GameSystem::getInstance()->setMusicVolume(_musicVolumeSlidebar->getFloat());
 	CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(GameSystem::getInstance()->getMusicVolume());
+}
+
+void SettingScene::changeSoundVolume()
+{
+    GameSystem::getInstance()->setSoundVolume(_soundVolumeSlidebar->getFloat());
+    CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(GameSystem::getInstance()->getSoundVolume());
 }

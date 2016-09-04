@@ -7,9 +7,8 @@ USING_NS_CC;
 
 #define CM CharactorManager::getInstance()
 
-
 //立绘位置
-enum PositionType
+enum CMPositionType
 {
 	EMPTY,	//没有位置
 	LEFT,	//左边
@@ -36,7 +35,7 @@ struct Charactor
 	Sprite* faceSprite;	//当前显示中的精灵，考虑到角色入场和离场所使用的存储的变量。
 	std::string currentFace;	//当前显示的立绘
 	bool positionIsLeft;	//显示的位置
-	PositionType currentPosition;	//当前显示的位置
+	CMPositionType currentPosition;	//当前显示的位置
 
 	Charactor()
 		:name("NoName")
@@ -66,38 +65,38 @@ struct Charactor
 		}
 	}
 
-	void moveTo(PositionType pt)
+	void moveTo(CMPositionType pt)
 	{
 		int Distance;	//立绘移动的位置
 		//auto actionTo = MoveTo::create(1, Point(Distance, 0));
         Size visibleSize = Director::getInstance()->getVisibleSize();
 		switch (pt)
 		{
-		case PositionType::LEFT:
+		case CMPositionType::LEFT:
 		{
 			//faceSprite->setPositionX(320);
             setAction(visibleSize.width / 4);
 			break;
 		}
-		case PositionType::LEFT_CENTER:
+		case CMPositionType::LEFT_CENTER:
 		{
 			//faceSprite->setPositionX(427);
             setAction(visibleSize.width / 3);
 			break;
 		}
-		case PositionType::CENTER:
+		case CMPositionType::CENTER:
 		{
 			//faceSprite->setPositionX(640);
 			setAction(visibleSize.width / 2);
 			break;
 		}
-		case PositionType::RIGHT_CENTER:
+		case CMPositionType::RIGHT_CENTER:
 		{
 			//faceSprite->setPositionX(853);
             setAction(visibleSize.width * 2 / 3);
 			break;
 		}
-		case PositionType::RIGHT:
+		case CMPositionType::RIGHT:
 		{
 			//faceSprite->setPositionX(960);
             setAction(visibleSize.width * 3 / 4);
@@ -127,7 +126,7 @@ struct Charactor
 			faceSprite->removeFromParent();
 			faceSprite = nullptr;
 			currentFace = "";
-			currentPosition = PositionType::EMPTY;
+			currentPosition = CMPositionType::EMPTY;
 		}
 	}
 };

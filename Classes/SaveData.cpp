@@ -153,13 +153,13 @@ void SaveData::updataData()
 		/*显示存档截图*/
 		_dataImage = Sprite::create("ui/saveload/pic_bg.png");
 		_dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-		_dataImage->setPosition(15, 101);
+		_dataImage->setPosition(80, 55);
 		_stageLayer->addChild(_dataImage);
 
 		/*显示存档日期*/
 		_dataDate = Label::createWithSystemFont("-/-/- --:--", "黑体", 20);
 		_dataDate->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		_dataDate->setPosition(170, 65);
+		_dataDate->setPosition(240, 65);
 		_stageLayer->addChild(_dataDate);
 
 		/*显示存档备注*/

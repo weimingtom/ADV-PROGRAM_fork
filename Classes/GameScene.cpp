@@ -9,6 +9,8 @@
 #include "LoadScene.h"
 #include "HistoryScene.h"
 #include "History.hpp"
+#include "PopupLayer.hpp"
+#include "MainMenuScene.h"
 
 #define SCRIPT_FILE "scenario/LD.txt"
 
@@ -136,7 +138,7 @@ bool GameScene::init()
     //auto buttonConfig = MenuItemImage::create("ui/dialog/button_config.png", "ui/dialog/button_config_down.png",CC_CALLBACK_0(GameScene::startSkipPlay, this));
 	//buttonConfig->setPosition(Vec2(1080,220));
 
-    auto buttonTitle = MenuItemImage::create("ui/dialog/menu.png", "ui/dialog/menu_on.png", CC_CALLBACK_0(GameScene::stopAutoPlay, this));
+    auto buttonTitle = MenuItemImage::create("ui/dialog/menu.png", "ui/dialog/menu_on.png", CC_CALLBACK_0(GameScene::showMenuScene, this));
     buttonTitle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	buttonTitle->setPosition(Vec2(1000,20));
 
@@ -699,8 +701,7 @@ void GameScene::showSaveScene()
 {
 	ScreenShoot();
 	createGameDate();	//向GameSystem更新GameData信息
-	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
-	Director::getInstance()->replaceScene(SaveScene::createScene());
+	Director::getInstance()->pushScene(SaveScene::createScene());
 	
 	//GameSystem::getInstance()->saveGameSceneInfo(1);
 	//this->setScale(1.0f);
@@ -710,6 +711,8 @@ void GameScene::ScreenShoot()
 {
 	//utils::captureScreen(nullptr, "savedata\\savedataImage.jpg");
 
+    float screenShootWidth = SCREEN_SHOOT_WIDTH;
+    float screenShootHeight = SCREEN_SHOOT_HEIGHT;
 	float scale = 0.1164f;	//缩小倍率
 	this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	auto render = RenderTexture::create(getContentSize().width*scale, getContentSize().height*scale);
@@ -768,8 +771,7 @@ void GameScene::clear()
 
 void GameScene::showLoadScene()
 {
-	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
-	Director::getInstance()->replaceScene(LoadScene::createScene());
+	Director::getInstance()->pushScene(LoadScene::createScene());
 }
 
 void GameScene::reloadScene()
@@ -935,8 +937,7 @@ void GameScene::showSelect(std::map<std::string, std::string> &options)
 
 void GameScene::showHistoryScene()
 {
-	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
-	Director::getInstance()->replaceScene(HistoryScene::createScene());
+	Director::getInstance()->pushScene(HistoryScene::createScene());
 }
 
 void GameScene::skipAction()
@@ -977,15 +978,15 @@ void GameScene::hideWaittingAnime()
 
 void GameScene::selectEventOfSkip(Ref* pSender,CheckBox::EventType type)
 {
-    log("CheckBox has active.");
+    //log("CheckBox has active.");
     switch (type) {
         case CheckBox::EventType::SELECTED:
-            log("SELECTED");
+            //log("SELECTED");
             startSkipPlay();
             break;
             
         case CheckBox::EventType::UNSELECTED:
-            log("UNSELECTED");
+            //log("UNSELECTED");
             stopSkipPlay();
             break;
         default:
@@ -997,15 +998,46 @@ void GameScene::selectEventOfAuto(cocos2d::Ref *pSender, CheckBox::EventType typ
 {
     switch (type) {
         case CheckBox::EventType::SELECTED:
-            log("SELECTED");
+            //log("SELECTED");
             startAutoPlay();
             break;
             
         case CheckBox::EventType::UNSELECTED:
-            log("UNSELECTED");
+            //log("UNSELECTED");
             stopAutoPlay();
             break;
         default:
             break;
     }
+}
+
+void GameScene::showMenuScene()
+{
+    //暂停演出
+    Director::getInstance()->pause();
+    //弹出提示窗
+    auto popupDialog = PopupLayer::create("ui/popup.png");
+    popupDialog->addLabelButton("Yes", CC_CALLBACK_0(GameScene::showMenuSceneYes, this));
+    popupDialog->addLabelButton("No", CC_CALLBACK_0(GameScene::showMenuSceneNo, this));
+    popupDialog->setString("Do you want to return to menu?");
+    this->addChild(popupDialog,255);
+}
+
+void GameScene::showMenuSceneYes()
+{
+    //恢复暂停演出
+    Director::getInstance()->resume();
+    //屏幕慢慢变黑
+    auto backLayer = LayerColor::create(Color4B::BLACK);
+    
+    //回到主菜单
+    GameSystem::getInstance()->setGameScene(MainMenu::createScene());
+    auto scene = GameSystem::getInstance()->getGameScene();
+    Director::getInstance()->replaceScene(scene);
+}
+
+void GameScene::showMenuSceneNo()
+{
+    //恢复暂停演出
+    Director::getInstance()->resume();
 }

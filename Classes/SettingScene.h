@@ -35,7 +35,8 @@ public:
 
 	void back();	//返回
 	void test();	//测试方法
-	void changeMusicVolume();
+	void changeMusicVolume();   //改变音乐音量
+    void changeSoundVolume();   //改变音效音量
 };
 
 #endif

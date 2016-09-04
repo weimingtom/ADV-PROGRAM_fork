@@ -12,6 +12,7 @@
 #define DEFAULT_SOUNDVOLUME 1.0f
 #define DEFAULT_TEXTSPEED 1.0f
 #define DEFAULT_AUTOSPEED 1.0f
+#define DEFAULT_ISSKIPREAD true
 #define MAX_SAVEDATA_NUMBER 100
 
 #define ISINIT "isInitialization"	//初始化标记
@@ -29,6 +30,9 @@ GameSystem::GameSystem()
 	_isLoadSuccess = false;
 	_savedata = new std::map<std::string, int>[100];
 	_gameSceneInfo = nullptr;
+    
+    //初始化各种数值
+    
 	//初始化存档列表
 	_savedataList = new GameSaveData[MAX_SAVEDATA_NUMBER];
 	createSavedata();
@@ -83,6 +87,7 @@ void GameSystem::setDefault()
 	setSoundVolume(DEFAULT_SOUNDVOLUME);
 	setTextSpeed(DEFAULT_TEXTSPEED);
 	setAutoSpeed(DEFAULT_AUTOSPEED);
+    setIsSkipRead(DEFAULT_ISSKIPREAD);
 	cocos2d::UserDefault::getInstance()->setBoolForKey(ISINIT, true);
 }
 
@@ -117,6 +122,11 @@ void GameSystem::setHaveRead(const std::string &key, int value)
     cocos2d::UserDefault::sharedUserDefault()->flush();//为什么其它没加这句？因为其它没加这句也在正常运行，我就不加先了。
 }
 
+void GameSystem::setIsSkipRead(bool value)
+{
+    cocos2d::UserDefault::getInstance()->setBoolForKey(ISSKIPREAD, value);
+}
+
 float GameSystem::getSystemVolume()
 {
 	return cocos2d::UserDefault::getInstance()->getFloatForKey(SYSTEMVOLUME);
@@ -145,6 +155,11 @@ float GameSystem::getAutoSpeed()
 int GameSystem::getHaveRead(const std::string &key)
 {
     return cocos2d::UserDefault::getInstance()->getIntegerForKey(key.c_str());
+}
+
+bool GameSystem::getIsSkipRead()
+{
+    return cocos2d::UserDefault::getInstance()->getBoolForKey(ISSKIPREAD);
 }
 
 void GameSystem::setDataValue(std::string &key, int value)
@@ -253,6 +268,7 @@ void GameSystem::saveGameSceneInfo(int i)
 		{
 			char tmp[100];
 			//sprintf(tmp, "%s%s", FileUtils::getInstance()->getWritablePath().c_str(), image);
+            //只保存图片的名字，不记录路径，因为在iOS中每一次启动进程WritablePath都是不一样的。
             sprintf(tmp, "%s", image);
 			fwrite(tmp, sizeof(char), strlen(tmp), savedata);
 		}
@@ -434,9 +450,9 @@ void GameSystem::updateGameSavedata(int i)
 		/*读取存档截图路径*/
 		ePos = data.find('\n', sPos);
 		temp = data.substr(sPos, ePos - sPos - 1);
-		Director::getInstance()->getTextureCache()->reloadTexture(temp);
+		Director::getInstance()->getTextureCache()->reloadTexture(FileUtils::getInstance()->getWritablePath() + temp);
 		//cocos2d::log(temp.c_str());
-		_savedataList[i].imageFile = temp;
+		_savedataList[i].imageFile = FileUtils::getInstance()->getWritablePath() + temp;
 		sPos = ePos + 1;
 		/*读取存档时间*/
 		ePos = data.find('\n', sPos);

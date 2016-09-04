@@ -14,6 +14,9 @@
 #define TEXTLABEL_SIZE_WIDTH 800
 #define TEXTLABEL_SIZE_HEIGHT 100
 
+#define SCREEN_SHOOT_WIDTH 100
+#define SCREEN_SHOOT_HEIGHT 80
+
 USING_NS_CC;
 using namespace ui;
 
@@ -50,6 +53,8 @@ class GameScene : public cocos2d::Layer
 	std::map<std::string, std::string> _currentOptions;	//当前选项
 	int _optionsNumber;	//当前选项数量
 
+    void showMenuSceneYes();    
+    void showMenuSceneNo();
 public:
 	GameScene();
 	~GameScene();
@@ -102,6 +107,7 @@ public:
 	void showSaveScene();	//进入存档界面
 	void showLoadScene();	//进入读档界面
 	void showHistoryScene();	//进入历史记录界面
+    void showMenuScene();       //返回主菜单
 
 	void ScreenShoot();	//截屏
 
@@ -114,7 +120,6 @@ public:
     void showWaittingAnime();
     void hideWaittingAnime();
     
-
 };
 
 #endif

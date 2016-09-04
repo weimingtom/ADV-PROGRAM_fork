@@ -108,6 +108,7 @@ public:
 	std::function<void(std::string &cName, std::string &face)> showCharator;	//显示立绘
 	std::function<void(std::string &name)> hideCharator;	//隐藏立绘
 	std::function<void(std::map<std::string, std::string> &options)> showSelect;	//显示选项
+    std::function<void()> returnToMenu; //返回主菜单。主要用于结束游戏
 
 	void loadScriptFile(std::string path);	//载入脚本数据
 	void clearScript();	//清理脚本数据

@@ -134,4 +134,5 @@ bool HistoryScene::init()
 void HistoryScene::back()
 {
 	Director::getInstance()->popScene();
+    //Director::getInstance()->resume();
 }
