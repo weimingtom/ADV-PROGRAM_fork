@@ -28,7 +28,7 @@ GameSystem::GameSystem()
 		setDefault();
 	}
 	_isLoadSuccess = false;
-	_savedata = new std::map<std::string, int>[100];
+	_savedata = new std::map<std::string, int>[100];    //为什么是100？我已经不记得了，大概当时想着可以存100个档案的变量，0作为当前游戏储存的变量吧。有空再改
 	_gameSceneInfo = nullptr;
     
     //初始化各种数值
@@ -48,6 +48,7 @@ GameSystem::GameSystem()
 
 GameSystem::~GameSystem()
 {
+    if (_savedata)
 	delete _savedata;
 	if (_gameSceneInfo)
 	{
@@ -191,6 +192,70 @@ int GameSystem::getDataValue(std::string &key)
 	}
 }
 
+bool GameSystem::isDataValueExists(const std::string &key)
+{
+    auto result = _savedata[0].find(key);
+    if (result != _savedata[0].end())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+std::string GameSystem::dataValueToString()
+{
+    std::string dataValueStr = "";
+    for (auto it=_savedata[0].begin(); it!=_savedata[0].end(); ++it)
+    {
+        dataValueStr += it->first;
+        dataValueStr += "=";
+        char* ch = new char[6];
+        //itoa(i, ch, 10);
+        sprintf(ch, "%d", it->second);
+        dataValueStr += ch;
+        delete[] (ch);
+        dataValueStr += ",";
+    }
+    return dataValueStr;
+}
+
+void GameSystem::stringToDataValue(const std::string &dataValueStr)
+{
+    //清空_savadata
+    if (_savedata != nullptr)
+    {
+        delete [] _savedata;
+    }
+    _savedata = new std::map<std::string, int>[100];
+    
+    log("dataValueStr = %s", dataValueStr.c_str());
+    
+    //对字符串进行处理
+    int sPos = 0;	//行头
+    int ePos = 0;	//行尾
+    std::string temp;	//临时储存一行信息
+    while(sPos < dataValueStr.length())
+    {
+        /*读取每一个分割*/
+        ePos = dataValueStr.find(',', sPos);
+        temp = dataValueStr.substr(sPos, ePos - sPos);
+        //对每一个分割进行处理
+        std::string key;
+        std::string value;
+        log("temp = %s", temp.c_str());
+        key = temp.substr(0, temp.find('=', 0));
+        value = temp.substr(key.length()+1, temp.length() - (key.length()+1));
+        log("key = %s, value = %s", key.c_str(), value.c_str());
+        
+        setDataValue(value, atoi(value.c_str()));
+        
+        sPos = ePos + 1;
+    }
+}
+
 void GameSystem::setData(std::map<std::string, int> *map)// = nullptr)
 {
 	if (map == nullptr)
@@ -216,6 +281,7 @@ bool GameSystem::getSavedata(int i)
 	char* ch = new char[4];
 	//itoa(i, ch, 10);
     sprintf(ch, "%d", i);
+    delete[] (ch);
 	return cocos2d::UserDefault::getInstance()->getBoolForKey(ch);
 }
 
@@ -341,6 +407,11 @@ void GameSystem::saveGameSceneInfo(int i)
 		sprintf(sCommandIndex, "%d", commandIndex);
 		fwrite(sCommandIndex, sizeof(char), strlen(sCommandIndex), savedata);
 		fputs("\r\n", savedata);
+        /*保存当前的变量*/
+        auto dataValueStr = dataValueToString();
+        fwrite(dataValueStr.c_str(), sizeof(char), strlen(dataValueStr.c_str()), savedata);
+        fputs("\r\n", savedata);
+        
 		fclose(savedata);
         
         cocos2d::log("savedata done");
@@ -572,6 +643,11 @@ bool GameSystem::loadGameSceneInfo(int i)
 		temp = data.substr(sPos, ePos - sPos - 1);
 		sPos = ePos + 1;
 		_gameSceneInfo->currentCommandIndex = atoi(temp.c_str());
+        /*读取变量信息*/
+        ePos = data.find('\n', sPos);
+        temp = data.substr(sPos, ePos - sPos - 1);
+        sPos = ePos + 1;
+        stringToDataValue(temp);
 
 		log("Load done.");
 		return true;

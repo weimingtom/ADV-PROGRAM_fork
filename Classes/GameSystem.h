@@ -102,10 +102,21 @@ public:
     int getHaveRead(const std::string &key);
     bool getIsSkipRead();
 
+    /*--处理变量存取部分--*/
+    //将key设为value值
 	void setDataValue(std::string &key, int value);
+    //获得key的value值，如果key不存在会返回0。使用前先用isDataValueExists(const std::string &key)判断一下变量是否存在。
 	int getDataValue(std::string &key);
+    //判断key变量是否存在于变量池中，返回布尔值。
+    bool isDataValueExists(const std::string &key);
+    //我忘了这是啥
 	void setData(std::map<std::string, int> *map = nullptr);
-
+    //将变量池转为string，用于变量池储存为存档数据。
+    std::string dataValueToString();
+    //将string转为变量池，用于读取存档数据为变量池。
+    void stringToDataValue(const std::string &dataValueStr);
+    
+    //存档管理
 	void setSavedata(int i, bool value);	//设置存档是否存在，value为true时则有存档
 	bool getSavedata(int i);
 

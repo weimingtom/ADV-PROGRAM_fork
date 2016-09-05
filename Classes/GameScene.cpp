@@ -715,7 +715,8 @@ void GameScene::ScreenShoot()
     float screenShootHeight = SCREEN_SHOOT_HEIGHT;
 	float scale = 0.1164f;	//缩小倍率
 	this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	auto render = RenderTexture::create(getContentSize().width*scale, getContentSize().height*scale);
+	//auto render = RenderTexture::create(getContentSize().width*scale, getContentSize().height*scale);
+    auto render = RenderTexture::create(SCREEN_SHOOT_WIDTH, SCREEN_SHOOT_HEIGHT);
 	render->begin();
 	this->setScale(scale);
 	this->visit();
