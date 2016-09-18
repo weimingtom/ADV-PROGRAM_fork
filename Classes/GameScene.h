@@ -23,17 +23,21 @@ using namespace ui;
 class GameScene : public cocos2d::Layer
 {
 	cocos2d::Label* _label;//文本框的文本层
-	//ScriptReader* _reader;	//脚本解析器
-
-	Label* _nameLabel;	//姓名框
-    Sprite* _nameWindow;
-	CharLabel* _textLabel;	//对白框
-	Sprite* _dialogWindow;	//文本框背景
+	//ScriptReader* _reader;	//脚本解析器（已移除，归入GameSystem管理）
+	Label* _nameLabel;	//姓名文本层
+    Sprite* _nameWindow;    //姓名框
+	CharLabel* _textLabel;	//对白文本层
+	Sprite* _dialogWindow;	//对白框
 	Layer* _backgroundLayer;	//背景层
 	Sprite* _backgroundSprite;	//背景图片
 	Layer* _charactorsLayer;	//立绘层
 	Layer* _selectLayer;	//选项层
-    Sprite* _wtIcon;
+    Layer* _menuLayer;      //菜单层
+    Sprite* _wtIcon;        //等待继续标记
+    Sprite* _autoIcon;      //自动播放标记
+    Sprite* _skipIcon;      //快进播放标记
+    
+    MenuItemImage* _btnMenu;    //呼出菜单按钮
     
     //窗口按钮
     CheckBox* CBskip;   //快进
@@ -44,6 +48,8 @@ class GameScene : public cocos2d::Layer
 	int _charNumber;	//储存立绘数量
 
 	bool _isPlayingMusic;	//音乐播放状态
+    bool _isAutoPlaying;    //自动播放状态
+    bool _isSkipPlaying;    //快进播放状态
 
 	std::string _backgroundKey;	//当前背景
 	std::string _backgroundMusicKey;	//当前背景音乐
@@ -108,7 +114,9 @@ public:
 	void showLoadScene();	//进入读档界面
 	void showHistoryScene();	//进入历史记录界面
     void showMenuScene();       //返回主菜单
-
+    void showMenuLayer();       //呼出游戏菜单
+    void showConfigScene();     //进入设置界面
+    
 	void ScreenShoot();	//截屏
 
 	void clear();	//清楚屏幕的所有东西

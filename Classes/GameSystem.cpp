@@ -56,7 +56,7 @@ GameSystem::~GameSystem()
 		_gameSceneInfo = nullptr;
 	}
 	delete _savedataList;
-	if (_screenShoot) _screenShoot->release();
+    //if (_screenShoot) _screenShoot->release();
 	if (_gameScene)
 	{
 		//delete _gameScene;

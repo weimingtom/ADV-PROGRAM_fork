@@ -5,8 +5,34 @@
 
 class MainMenu : public cocos2d::Layer
 {
+    //--绘制下雨效果--
+    cocos2d::DrawNode* drawNode;
+    
+    void update(float dt);
+    
+    struct Rain{
+        float x;
+        float y;
+        float landLen;
+        float len;
+        float alpha;
+        bool isLand;
+    };
+    
+    struct RainOver{
+        float x;
+        float y;
+        float r;
+        float alpha;
+    };
+    
+    std::vector<Rain*> rains;
+    std::vector<RainOver*> rainOvers;
+    
+    void appendRain();
+    //--------------
 public:
-	MainMenu();
+    MainMenu();
 	~MainMenu();
 
 	static cocos2d::Scene* createScene();

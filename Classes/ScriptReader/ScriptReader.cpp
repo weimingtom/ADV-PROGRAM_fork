@@ -43,7 +43,8 @@ void ScriptReader::initWithStage(Node* stage)
 	{
 		chars[i] = nullptr;
 	}
-
+    _currentSignName = "gameStart";
+    _currentCommandIndex = 0;
 }
 
 ScriptReader* ScriptReader::getInstance()

@@ -11,12 +11,13 @@
 #include "History.hpp"
 #include "PopupLayer.hpp"
 #include "MainMenuScene.h"
+#include "SettingScene.h"
 
 #define SCRIPT_FILE "scenario/LD.txt"
 
 USING_NS_CC;
 
-GameScene::GameScene() 
+GameScene::GameScene()
 	:_label(nullptr)
 	, _backgroundSprite(nullptr)
 	, _charNumber(0)
@@ -27,6 +28,8 @@ GameScene::GameScene()
 	, _currentText("")
 	//, _currentOptions(nullptr)
 	, _optionsNumber(0)
+    , _isAutoPlaying(false)
+    , _isSkipPlaying(false)
 {
 	_emptyChar = new Charactor;
 }
@@ -48,6 +51,8 @@ GameScene::~GameScene()
 			_chars[i] = nullptr;
 		}
 	}
+    _isAutoPlaying = false;
+    _isSkipPlaying = false;
 }
 
 Scene* GameScene::createScene()
@@ -90,36 +95,37 @@ bool GameScene::init()
 	//对话框
 	_dialogWindow = Sprite::create("ui/dialog/dialog_bg.png");
     _dialogWindow->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 176));
+	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 150));
 	this->addChild(_dialogWindow,10);
 
+    _textLabel = CharLabel::create("", 30, CC_CALLBACK_0(GameScene::showWaittingAnime, this));
+    _textLabel->setPosition(100,_dialogWindow->getContentSize().height - 10);
+    _textLabel->setColor(Color3B::WHITE);
+    //_textLabel->setCharLabelSize(800, 200);
+    _textLabel->setContentSize(Size(_dialogWindow->getContentSize().width - 100*2, _dialogWindow->getContentSize().height - 10*2));
+    _dialogWindow->addChild(_textLabel,12);
+    
     //wtIcon
     _wtIcon = Sprite::create("ui/wait_point.png");
-    _wtIcon->setPosition(Vec2(950, 65));
+    _wtIcon->setPosition(_dialogWindow->getContentSize().width - 50, 25);
     _wtIcon->setOpacity(0);
     _dialogWindow->addChild(_wtIcon);
     
 	//文本框
-	_nameLabel = Label::createWithSystemFont("", "微软雅黑", 30);
-	_nameLabel->setColor(Color3B::WHITE);
-	_nameLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-	_nameLabel->setPosition(140, 190);
-	_dialogWindow->addChild(_nameLabel,11);
-    
     _nameWindow = Sprite::create("ui/dialog/dialog_name.png");
     _nameWindow->setPosition(170,190);
     _nameWindow->setOpacity(0);
     _dialogWindow->addChild(_nameWindow,10);
 
-	_textLabel = CharLabel::create("", 30, CC_CALLBACK_0(GameScene::showWaittingAnime, this));
-	//_textLabel->setPosition(_nameLabel->getPositionX(), _nameLabel->getPositionY() - 25);
-    _textLabel->setPosition(104,150);
-	_textLabel->setColor(Color3B::WHITE);
-    //_textLabel->setCharLabelSize(800, 200);
-    _textLabel->setContentSize(Size(TEXTLABEL_SIZE_WIDTH, TEXTLABEL_SIZE_HEIGHT));
-	_dialogWindow->addChild(_textLabel,12);
-
-	//对话框按钮
+    _nameLabel = Label::createWithSystemFont("", "微软雅黑", 30);
+    _nameLabel->setColor(Color3B::WHITE);
+    _nameLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _nameLabel->setPosition(Vec2(_nameWindow->getContentSize().width/2, _nameWindow->getContentSize().height/2));
+    _nameWindow->addChild(_nameLabel,11);
+    
+	//-----------对话框按钮----------
+    /*
+    ////PC端适用，移动端的话按钮太小了
 	//auto buttonDict = MenuItemImage::create("ui/dialog/button_dict.png", "ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
 	//buttonDict->setPosition(Vec2(840,220));
 
@@ -157,11 +163,35 @@ bool GameScene::init()
 	auto menu = Menu::create(buttonSave, buttonLoad, buttonLog, buttonTitle, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 13);
+     */
+    //----------------------------------------------
+    
+    //菜单按钮（移动端适用）
+    _btnMenu = MenuItemImage::create("ui/dialog/btn_menu_normal.png", "ui/dialog/btn_menu_touch.png", CC_CALLBACK_0(GameScene::showMenuLayer, this));
+    _btnMenu->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _btnMenu->setPosition(visibleSize.width + origin.x - 50, visibleSize.height + origin.y - 50);
+    auto menu = Menu::create(_btnMenu, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 13);
+    
+    //自动播放图标
+    _autoIcon = Sprite::create("ui/dialog/dialog_auto.png");
+    _autoIcon->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
+    _autoIcon->setPosition(Vec2(_dialogWindow->getContentSize().width, _dialogWindow->getContentSize().height + 10));
+    _autoIcon->setOpacity(0);
+    _dialogWindow->addChild(_autoIcon);
+    
+    //快进播放图标
+    _skipIcon = Sprite::create("ui/dialog/dialog_skip.png");
+    _skipIcon->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
+    _skipIcon->setPosition(Vec2(_dialogWindow->getContentSize().width, _dialogWindow->getContentSize().height + 10));
+    _skipIcon->setOpacity(0);
+    _dialogWindow->addChild(_skipIcon);
+
 
 	//选项层
 	_selectLayer = Layer::create();
 	this->addChild(_selectLayer, 13);
-
 
 	//监听器
 	auto clickEvent = EventListenerTouchOneByOne::create();
@@ -233,6 +263,16 @@ void GameScene::showClickSign()
 void GameScene::screenClicked()
 {
 	//ScriptReader::getInstance()->nextScript();
+    //判断是否正在自动播放或者快进，如果是就停止
+    if (_isAutoPlaying)
+    {
+        stopAutoPlay();
+    }
+    if (_isSkipPlaying)
+    {
+        stopSkipPlay();
+    }
+    
     dialogClicked();
 }
 
@@ -347,17 +387,37 @@ void GameScene::stopSound()
 void GameScene::startAutoPlay()
 {
 	//schedule(schedule_selector(GameScene::autoPlay), GameSystem::getInstance()->getAutoSpeed());
-	schedule(schedule_selector(GameScene::autoPlay),1.0f);
+    _isAutoPlaying = true;
+    _autoIcon->setOpacity(255);
+    if (true)
+    {
+        _menuLayer->removeAllChildren();
+        _btnMenu->setOpacity(255);
+    }
+	//schedule(schedule_selector(GameScene::autoPlay),1.0f);
+    if (!_textLabel->isRunning())
+    {
+        this->runAction(Sequence::create(DelayTime::create(1.0f), CallFunc::create(CC_CALLBACK_0(GameScene::dialogClicked, this)), NULL));
+    }
 }
 
 void GameScene::stopAutoPlay()
 {
+    _isAutoPlaying = false;
+    _autoIcon->setOpacity(0);
 	unschedule(schedule_selector(GameScene::autoPlay));
 }
 
 void GameScene::startSkipPlay()
 {
     //schedule(schedule_selector(GameScene::autoPlay),0.01f);
+    _isSkipPlaying = true;
+    _skipIcon->setOpacity(255);
+    if (true)
+    {
+        _menuLayer->removeAllChildren();
+        _btnMenu->setOpacity(255);
+    }
     if (true)
     {
         log("start skip");
@@ -376,11 +436,15 @@ void GameScene::startSkipPlay()
 
 void GameScene::stopSkipPlay()
 {
+    _isSkipPlaying = false;
+    _skipIcon->setOpacity(0);
     unschedule(schedule_selector(GameScene::skipPlay));
+    unschedule(schedule_selector(GameScene::autoPlay));
 }
 
 void GameScene::autoPlay(float dt)
 {
+    
 	dialogClicked();
 }
                      
@@ -707,6 +771,11 @@ void GameScene::showSaveScene()
 	//this->setScale(1.0f);
 }
 
+void GameScene::showConfigScene()
+{
+    Director::getInstance()->pushScene(SettingScene::createScene());
+}
+
 void GameScene::ScreenShoot()
 {
 	//utils::captureScreen(nullptr, "savedata\\savedataImage.jpg");
@@ -969,6 +1038,12 @@ void GameScene::showWaittingAnime()
     auto action = FadeOut::create(0.8f);
     auto actionBack = action->reverse();
     _wtIcon->runAction(RepeatForever::create(Sequence::create(action,actionBack, NULL)));
+    
+    //
+    if (_isAutoPlaying)
+    {
+        this->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create(CC_CALLBACK_0(GameScene::dialogClicked, this)), NULL));
+    }
 }
 
 void GameScene::hideWaittingAnime()
@@ -1041,4 +1116,80 @@ void GameScene::showMenuSceneNo()
 {
     //恢复暂停演出
     Director::getInstance()->resume();
+}
+
+void GameScene::showMenuLayer()
+{
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    //隐藏呼出菜单按钮
+    _btnMenu->setOpacity(0);
+    
+    _menuLayer = Layer::create();
+    
+    //-------------
+    
+    auto background = LayerColor::create(Color4B(30,30,30,128));
+    _menuLayer->addChild(background);
+    
+    //加载菜单背景
+    auto menuBackground = Sprite::create("ui/dialog_menu/bg_menu.png");
+    menuBackground->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+    menuBackground->setPosition(visibleSize.width + origin.x, visibleSize.height + origin.y);
+    _menuLayer->addChild(menuBackground);
+    
+    //加载菜单按钮
+    auto btnSave = MenuItemImage::create("ui/dialog_menu/btn_menu_save_normal.png", "ui/dialog_menu/btn_menu_save_touch.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
+    //btnSave->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    
+    auto btnLoad = MenuItemImage::create("ui/dialog_menu/btn_menu_load_normal.png", "ui/dialog_menu/btn_menu_load_touch.png", CC_CALLBACK_0(GameScene::showLoadScene, this));
+    //btnLoad->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    
+    auto btnAuto = MenuItemImage::create("ui/dialog_menu/btn_menu_auto_normal.png", "ui/dialog_menu/btn_menu_auto_touch.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
+    
+    auto btnSkip = MenuItemImage::create("ui/dialog_menu/btn_menu_skip_normal.png", "ui/dialog_menu/btn_menu_skip_touch.png", CC_CALLBACK_0(GameScene::startSkipPlay, this));
+    
+    auto btnLog = MenuItemImage::create("ui/dialog_menu/btn_menu_log_normal.png", "ui/dialog_menu/btn_menu_log_touch.png", CC_CALLBACK_0(GameScene::showHistoryScene, this));
+    
+    auto btnConfig = MenuItemImage::create("ui/dialog_menu/btn_menu_config_normal.png", "ui/dialog_menu/btn_menu_config_touch.png");
+    
+    auto btnTitle = MenuItemImage::create("ui/dialog_menu/btn_menu_title_normal.png", "ui/dialog_menu/btn_menu_title_touch.png", CC_CALLBACK_0(GameScene::showMenuScene, this));
+    
+    auto menu = Menu::create(btnSave, btnLoad, btnAuto, btnSkip, btnLog, btnConfig, btnTitle, NULL);
+    //menu->setContentSize(menuBackground->getContentSize());
+    //menu->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+    menu->setPosition(visibleSize.width + origin.x - menuBackground->getContentSize().width/2, visibleSize.height + origin.y - menuBackground->getContentSize().height/2);
+    menu->alignItemsVerticallyWithPadding(0.0f);
+    _menuLayer->addChild(menu);
+    
+    
+    this->addChild(_menuLayer, 20);
+    
+    //阻断触碰事件
+    auto backgroundTouch = EventListenerTouchOneByOne::create();
+    backgroundTouch->onTouchBegan = [=] (Touch *t, Event *e)
+    {
+        return true;
+    };
+    backgroundTouch->onTouchEnded = [=] (Touch *t, Event *e)
+    {
+        log("Background touched.");
+        //碰到对话框以外的区域就释放整个层
+        this->runAction(Sequence::create(CallFunc::create(CC_CALLBACK_0(Node::removeFromParent, _menuLayer)), CallFunc::create(CC_CALLBACK_0(MenuItemImage::setOpacity, _btnMenu, 255)), NULL));
+    };
+    backgroundTouch->setSwallowTouches(true);
+    _menuLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(backgroundTouch, background);
+    
+    auto backgroundSpriteTouch = EventListenerTouchOneByOne::create();
+    backgroundSpriteTouch->onTouchBegan = [=] (Touch *t, Event *e)
+    {
+        if (menuBackground->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))
+        {
+            return true;
+        }
+        return false;
+    };
+    backgroundSpriteTouch->setSwallowTouches(true);
+    menuBackground->getEventDispatcher()->addEventListenerWithSceneGraphPriority(backgroundSpriteTouch, menuBackground);
+
 }
