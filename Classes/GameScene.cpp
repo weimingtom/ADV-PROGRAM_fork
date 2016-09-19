@@ -106,7 +106,7 @@ bool GameScene::init()
     _dialogWindow->addChild(_textLabel,12);
     
     //wtIcon
-    _wtIcon = Sprite::create("ui/wait_point.png");
+    _wtIcon = Sprite::create("ui/dialog/wait_icon.png");
     _wtIcon->setPosition(_dialogWindow->getContentSize().width - 50, 25);
     _wtIcon->setOpacity(0);
     _dialogWindow->addChild(_wtIcon);
@@ -763,7 +763,7 @@ void GameScene::unDisplayCharator(std::string cName)
 
 void GameScene::showSaveScene()
 {
-	ScreenShoot();
+	//ScreenShoot();
 	createGameDate();	//向GameSystem更新GameData信息
 	Director::getInstance()->pushScene(SaveScene::createScene());
 	
@@ -782,10 +782,11 @@ void GameScene::ScreenShoot()
 
     float screenShootWidth = SCREEN_SHOOT_WIDTH;
     float screenShootHeight = SCREEN_SHOOT_HEIGHT;
-	float scale = 0.1164f;	//缩小倍率
+	//float scale = 0.1546875f;	//缩小倍率
+    float scale = SCREEN_SHOOT_HEIGHT / getContentSize().height;
 	this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-	//auto render = RenderTexture::create(getContentSize().width*scale, getContentSize().height*scale);
-    auto render = RenderTexture::create(SCREEN_SHOOT_WIDTH, SCREEN_SHOOT_HEIGHT);
+	auto render = RenderTexture::create(getContentSize().width*scale, getContentSize().height*scale);
+    //auto render = RenderTexture::create(SCREEN_SHOOT_WIDTH, SCREEN_SHOOT_HEIGHT);
 	render->begin();
 	this->setScale(scale);
 	this->visit();
@@ -1120,10 +1121,13 @@ void GameScene::showMenuSceneNo()
 
 void GameScene::showMenuLayer()
 {
+    
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //隐藏呼出菜单按钮
     _btnMenu->setOpacity(0);
+    
+    ScreenShoot();
     
     _menuLayer = Layer::create();
     

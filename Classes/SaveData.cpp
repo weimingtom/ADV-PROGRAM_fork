@@ -23,11 +23,17 @@ SaveData::SaveData(int i)
 {
 	/*¼ÓÔØ°´Å¥µ×²ã*/
 	
-	_stageLayer = Layer::create();
-	_stageLayer->setContentSize(Size(917,130));
+	//_stageLayer = Layer::create();
+	//_stageLayer->setContentSize(Size(917,130));
 	//_stageLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	
-	//_stageLayer = Sprite::create("ui/saveload/noselected_bg.png");
+	_stageLayer = Sprite::create("ui/sl/btn_button_normal.png");
+    
+    this->setContentSize(_stageLayer->getContentSize());
+    
+    _stageLayer->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    _stageLayer->setPosition(Vec2(0, this->getContentSize().height));
+    
 	
 	_number = i;
 
@@ -36,10 +42,10 @@ SaveData::SaveData(int i)
 	onTouchEnded = [=](int i){};
 	//this->setTouchEnabled(true);
 
-	auto touchImage = Sprite::create("ui/saveload/selected_bg.png");
+	auto touchImage = Sprite::create("ui/sl/btn_button_touch.png");
 	touchImage->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	touchImage->setVisible(false);
-	_stageLayer->addChild(touchImage);
+	_stageLayer->addChild(touchImage,0);
 
 	auto eventTouch = EventListenerTouchOneByOne::create();
 
@@ -47,7 +53,7 @@ SaveData::SaveData(int i)
 	{
 		if (_stageLayer->getBoundingBox().containsPoint(this->convertTouchToNodeSpace(t)))	//Èç¹ûÅöµ½Ö¸Õë
 		{
-			//touchImage->setVisible(true);
+			touchImage->setVisible(true);
 			return true;
 		}
 		return false;
@@ -96,11 +102,13 @@ void SaveData::updataData()
 	if (savedata)
 	{
 		/*ÏÔÊ¾´æµµĞòºÅ*/
-		/*
-		auto dataNumber = Label::createWithSystemFont();
-		dataNumber->setPosition();
+		
+        char numberInChar[3];
+        sprintf(numberInChar,"%d", _number);
+        auto dataNumber = Label::createWithSystemFont((std::string)numberInChar, "ºÚÌå", 26);
+		dataNumber->setPosition(Vec2(16,9));
 		_stageLayer->addChild(dataNumber);
-		*/
+		
 
 		/*ÏÔÊ¾´æµµ½ØÍ¼*/
 
@@ -117,7 +125,7 @@ void SaveData::updataData()
 		{
 			
 			//_dataImage->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-			_dataImage->setPosition(80, 55);
+			_dataImage->setPosition(70, _stageLayer->getContentSize().height/2);
 			_stageLayer->addChild(_dataImage);
 		}
 
@@ -167,7 +175,7 @@ void SaveData::updataData()
 	}
 }
 
-Layer* SaveData::getStageLayer()
+Sprite* SaveData::getStageLayer()
 {
 	//log("data Number = %d", _number);
 	return _stageLayer;

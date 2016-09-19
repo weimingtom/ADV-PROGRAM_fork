@@ -40,17 +40,18 @@ bool SaveScene::init()
 	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
 	stageLayer->addChild(backgroundLayer);
 
-	auto backgroundWindow = Sprite::create("ui/saveload/save_bg.jpg");
+	auto backgroundWindow = Sprite::create("ui/sl/bg_save.jpg");
 	backgroundWindow->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundWindow);
 
 	/*º”‘ÿ∞¥≈•*/
 
 	//dataButtons[8];
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		dataButtons[i] = SaveData::create(i);
-		dataButtons[i]->setPosition(116, 368 - 150 * i);
+        dataButtons[i]->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		dataButtons[i]->setPosition(visibleSize.width/2 + origin.x + 50, 530 - 140 * i);
 		//dataButtons[i]->onTouchEnded = CC_CALLBACK_1(GameSystem::saveGameSceneInfo, GameSystem::getInstance());
 		eventTouch[i] = EventListenerTouchOneByOne::create();
 		eventTouch[i]->onTouchBegan = [=](Touch *t, Event *e)
