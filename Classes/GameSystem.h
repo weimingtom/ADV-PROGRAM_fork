@@ -10,7 +10,7 @@
 #define SOUNDVOLUME "SoundVolume"
 #define TEXTSPEED "TextSpeed"
 #define AUTOSPEED "AutoSpeed"
-#define ISSKIPREAD "IsSkipRead"
+#define ISSKIPALL "IsSkipAll"
 
 USING_NS_CC;
 
@@ -92,7 +92,7 @@ public:
 	void setTextSpeed(float value);
 	void setAutoSpeed(float value);
     void setHaveRead(const std::string &key, int value);
-    void setIsSkipRead(bool value); //设置是否跳过已阅
+    void setIsSkipAll(bool value); //设置是否跳过全部
 
 	float getSystemVolume();
 	float getMusicVolume();
@@ -100,7 +100,7 @@ public:
 	float getTextSpeed();
 	float getAutoSpeed();
     int getHaveRead(const std::string &key);
-    bool getIsSkipRead();
+    bool getIsSkipAll();
 
     /*--处理变量存取部分--*/
     //将key设为value值

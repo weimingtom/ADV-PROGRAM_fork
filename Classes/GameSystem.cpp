@@ -12,7 +12,7 @@
 #define DEFAULT_SOUNDVOLUME 1.0f
 #define DEFAULT_TEXTSPEED 1.0f
 #define DEFAULT_AUTOSPEED 1.0f
-#define DEFAULT_ISSKIPREAD true
+#define DEFAULT_ISSKIPALL false
 #define MAX_SAVEDATA_NUMBER 100
 
 #define ISINIT "isInitialization"	//初始化标记
@@ -88,7 +88,7 @@ void GameSystem::setDefault()
 	setSoundVolume(DEFAULT_SOUNDVOLUME);
 	setTextSpeed(DEFAULT_TEXTSPEED);
 	setAutoSpeed(DEFAULT_AUTOSPEED);
-    setIsSkipRead(DEFAULT_ISSKIPREAD);
+    setIsSkipAll(DEFAULT_ISSKIPALL);
 	cocos2d::UserDefault::getInstance()->setBoolForKey(ISINIT, true);
 }
 
@@ -123,9 +123,9 @@ void GameSystem::setHaveRead(const std::string &key, int value)
     cocos2d::UserDefault::sharedUserDefault()->flush();//为什么其它没加这句？因为其它没加这句也在正常运行，我就不加先了。
 }
 
-void GameSystem::setIsSkipRead(bool value)
+void GameSystem::setIsSkipAll(bool value)
 {
-    cocos2d::UserDefault::getInstance()->setBoolForKey(ISSKIPREAD, value);
+    cocos2d::UserDefault::getInstance()->setBoolForKey(ISSKIPALL, value);
 }
 
 float GameSystem::getSystemVolume()
@@ -158,9 +158,9 @@ int GameSystem::getHaveRead(const std::string &key)
     return cocos2d::UserDefault::getInstance()->getIntegerForKey(key.c_str());
 }
 
-bool GameSystem::getIsSkipRead()
+bool GameSystem::getIsSkipAll()
 {
-    return cocos2d::UserDefault::getInstance()->getBoolForKey(ISSKIPREAD);
+    return cocos2d::UserDefault::getInstance()->getBoolForKey(ISSKIPALL);
 }
 
 void GameSystem::setDataValue(std::string &key, int value)

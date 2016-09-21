@@ -41,64 +41,68 @@ bool SettingScene::init()
 	auto backgroundLayer = LayerColor::create(Color4B::BLACK);
 	stageLayer->addChild(backgroundLayer);
 
+    /*
 	auto backgroundImage = Sprite::create("ui/backgroundEffect/fullscreen_smoke.png");
 	backgroundImage->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundImage);
-
-	auto backgroundBox = Sprite::create("ui/config/window_bg.png");
+     */
+    
+	auto backgroundBox = Sprite::create("ui/config/bg_config.jpg");
 	backgroundBox->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	stageLayer->addChild(backgroundBox);
 	
 	/*加载按钮*/
 
 	//SliderBar
-	_musicVolumeSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
-	_musicVolumeSlidebar->setPosition(Vec2(712, 127));
-	_musicVolumeSlidebar->setFloat(GameSystem::getInstance()->getMusicVolume());
-	_musicVolumeSlidebar->moveEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
-	_musicVolumeSlidebar->touchEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
-	stageLayer->addChild(_musicVolumeSlidebar);
+    _textSpeedSlb = Slidebar::createSlidebar("ui/config/slb_background.png", "ui/config/slb_ball.png");
+    _textSpeedSlb->setPosition(Vec2(825 + origin.x, 510 + origin.y));
+    _textSpeedSlb->setFloat(GameSystem::getInstance()->getTextSpeed());
+    _textSpeedSlb->moveEvent = CC_CALLBACK_0(SettingScene::changeTextSpeed, this);
+    _textSpeedSlb->touchEvent = CC_CALLBACK_0(SettingScene::changeTextSpeed, this);
+    stageLayer->addChild(_textSpeedSlb);
 	
-    _autoSpeedSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
-    _autoSpeedSlidebar->setPosition(Vec2(712,320));
+    _autoSpeedSlidebar = Slidebar::createSlidebar("ui/config/slb_background.png", "ui/config/slb_ball.png");
+    _autoSpeedSlidebar->setPosition(Vec2(825 + origin.x, 442 + origin.y));
+    _autoSpeedSlidebar->setFloat(GameSystem::getInstance()->getAutoSpeed());
+    _autoSpeedSlidebar->moveEvent = CC_CALLBACK_0(SettingScene::changeAutoSpeed, this);
+    _autoSpeedSlidebar->touchEvent = CC_CALLBACK_0(SettingScene::changeAutoSpeed, this);
     stageLayer->addChild(_autoSpeedSlidebar);
+
+    _musicVolumeSlidebar = Slidebar::createSlidebar("ui/config/slb_background.png", "ui/config/slb_ball.png");
+    _musicVolumeSlidebar->setPosition(Vec2(825 + origin.x, 374 + origin.y));
+    _musicVolumeSlidebar->setFloat(GameSystem::getInstance()->getMusicVolume());
+    _musicVolumeSlidebar->moveEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
+    _musicVolumeSlidebar->touchEvent = CC_CALLBACK_0(SettingScene::changeMusicVolume, this);
+    stageLayer->addChild(_musicVolumeSlidebar);
     
-    _skipSpeedSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
+    /*
+    _skipSpeedSlidebar = Slidebar::createSlidebar("ui/config/slb_background.png", "ui/config/slb_ball.png");
     _skipSpeedSlidebar->setPosition(Vec2(712,280));
     stageLayer->addChild(_skipSpeedSlidebar);
+     */
     
-    _soundVolumeSlidebar = Slidebar::createSlidebar("ui/scroll_bar.png", "ui/scroll_point.png");
-    _soundVolumeSlidebar->setPosition(Vec2(712,77));
+    _soundVolumeSlidebar = Slidebar::createSlidebar("ui/config/slb_background.png", "ui/config/slb_ball.png");
+    _soundVolumeSlidebar->setPosition(Vec2(825 + origin.x, 306 + origin.y));
     _soundVolumeSlidebar->setFloat(GameSystem::getInstance()->getSoundVolume());
-    
+    _musicVolumeSlidebar->moveEvent = CC_CALLBACK_0(SettingScene::changeSoundVolume, this);
+    _musicVolumeSlidebar->touchEvent = CC_CALLBACK_0(SettingScene::changeSoundVolume, this);
     stageLayer->addChild(_soundVolumeSlidebar);
     
 	//
 
-	//测试按钮
-	auto testButton = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
-	testButton->setPosition(Vec2(515, 438));
-	auto testButton2 = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
-	testButton2->setPosition(Vec2(664, 438));
-
-    auto testButton3 = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
-    testButton3->setPosition(Vec2(515, 243));
-    auto testButton4 = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/charbox_on.png");
-    testButton4->setPosition(Vec2(664, 243));
+	auto ebSkipReadOnly = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/config/yes.png");
+	ebSkipReadOnly->setPosition(Vec2(740, 212));
+	auto ebSkipAll = EasyButton::createEasyButton("ui/charbox_off.png", "ui/charbox_off.png", "ui/config/yes.png");
+	ebSkipAll->setPosition(Vec2(940, 212));
     
-	_testRadio = RadioButton::createRadioButton(testButton, testButton2,nullptr);
-	_testRadio->setSelectedNumber(1);
-	stageLayer->addChild(_testRadio);
-	_testRadio->touchEvent = CC_CALLBACK_0(SettingScene::test, this);
-
-    _testRadio2 = RadioButton::createRadioButton(testButton3, testButton4,nullptr);
-    _testRadio2->setSelectedNumber(1);
-    stageLayer->addChild(_testRadio2);
-    
+	_isSkipAll = RadioButton::createRadioButton(ebSkipReadOnly, ebSkipAll,nullptr);
+	_isSkipAll->setSelectedNumber(1);
+	stageLayer->addChild(_isSkipAll);
+	//_isSkipAll->touchEvent = CC_CALLBACK_0(SettingScene::test, this);
     
     
 	//返回按钮
-	auto buttonBack = MenuItemImage::create("ui/button_return.png", "ui/button_return_down.png", CC_CALLBACK_0(SettingScene::back, this));
+	auto buttonBack = MenuItemImage::create("ui/config/btn_back_normal.png", "ui/config/btn_backtouch.png", CC_CALLBACK_0(SettingScene::back, this));
 	buttonBack->setPosition(Vec2(175, 90));
 	auto menu = Menu::create(buttonBack, NULL);
 	menu->setPosition(Vec2::ZERO);
@@ -114,11 +118,6 @@ void SettingScene::back()
 	Director::getInstance()->popScene();
 }
 
-void SettingScene::test()
-{
-	log("RadioButton Number: %d", _testRadio->getSelectedNumber());
-}
-
 void SettingScene::changeMusicVolume()
 {
 	log("Music Value : %f", _musicVolumeSlidebar->getFloat());
@@ -130,4 +129,26 @@ void SettingScene::changeSoundVolume()
 {
     GameSystem::getInstance()->setSoundVolume(_soundVolumeSlidebar->getFloat());
     CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(GameSystem::getInstance()->getSoundVolume());
+}
+
+void SettingScene::changeTextSpeed()
+{
+    GameSystem::getInstance()->setTextSpeed(_textSpeedSlb->getFloat());
+}
+
+void SettingScene::changeAutoSpeed()
+{
+    GameSystem::getInstance()->setAutoSpeed(_autoSpeedSlidebar->getFloat());
+}
+
+void SettingScene::changeIsSkipAll()
+{
+    if (_isSkipAll->getSelectedNumber())
+    {
+        GameSystem::getInstance()->setIsSkipAll(false);
+    }
+    else
+    {
+        
+    }
 }
