@@ -1,5 +1,5 @@
 #include "GameSystem.h"
-#include "CCUserDefault.h"
+//#include "CCUserDefault.h"
 #include <stdlib.h>
 #include "ScriptReader/ScriptReader.h"
 #include "ScriptReader/CharactorManager.h"

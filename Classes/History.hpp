@@ -5,22 +5,22 @@
 #include "cocos2d.h"
 
 USING_NS_CC;
-#define MAXIMUM 80 //æœ€å¤§è®°å½•æ•°
-/*è®°å½•ç±»å‹*/
+#define MAXIMUM 80 //×î´ó¼ÇÂ¼Êı
+/*¼ÇÂ¼ÀàĞÍ*/
 enum recordType
 {
-    null,   //æ—ç™½ï¼ˆé»˜è®¤ï¼‰
-    talk,   //å¯¹ç™½
-    selecte  //é€‰é¡¹
+    null,   //ÅÔ°×£¨Ä¬ÈÏ£©
+    talk,   //¶Ô°×
+    selecte  //Ñ¡Ïî
 };
 
-/*è®°å½•*/
+/*¼ÇÂ¼*/
 struct record
 {
-    recordType type;    //è®°å½•ç±»å‹
-    std::string text;   //è®°å½•æ–‡æœ¬
-    std::string name;   //è®°å½•è§’è‰²å
-    Color4B color;      //è®°å½•é¢œè‰²
+    recordType type;    //¼ÇÂ¼ÀàĞÍ
+    std::string text;   //¼ÇÂ¼ÎÄ±¾
+    std::string name;   //¼ÇÂ¼½ÇÉ«Ãû
+    Color4B color;      //¼ÇÂ¼ÑÕÉ«
     record(recordType type, std::string text, std::string name = "", Color4B color = Color4B::WHITE)
         : type(type)
         , text(text)
@@ -33,20 +33,20 @@ struct record
 
 class HistoryLogger
 {
-    int _maximum;   //æœ€å¤§è®°å½•æ•°
-    int _currentLog;    //å½“å‰è®°å½•
+    int _maximum;   //×î´ó¼ÇÂ¼Êı
+    int _currentLog;    //µ±Ç°¼ÇÂ¼
     record* _records[MAXIMUM];
-    static HistoryLogger* _instance;    //å®ä¾‹
+    static HistoryLogger* _instance;    //ÊµÀı
 public:
     HistoryLogger();
     ~HistoryLogger();
-    static HistoryLogger* getInstance(); //è·å–å®ä¾‹
-	void destoryInstance(); //é”€æ¯å®ä¾‹
-	record* createRecord(const std::string type, std::string text, std::string name, Color4B color = Color4B::WHITE);    //ç”Ÿæˆè®°å½•
+    static HistoryLogger* getInstance(); //»ñÈ¡ÊµÀı
+	void destoryInstance(); //Ïú»ÙÊµÀı
+	record* createRecord(const std::string type, std::string text, std::string name, Color4B color = Color4B::WHITE);    //Éú³É¼ÇÂ¼
 	void addRecord(const std::string type, std::string text, std::string name, Color4B color = Color4B::WHITE);
     void pushRecord(record record);
-	void addRecord(record* record);	//æ·»åŠ è®°å½•
-	int getLength();	//è·å–å½“å‰å†å²è®°å½•æ¡æ•°
+	void addRecord(record* record);	//Ìí¼Ó¼ÇÂ¼
+	int getLength();	//»ñÈ¡µ±Ç°ÀúÊ·¼ÇÂ¼ÌõÊı
 	record* getRecord(int i);
 };
 
