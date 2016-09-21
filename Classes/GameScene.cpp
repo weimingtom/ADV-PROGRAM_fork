@@ -1,4 +1,4 @@
-ï»¿#include "GameScene.h"
+#include "GameScene.h"
 
 #include "SimpleAudioEngine.h"
 #include "GameSystem.h"
@@ -79,12 +79,12 @@ bool GameScene::init()
 	auto stageLayer = Layer::create();
 	addChild(stageLayer,13);
 
-	//èƒŒæ™¯å±‚
+	//±³¾°²ã
 	_backgroundLayer = Layer::create();
 	//_backgroundLayer->setLocalZOrder(0);
 	this->addChild(_backgroundLayer, -1);
 
-	//ç«‹ç»˜å±‚
+	//Á¢»æ²ã
 	_charactorsLayer = Layer::create();
 	this->addChild(_charactorsLayer, 1);
 	for (int i = 0; i < 5; i++)
@@ -92,7 +92,7 @@ bool GameScene::init()
 		_chars[i] = new Charactor;
 	}
 
-	//å¯¹è¯æ¡†
+	//¶Ô»°¿ò
 	_dialogWindow = Sprite::create("ui/dialog/dialog_bg.png");
     _dialogWindow->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 	_dialogWindow->setPosition(Vec2(visibleSize.width / 2, 150));
@@ -111,21 +111,21 @@ bool GameScene::init()
     _wtIcon->setOpacity(0);
     _dialogWindow->addChild(_wtIcon);
     
-	//æ–‡æœ¬æ¡†
+	//ÎÄ±¾¿ò
     _nameWindow = Sprite::create("ui/dialog/dialog_name.png");
     _nameWindow->setPosition(170,190);
     _nameWindow->setOpacity(0);
     _dialogWindow->addChild(_nameWindow,10);
 
-    _nameLabel = Label::createWithSystemFont("", "å¾®è½¯é›…é»‘", 30);
+    _nameLabel = Label::createWithSystemFont("", "Î¢ÈíÑÅºÚ", 30);
     _nameLabel->setColor(Color3B::WHITE);
     _nameLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     _nameLabel->setPosition(Vec2(_nameWindow->getContentSize().width/2, _nameWindow->getContentSize().height/2));
     _nameWindow->addChild(_nameLabel,11);
     
-	//-----------å¯¹è¯æ¡†æŒ‰é’®----------
+	//-----------¶Ô»°¿ò°´Å¥----------
     /*
-    ////PCç«¯é€‚ç”¨ï¼Œç§»åŠ¨ç«¯çš„è¯æŒ‰é’®å¤ªå°äº†
+    ////PC¶ËÊÊÓÃ£¬ÒÆ¶¯¶ËµÄ»°°´Å¥Ì«Ð¡ÁË
 	//auto buttonDict = MenuItemImage::create("ui/dialog/button_dict.png", "ui/dialog/button_dict_down.png", CC_CALLBACK_0(GameScene::startAutoPlay, this));
 	//buttonDict->setPosition(Vec2(840,220));
 
@@ -166,7 +166,7 @@ bool GameScene::init()
      */
     //----------------------------------------------
     
-    //èœå•æŒ‰é’®ï¼ˆç§»åŠ¨ç«¯é€‚ç”¨ï¼‰
+    //²Ëµ¥°´Å¥£¨ÒÆ¶¯¶ËÊÊÓÃ£©
     _btnMenu = MenuItemImage::create("ui/dialog/btn_menu_normal.png", "ui/dialog/btn_menu_touch.png", CC_CALLBACK_0(GameScene::showMenuLayer, this));
     _btnMenu->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     _btnMenu->setPosition(visibleSize.width + origin.x - 50, visibleSize.height + origin.y - 50);
@@ -174,14 +174,14 @@ bool GameScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 13);
     
-    //è‡ªåŠ¨æ’­æ”¾å›¾æ ‡
+    //×Ô¶¯²¥·ÅÍ¼±ê
     _autoIcon = Sprite::create("ui/dialog/dialog_auto.png");
     _autoIcon->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
     _autoIcon->setPosition(Vec2(_dialogWindow->getContentSize().width, _dialogWindow->getContentSize().height + 10));
     _autoIcon->setOpacity(0);
     _dialogWindow->addChild(_autoIcon);
     
-    //å¿«è¿›æ’­æ”¾å›¾æ ‡
+    //¿ì½ø²¥·ÅÍ¼±ê
     _skipIcon = Sprite::create("ui/dialog/dialog_skip.png");
     _skipIcon->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
     _skipIcon->setPosition(Vec2(_dialogWindow->getContentSize().width, _dialogWindow->getContentSize().height + 10));
@@ -189,11 +189,11 @@ bool GameScene::init()
     _dialogWindow->addChild(_skipIcon);
 
 
-	//é€‰é¡¹å±‚
+	//Ñ¡Ïî²ã
 	_selectLayer = Layer::create();
 	this->addChild(_selectLayer, 13);
 
-	//ç›‘å¬å™¨
+	//¼àÌýÆ÷
 	auto clickEvent = EventListenerTouchOneByOne::create();
 	clickEvent->onTouchBegan = [=](Touch *t, Event *e)
 	{
@@ -213,10 +213,10 @@ bool GameScene::init()
 	};
 	//_dialogWindow->getEventDispatcher()->addEventListenerWithSceneGraphPriority(dialogClickEvent, _dialogWindow);
 
-	//åˆ›å»ºScriptReaderå¯¹è±¡
+	//´´½¨ScriptReader¶ÔÏó
 	
 	ScriptReader::getInstance()->initWithStage(stageLayer);
-	//ç»‘å®šreaderåŠŸèƒ½
+	//°ó¶¨reader¹¦ÄÜ
     
 	ScriptReader::getInstance()->showText = CC_CALLBACK_1(GameScene::showText, this);
 	ScriptReader::getInstance()->showName = CC_CALLBACK_1(GameScene::showName, this);
@@ -263,7 +263,7 @@ void GameScene::showClickSign()
 void GameScene::screenClicked()
 {
 	//ScriptReader::getInstance()->nextScript();
-    //åˆ¤æ–­æ˜¯å¦æ­£åœ¨è‡ªåŠ¨æ’­æ”¾æˆ–è€…å¿«è¿›ï¼Œå¦‚æžœæ˜¯å°±åœæ­¢
+    //ÅÐ¶ÏÊÇ·ñÕýÔÚ×Ô¶¯²¥·Å»òÕß¿ì½ø£¬Èç¹ûÊÇ¾ÍÍ£Ö¹
     if (_isAutoPlaying)
     {
         stopAutoPlay();
@@ -310,7 +310,7 @@ void GameScene::showText(std::string &text)
 void GameScene::changeBackground(std::string &key)
 {
 	auto background = BM->getBackground(key);
-	if (background.compare("") == 0) return;	//å¦‚æžœæ‰¾ä¸åˆ°å°±é€€å‡º
+	if (background.compare("") == 0) return;	//Èç¹ûÕÒ²»µ½¾ÍÍË³ö
 	_backgroundKey = key;
 	auto backgroundSprite = Sprite::create(background);
 	backgroundSprite->setAnchorPoint(Vec2(0, 0));
@@ -496,11 +496,11 @@ void GameScene::createGameDate()
 
 void GameScene::displayCharator(std::string cName, std::string face)
 {
-	auto cha = CM->getCharactor(cName);	//èŽ·å–è§’è‰²
+	auto cha = CM->getCharactor(cName);	//»ñÈ¡½ÇÉ«
     log("cName = %s, Name = %s",cName.c_str(),cha->name.c_str());
 	if (cha && cha->getCharactorFace(face))
 	{
-		bool isNeedShow = false;	//åˆ¤æ–­æ˜¯å¦éœ€è¦é‡æ–°æ˜¾ç¤ºäººç‰©ç«‹ç»˜
+		bool isNeedShow = false;	//ÅÐ¶ÏÊÇ·ñÐèÒªÖØÐÂÏÔÊ¾ÈËÎïÁ¢»æ
 		if (cha->faceSprite)
 		{
 			log("CurrentFace = %s, Face = %s", cha->currentFace.c_str(), face.c_str());
@@ -764,7 +764,7 @@ void GameScene::unDisplayCharator(std::string cName)
 void GameScene::showSaveScene()
 {
 	//ScreenShoot();
-	createGameDate();	//å‘GameSystemæ›´æ–°GameDataä¿¡æ¯
+	createGameDate();	//ÏòGameSystem¸üÐÂGameDataÐÅÏ¢
 	Director::getInstance()->pushScene(SaveScene::createScene());
 	
 	//GameSystem::getInstance()->saveGameSceneInfo(1);
@@ -782,7 +782,7 @@ void GameScene::ScreenShoot()
 
     float screenShootWidth = SCREEN_SHOOT_WIDTH;
     float screenShootHeight = SCREEN_SHOOT_HEIGHT;
-	//float scale = 0.1546875f;	//ç¼©å°å€çŽ‡
+	//float scale = 0.1546875f;	//ËõÐ¡±¶ÂÊ
     float scale = SCREEN_SHOOT_HEIGHT / getContentSize().height;
 	this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 	auto render = RenderTexture::create(getContentSize().width*scale, getContentSize().height*scale);
@@ -799,7 +799,7 @@ void GameScene::ScreenShoot()
 void GameScene::clear()
 {
     log("Clearing");
-	/*æ¸…é™¤æ‰€æœ‰ç«‹ç»˜*/
+	/*Çå³ýËùÓÐÁ¢»æ*/
 	for (int i = 0; i < MAX_CHARACTOR_NUMBER; i++)
 	{
         log("_chars[%i]->key = %s",i,_chars[i]->key.c_str());
@@ -811,10 +811,10 @@ void GameScene::clear()
 	}
 	_charNumber = 0;
 
-	/*åœæ­¢æ’­æ”¾éŸ³ä¹*/
+	/*Í£Ö¹²¥·ÅÒôÀÖ*/
 	stopBackgroundMusic();
 
-	/*æ¸…æ¥šå½“å‰èƒŒæ™¯*/
+	/*Çå³þµ±Ç°±³¾°*/
 	//std::string black = "black";
 	//changeBackground(black);
 
@@ -823,15 +823,15 @@ void GameScene::clear()
 	_backgroundLayer->addChild(backgroundSprite);
 	_backgroundSprite = backgroundSprite;
 
-	/*åœæ­¢å½“å‰éŸ³æ•ˆ*/
+	/*Í£Ö¹µ±Ç°ÒôÐ§*/
 	stopSound();
 
-	/*æ¸…ç©ºå½“å‰æ–‡æœ¬å±‚*/
+	/*Çå¿Õµ±Ç°ÎÄ±¾²ã*/
 	std::string empty = "";
 	showName(empty);
 	showText(empty);
 
-	/*æ¸…ç©ºé€‰é¡¹*/
+	/*Çå¿ÕÑ¡Ïî*/
 	if (_optionsNumber)
 	{
 		_optionsNumber = 0;
@@ -849,7 +849,7 @@ void GameScene::reloadScene()
 {
 	if (GameSystem::getInstance()->getIsLoadSuccess())
 	{ 
-		/*è®¾ç½®èƒŒæ™¯*/
+		/*ÉèÖÃ±³¾°*/
 		auto background = BM->getBackground(GameSystem::getInstance()->getGameSceneInfo()->backgroundKey);
 		if (background.compare("") == 0)
         {
@@ -860,11 +860,11 @@ void GameScene::reloadScene()
 		backgroundSprite->setAnchorPoint(Vec2(0, 0));
 		_backgroundLayer->addChild(backgroundSprite);
 		_backgroundSprite = backgroundSprite;
-		/*è®¾ç½®å½“å‰åå­—*/
+		/*ÉèÖÃµ±Ç°Ãû×Ö*/
 		showName(GameSystem::getInstance()->getGameSceneInfo()->currentName);
-		/*è®¾ç½®å½“å‰æ–‡æœ¬*/
+		/*ÉèÖÃµ±Ç°ÎÄ±¾*/
 		showText(GameSystem::getInstance()->getGameSceneInfo()->currentText);
-		/*è®¾ç½®å½“å‰ç«‹ç»˜*/
+		/*ÉèÖÃµ±Ç°Á¢»æ*/
 		_charNumber = GameSystem::getInstance()->getGameSceneInfo()->charactorCount;
 		log("load charator");
 		for (int i = 0; i < _charNumber; i++)
@@ -872,7 +872,7 @@ void GameScene::reloadScene()
 			auto name = GameSystem::getInstance()->getGameSceneInfo()->fgCharactors[i].name;
 			auto face = GameSystem::getInstance()->getGameSceneInfo()->fgCharactors[i].face;
 			auto number = GameSystem::getInstance()->getGameSceneInfo()->fgCharactors[i].number;
-			auto cha = CM->getCharactor(name);	//èŽ·å–è§’è‰²
+			auto cha = CM->getCharactor(name);	//»ñÈ¡½ÇÉ«
 			if (cha)
 			{
 				auto pChar = &_chars[number];
@@ -957,16 +957,16 @@ void GameScene::reloadScene()
 				}
 			}
 		}
-		/*è®¾ç½®å½“å‰æ’­æ”¾bgmä¿¡æ¯*/
+		/*ÉèÖÃµ±Ç°²¥·ÅbgmÐÅÏ¢*/
 		playBackgroundMusic(GameSystem::getInstance()->getGameSceneInfo()->bgmKey);
-		/*è®¾ç½®å½“å‰æ’­æ”¾éŸ³æ•ˆ*/
-		/*è®¾ç½®é€‰é¡¹ä¿¡æ¯*/
+		/*ÉèÖÃµ±Ç°²¥·ÅÒôÐ§*/
+		/*ÉèÖÃÑ¡ÏîÐÅÏ¢*/
 		log("load select start");
 		if (GameSystem::getInstance()->getGameSceneInfo()->optionsNumber)
 		{
 			showSelect(GameSystem::getInstance()->getGameSceneInfo()->options);
 		}
-		/*è®¾ç½®ScriptReader*/
+		/*ÉèÖÃScriptReader*/
 		auto sign = GameSystem::getInstance()->getGameSceneInfo()->currentSignName;
 		auto commandIndex = GameSystem::getInstance()->getGameSceneInfo()->currentCommandIndex;
 		ScriptReader::getInstance()->jumpToSign(sign, commandIndex);
@@ -983,7 +983,7 @@ void GameScene::showSelect(std::map<std::string, std::string> &options)
 	log("Select::> optionSize[%d]", options.size());
 	for (auto itr = options.begin(); itr != options.end(); itr++)
 	{
-		_optionsNumber++;	//é€‰æ‹©æ•°é‡+1
+		_optionsNumber++;	//Ñ¡ÔñÊýÁ¿+1
 		auto label = Label::createWithSystemFont(itr->second, "MSYH", 30);
 		label->setColor(Color3B::WHITE);
 		label->enableShadow();
@@ -1090,24 +1090,27 @@ void GameScene::selectEventOfAuto(cocos2d::Ref *pSender, CheckBox::EventType typ
 
 void GameScene::showMenuScene()
 {
-    //æš‚åœæ¼”å‡º
+    //ÔÝÍ£ÑÝ³ö
     Director::getInstance()->pause();
-    //å¼¹å‡ºæç¤ºçª—
-    auto popupDialog = PopupLayer::create("ui/popup.png");
+    //µ¯³öÌáÊ¾´°
+    auto popupDialog = PopupLayer::create("ui/popupwindow/bg_popup.png");
     popupDialog->addLabelButton("Yes", CC_CALLBACK_0(GameScene::showMenuSceneYes, this));
     popupDialog->addLabelButton("No", CC_CALLBACK_0(GameScene::showMenuSceneNo, this));
+    //ÏÖÔÚÓ¦¸ÃÊ¹ÓÃÏÂÃæÁ½¸ö,µ«ÎÒµÄXcodeÌáÊ¾No matching member function for call to 'addButton'
+    //popupDialog->addButton("ui/popupwindow/btn_yes_normal.png", "ui/popupwindow/btn_yes_touch.png", CC_CALLBACK_0(GameScene::showMenuSceneYes, this));
+    //popupDialog->addButton("ui/popupwindow/btn_cancel_normal.png", "ui/popupwindow/btn_cancel_touch.png", CC_CALLBACK_0(GameScene::showMenuSceneYes, this));
     popupDialog->setString("Do you want to return to menu?");
     this->addChild(popupDialog,255);
 }
 
 void GameScene::showMenuSceneYes()
 {
-    //æ¢å¤æš‚åœæ¼”å‡º
+    //»Ö¸´ÔÝÍ£ÑÝ³ö
     Director::getInstance()->resume();
-    //å±å¹•æ…¢æ…¢å˜é»‘
+    //ÆÁÄ»ÂýÂý±äºÚ
     auto backLayer = LayerColor::create(Color4B::BLACK);
     
-    //å›žåˆ°ä¸»èœå•
+    //»Øµ½Ö÷²Ëµ¥
     GameSystem::getInstance()->setGameScene(MainMenu::createScene());
     auto scene = GameSystem::getInstance()->getGameScene();
     Director::getInstance()->replaceScene(scene);
@@ -1115,7 +1118,7 @@ void GameScene::showMenuSceneYes()
 
 void GameScene::showMenuSceneNo()
 {
-    //æ¢å¤æš‚åœæ¼”å‡º
+    //»Ö¸´ÔÝÍ£ÑÝ³ö
     Director::getInstance()->resume();
 }
 
@@ -1124,7 +1127,7 @@ void GameScene::showMenuLayer()
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    //éšè—å‘¼å‡ºèœå•æŒ‰é’®
+    //Òþ²Øºô³ö²Ëµ¥°´Å¥
     _btnMenu->setOpacity(0);
     
     ScreenShoot();
@@ -1136,13 +1139,13 @@ void GameScene::showMenuLayer()
     auto background = LayerColor::create(Color4B(30,30,30,128));
     _menuLayer->addChild(background);
     
-    //åŠ è½½èœå•èƒŒæ™¯
+    //¼ÓÔØ²Ëµ¥±³¾°
     auto menuBackground = Sprite::create("ui/dialog_menu/bg_menu.png");
     menuBackground->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
     menuBackground->setPosition(visibleSize.width + origin.x, visibleSize.height + origin.y);
     _menuLayer->addChild(menuBackground);
     
-    //åŠ è½½èœå•æŒ‰é’®
+    //¼ÓÔØ²Ëµ¥°´Å¥
     auto btnSave = MenuItemImage::create("ui/dialog_menu/btn_menu_save_normal.png", "ui/dialog_menu/btn_menu_save_touch.png", CC_CALLBACK_0(GameScene::showSaveScene, this));
     //btnSave->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     
@@ -1169,7 +1172,7 @@ void GameScene::showMenuLayer()
     
     this->addChild(_menuLayer, 20);
     
-    //é˜»æ–­è§¦ç¢°äº‹ä»¶
+    //×è¶Ï´¥ÅöÊÂ¼þ
     auto backgroundTouch = EventListenerTouchOneByOne::create();
     backgroundTouch->onTouchBegan = [=] (Touch *t, Event *e)
     {
@@ -1178,7 +1181,7 @@ void GameScene::showMenuLayer()
     backgroundTouch->onTouchEnded = [=] (Touch *t, Event *e)
     {
         log("Background touched.");
-        //ç¢°åˆ°å¯¹è¯æ¡†ä»¥å¤–çš„åŒºåŸŸå°±é‡Šæ”¾æ•´ä¸ªå±‚
+        //Åöµ½¶Ô»°¿òÒÔÍâµÄÇøÓò¾ÍÊÍ·ÅÕû¸ö²ã
         this->runAction(Sequence::create(CallFunc::create(CC_CALLBACK_0(Node::removeFromParent, _menuLayer)), CallFunc::create(CC_CALLBACK_0(MenuItemImage::setOpacity, _btnMenu, 255)), NULL));
     };
     backgroundTouch->setSwallowTouches(true);
