@@ -70,12 +70,13 @@ bool MainMenu::init()
 	//logo
     auto lastdayLogo = Sprite::create("ui/Title/bg_title_logo.png");
     lastdayLogo->setPosition(250,100);
-    backgroundLayer->addChild(lastdayLogo);
     
     //绘制下雨效果
     drawNode = DrawNode::create();
     addChild(drawNode, 5);
     
+    backgroundLayer->addChild(lastdayLogo);
+
     scheduleUpdate();
     
     appendRain();
@@ -135,14 +136,13 @@ void MainMenu::newgame()
 
 void MainMenu::config()
 {
-	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
-	Director::getInstance()->replaceScene(SettingScene::createScene());
+	//直接将要显示的Scene  push.而不是push当前的runningScene...
+	Director::getInstance()->pushScene(SettingScene::createScene());
 }
 
 void MainMenu::load()
 {
-	Director::getInstance()->pushScene(Director::getInstance()->getRunningScene());
-	Director::getInstance()->replaceScene(LoadScene::createScene());
+	Director::getInstance()->pushScene(LoadScene::createScene());
 }
 
 void MainMenu::update(float dt){
@@ -178,7 +178,7 @@ void MainMenu::update(float dt){
             auto over = new RainOver();
             over->x = r->x;
             over->y = r->y;
-            over->alpha = r->len / RAIN_LEN_MAX*0.5f;
+            over->alpha = r->len / RAIN_LEN_MAX*0.5f+0.3f;
             over->r = 0;
             rainOvers.push_back(over);
         }

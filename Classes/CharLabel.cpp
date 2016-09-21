@@ -78,7 +78,7 @@ void CharLabel::finishShow()
 
 void CharLabel::showNextChar()
 {
-	if ( _text[_text.length() - 1] == 13 || _pos >= (int)_text.length())
+	if ( (_text.length()>0 && _text[_text.length() - 1] == 13 ) || _pos >= (int)_text.length())
 	{
         _isRunning = false;
 		if (_showFinishCallback)

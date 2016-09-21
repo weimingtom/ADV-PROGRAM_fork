@@ -30,7 +30,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
+#if CC_TARGET_PLATFORM==CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM==CC_PLATFORM_MAC
+		glview = GLViewImpl::createWithRect("Karma Beta 0.0725", Rect(0, 0, 1136, 640));
+#else 
         glview = GLViewImpl::create("Karma Beta 0.0725");
+#endif
         director->setOpenGLView(glview);
 		//改变窗口大小和自适应策略
 		glview->setFrameSize(1136, 640);
@@ -69,7 +73,7 @@ void AppDelegate::applicationDidEnterBackground() {
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
-
+	
     // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }
